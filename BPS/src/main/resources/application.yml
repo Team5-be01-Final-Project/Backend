@@ -4,15 +4,16 @@ spring:
       platform: mariadb
       encoding: UTF-8
       mode: always
+  # private yml import
+  profiles:
+    include: private
+#JPA
+  jpa:
+    hibernate:
+      ddl-auto: create
+    generate-ddl: false
+    show-sql: true
 server:
   port: 8081
 
-#JPA
-jpa:
-  hibernate:
-    ddl-auto: create
-  generate-ddl: false
-  show-sql: true
-# private yml import
-profiles:
-  include: private
+

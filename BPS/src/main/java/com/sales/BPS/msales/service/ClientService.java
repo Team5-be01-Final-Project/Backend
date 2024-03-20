@@ -1,9 +1,12 @@
 package com.sales.BPS.msales.service;
 
+import com.sales.BPS.msales.dto.ClientDto;
 import com.sales.BPS.msales.entity.Client;
 import com.sales.BPS.msales.repository.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class ClientService {
@@ -19,5 +22,7 @@ public class ClientService {
         return clientrepository.save(client);
     }
 
-
+    public List<ClientDto> getClientsWithSpecificFields() {
+        return clientrepository.findClientsWithSpecificFields();
+    }
 }

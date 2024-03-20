@@ -1,9 +1,10 @@
 package com.sales.BPS.msystem.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
@@ -21,5 +22,8 @@ public class Storage {
 
     @Column(name = "storage_ware")
     private String storageWare;
+
+    @OneToMany(mappedBy = "storage")
+    private List<TempLog> tempLogs = new ArrayList<>();
 
 }

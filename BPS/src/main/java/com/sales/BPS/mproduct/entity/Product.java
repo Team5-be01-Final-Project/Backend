@@ -3,12 +3,15 @@ package com.sales.BPS.mproduct.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Data
 @Entity
 public class Product {
     @Id
     @Column(name = "pro_code") //Product_Code
-    private int proCode;
+    private Integer proCode;
 
     @Column(name = "pro_name") //Product_name
     private String proName;
@@ -26,6 +29,10 @@ public class Product {
     private String proCat;
 
     @Column(name = "pro_unit")
-    private int proUnit;
+    private Integer proUnit;
+
+    @OneToMany(mappedBy = "product")
+    private List<Voucher> vouchers = new ArrayList<>();
+
 
 }

@@ -10,18 +10,20 @@ public class Authority {
 
     @Id
     @Column(name = "emp_code")
-    private int empCode;
+    private Integer empCode;
 
     @Id
     @Column(name = "auth_code")
     private String authCode;
 
+    @MapsId("auth_code")
     @ManyToOne
-    @JoinColumn(name = "auth_code", referencedColumnName = "auth_code", insertable = false, updatable = false)
+    @JoinColumn(name = "auth_code")
     private AuthorityCode authorityCode;
 
+    @MapsId("emp_code")
     @ManyToOne
-    @JoinColumn(name = "emp_code", referencedColumnName = "emp_code", insertable = false, updatable = false)
+    @JoinColumn(name = "emp_code")
     private Employee employee;
 
 }

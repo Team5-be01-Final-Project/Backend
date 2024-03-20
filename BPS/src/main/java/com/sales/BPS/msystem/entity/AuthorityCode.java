@@ -15,7 +15,7 @@ public class AuthorityCode {
     @Column(name = "auth_name")
     private String authName;
 
-    @OneToOne(mappedBy = "authoritycode")
+    @OneToOne(mappedBy = "authorityCode")
     private Authority authority;
 
 }

@@ -21,7 +21,7 @@ public class ApprovalCode {
     @Column(name = "app_name")
     private String appName;
 
-    @OneToOne(mappedBy = "approvalcode")
+    @OneToOne(mappedBy = "approvalCode")
     private Voucher voucher;
 
 }

@@ -19,8 +19,11 @@ public class Voucher {
     private Long voucId;
 
     @Id
+    @Column(name = "prd_code", insertable = false, updatable = false)
+    private Integer proCode; // 이 필드를 추가
+
     @ManyToOne
-    @JoinColumn(name = "prd_code")
+    @JoinColumn(name = "prd_code") // proCode 필드와 매핑
     private Product product;
 
     @Column(name = "vouc_date")
@@ -51,7 +54,7 @@ public class Voucher {
     private Employee employee;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "emp_code")
+    @JoinColumn(name = "emp_code_sign")
     private Employee employeeSign;
 
     @Column(name = "vouc_note")

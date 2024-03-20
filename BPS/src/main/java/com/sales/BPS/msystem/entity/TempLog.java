@@ -17,16 +17,16 @@ public class TempLog {
     private String tempCode;
 
     @Id
-    @ManyToOne
-    @JoinColumn(name = "storage_code")
-    private Storage storageCode;
+    @Column(name = "storage_code")
+    private String storageCode; // 직접 선언
+
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "storage_code", insertable = false, updatable = false)
+    private Storage storage;
 
     @Column(name = "temp_temp")
     private Integer tempTemp;
 
     @Column(name = "temp_date")
     private LocalDateTime tempDate;
-
-
-
 }

@@ -5,6 +5,7 @@ import lombok.Data;
 import java.io.Serializable;
 @Data
 public class TempLogPK implements Serializable {
+
     private String tempCode;
-    private String StorageCode;
+    private String storageCode;
 }

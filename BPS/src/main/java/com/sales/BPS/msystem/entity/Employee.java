@@ -5,8 +5,8 @@ import com.sales.BPS.msales.entity.Client;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -31,24 +31,13 @@ public class Employee {
     private String empEmail;
 
     @Column(name = "emp_startdate")
-    @Temporal(TemporalType.DATE)
-    private Date empStartDate;
+    private LocalDate empStartDate;
 
     @Column(name = "emp_enddate")
-    @Temporal(TemporalType.DATE)
-    private Date empEndDate;
+    private LocalDate empEndDate;
 
     @Column(name = "emp_img")
     private String empImg;
-
-    @Column(name = "dept_code")
-    private String deptCode;
-
-    @Column(name = "pos_code")
-    private String posCode;
-
-    @Column(name = "storage_code")
-    private String storageCode;
 
     @ManyToOne
     @JoinColumn(name = "dept_code")
@@ -56,7 +45,7 @@ public class Employee {
 
     @ManyToOne
     @JoinColumn(name = "pos_code")
-    private Position position;
+    private Positions positions;
 
     @OneToOne
     @JoinColumn(name = "storage_code")
@@ -73,6 +62,5 @@ public class Employee {
 
     @OneToMany(mappedBy = "employee")
     private List<Voucher> vouchers = new ArrayList<>();
-
 
 }

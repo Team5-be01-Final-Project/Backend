@@ -11,18 +11,21 @@ import lombok.Data;
 public class Ppc {
 
     @Id
-    @ManyToOne
-    @JoinColumn(name = "client_code")
-    private Client client;
-
+    @Column(name = "client_code")
+    private String clientCode;
 
     @Id
+    @Column(name = "pro_code")
+    private Integer proCode;
+
     @ManyToOne
-    @JoinColumn(name = "pro_code")
+    @JoinColumn(name = "client_code", insertable = false, updatable = false)
+    private Client client;
+
+    @ManyToOne
+    @JoinColumn(name = "pro_code", insertable = false, updatable = false)
     private Product product;
 
     @Column(name = "ppc_sale")
     private Integer ppcSale;
-
-
 }

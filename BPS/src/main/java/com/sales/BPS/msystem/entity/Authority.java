@@ -10,14 +10,19 @@ import lombok.Data;
 public class Authority {
 
     @Id
-    @OneToOne
-    @JoinColumn(name = "emp_code")
-    private Employee employee;
+    @Column(name = "emp_code")
+    private Integer empCode; // 직접 선언
 
     @Id
-    @OneToOne
-    @JoinColumn(name = "auth_code")
-    private AuthorityCode authorityCode;
+    @Column(name = "auth_code")
+    private String authCode; // 직접 선언
 
+    @OneToOne
+    @JoinColumn(name = "emp_code", insertable = false, updatable = false)
+    private Employee employee;
+
+    @OneToOne
+    @JoinColumn(name = "auth_code", insertable = false, updatable = false)
+    private AuthorityCode authorityCode;
 }
 

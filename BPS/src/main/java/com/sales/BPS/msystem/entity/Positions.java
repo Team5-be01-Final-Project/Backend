@@ -8,8 +8,7 @@ import java.util.List;
 
 @Entity
 @Data
-@Table(name = "POSITION")
-public class Position {
+public class Positions {
 
     @Id
     @Column(name = "pos_code")
@@ -18,7 +17,7 @@ public class Position {
     @Column(name = "pos_name")
     private String posName;
 
-    @OneToMany(mappedBy = "position")
+    @OneToMany(mappedBy = "positions")
     private List<Employee> employees = new ArrayList<>();
 
 }

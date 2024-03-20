@@ -19,7 +19,6 @@ public class TempLog {
     @Id
     @ManyToOne
     @JoinColumn(name = "storage_code")
-    @Column(name = "storage_code")
     private Storage storageCode;
 
     @Column(name = "temp_temp")

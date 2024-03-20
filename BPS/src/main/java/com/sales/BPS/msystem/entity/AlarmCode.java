@@ -12,4 +12,8 @@ public class AlarmCode {
 
     @Column(name = "alarm_name")
     private String alarmName;
+
+    @OneToOne(mappedBy = "alarmcode")
+    @JoinColumn(name = "alarm_code")
+    private Alarm alarm;
 }

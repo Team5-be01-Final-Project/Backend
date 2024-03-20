@@ -1,9 +1,13 @@
-package com.sales.BPS.msystem.entitiy;
+package com.sales.BPS.msystem.entity;
 
+import com.sales.BPS.mproduct.entity.Voucher;
+import com.sales.BPS.msales.entity.Client;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Data
@@ -47,15 +51,28 @@ public class Employee {
     private String storageCode;
 
     @ManyToOne
-    @JoinColumn(name = "dept_code", referencedColumnName = "dept_code", insertable = false, updatable = false)
+    @JoinColumn(name = "dept_code")
     private Department department;
 
     @ManyToOne
-    @JoinColumn(name = "pos_code", referencedColumnName = "pos_code", insertable = false, updatable = false)
+    @JoinColumn(name = "pos_code")
     private Position position;
 
-    @ManyToOne
-    @JoinColumn(name = "storage_code", referencedColumnName = "storage_code", insertable = false, updatable = false)
+    @OneToOne
+    @JoinColumn(name = "storage_code")
     private Storage storage;
+
+    @OneToOne(mappedBy = "employee")
+    private Authority authority;
+
+    @OneToMany(mappedBy = "employee")
+    private List<Alarm> alarms = new ArrayList<>();
+
+    @OneToMany(mappedBy = "employee")
+    private List<Client> clients = new ArrayList<>();
+
+    @OneToMany(mappedBy = "employee")
+    private List<Voucher> vouchers = new ArrayList<>();
+
 
 }

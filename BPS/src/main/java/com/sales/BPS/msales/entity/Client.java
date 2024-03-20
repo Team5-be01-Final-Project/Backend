@@ -1,5 +1,6 @@
 package com.sales.BPS.msales.entity;
 
+import com.sales.BPS.msystem.entity.Employee;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -12,6 +13,7 @@ import static jakarta.persistence.FetchType.LAZY;
 @Entity
 @Data
 public class Client {
+
     @Id
     @Column(name = "client_code")
     private String clientCode;

@@ -1,7 +1,10 @@
-package com.sales.BPS.msystem.entitiy;
+package com.sales.BPS.msystem.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
@@ -14,5 +17,9 @@ public class Department {
 
     @Column(name = "dept_name")
     private String deptName;
+
+    @OneToMany(mappedBy = "department")
+    private List<Employee> employees = new ArrayList<>();
+
 
 }

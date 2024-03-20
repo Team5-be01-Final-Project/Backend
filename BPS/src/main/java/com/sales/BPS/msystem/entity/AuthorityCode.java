@@ -1,4 +1,4 @@
-package com.sales.BPS.msystem.entitiy;
+package com.sales.BPS.msystem.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -14,6 +14,9 @@ public class AuthorityCode {
 
     @Column(name = "auth_name")
     private String authName;
+
+    @OneToOne(mappedBy = "authoritycode")
+    private Authority authority;
 
 }
 

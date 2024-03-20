@@ -26,4 +26,7 @@ public class Storage {
     @OneToMany(mappedBy = "storage")
     private List<TempLog> tempLogs = new ArrayList<>();
 
+    @OneToOne(mappedBy = "storage")
+    private Employee employee;
+
 }

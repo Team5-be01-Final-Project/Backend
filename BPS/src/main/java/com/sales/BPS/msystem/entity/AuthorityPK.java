@@ -1,4 +1,4 @@
-package com.sales.BPS.msystem.entitiy;
+package com.sales.BPS.msystem.entity;
 
 import lombok.Data;
 

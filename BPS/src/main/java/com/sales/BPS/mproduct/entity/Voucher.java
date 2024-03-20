@@ -1,6 +1,7 @@
 package com.sales.BPS.mproduct.entity;
 
 import com.sales.BPS.msales.entity.Client;
+import com.sales.BPS.msystem.entity.Employee;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -18,12 +19,8 @@ public class Voucher {
     private Long voucId;
 
     @Id
-    @Column(name = "pro_code")
-    private Integer proCode;
-
-    @ManyToOne(fetch = LAZY)
-    @MapsId
-    @JoinColumn(name = "pro_code")
+    @ManyToOne
+    @JoinColumn(name = "prd_code")
     private Product product;
 
     @Column(name = "vouc_date")

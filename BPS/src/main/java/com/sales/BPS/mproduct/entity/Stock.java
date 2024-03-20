@@ -8,7 +8,7 @@ import lombok.Data;
 public class Stock {
     @Id
     @Column(name = "pro_code")
-    private int proCode;
+    private Integer proCode;
 
     @OneToOne
     @MapsId
@@ -16,5 +16,5 @@ public class Stock {
     private Product product;
 
     @Column(name = "sto_amo")
-    private int stoAmo;
+    private Integer stoAmo;
 }

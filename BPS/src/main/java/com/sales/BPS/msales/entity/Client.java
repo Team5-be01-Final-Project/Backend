@@ -3,7 +3,7 @@ package com.sales.BPS.msales.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,10 +38,10 @@ public class Client {
     private String clientEmpTel;
 
     @Column(name="client_start")
-    private LocalDateTime clientStart;
+    private LocalDate clientStart;
 
     @Column(name = "client_end")
-    private LocalDateTime clientEnd;
+    private LocalDate clientEnd;
 
     @Column(name = "client_note")
     private String clientNote;

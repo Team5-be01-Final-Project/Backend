@@ -5,13 +5,13 @@ import lombok.Data;
 
 @Data
 @Entity
+@IdClass(AlarmPK.class)
 public class Alarm {
 
     @Id
     @Column(name = "emp_code")
     private Integer empCode;
 
-    @MapsId("emp_code")
     @ManyToOne
     @JoinColumn(name = "emp_code")
     private Employee employee;
@@ -20,7 +20,6 @@ public class Alarm {
     @Column(name = "alarm_code")
     private String alarmCode;
 
-    @MapsId("alarm_code")
     @OneToOne
     @JoinColumn(name = "alarm_code")
     private AlarmCode alarmcode;

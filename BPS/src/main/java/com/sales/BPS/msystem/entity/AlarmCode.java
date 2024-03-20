@@ -5,8 +5,6 @@ import lombok.Data;
 
 @Data
 @Entity
-@IdClass(AlarmPK.class
-)
 public class AlarmCode {
     @Id
     @Column(name = "alarm_code")

@@ -31,4 +31,7 @@
 2024-03-20 PM 03:07
 - [Feat] 0.1.0/4.11/WY 콜드체인관련 ENTITY 생성
 
+2024-03-20 PM 04:23
+- [fix] Client, Ppc ENTITY 수정
+
 

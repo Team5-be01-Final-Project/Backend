@@ -8,6 +8,7 @@ import java.util.List;
 
 @Data
 @Entity
+@Table(name = "PRODUCT")
 public class Product {
     @Id
     @Column(name = "pro_code") //Product_Code

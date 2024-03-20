@@ -12,6 +12,7 @@ import static jakarta.persistence.FetchType.LAZY;
 
 @Entity
 @Data
+@Table(name = "CLIENT")
 public class Client {
 
     @Id

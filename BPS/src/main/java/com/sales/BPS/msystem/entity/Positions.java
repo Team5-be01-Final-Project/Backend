@@ -8,6 +8,7 @@ import java.util.List;
 
 @Entity
 @Data
+@Table(name = "POSITIONS")
 public class Positions {
 
     @Id

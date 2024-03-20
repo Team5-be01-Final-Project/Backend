@@ -13,6 +13,7 @@ import static jakarta.persistence.FetchType.LAZY;
 @Data
 @Entity
 @IdClass(VoucherPK.class)
+@Table(name = "VOUCHER")
 public class Voucher {
     @Id
     @Column(name = "vouc_id")

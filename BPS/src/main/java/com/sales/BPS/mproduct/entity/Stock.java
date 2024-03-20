@@ -5,6 +5,7 @@ import lombok.Data;
 
 @Entity
 @Data
+@Table(name = "STOCK")
 public class Stock {
     @Id
     @Column(name = "pro_code")

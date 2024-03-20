@@ -10,6 +10,7 @@ import static jakarta.persistence.FetchType.LAZY;
 @Entity
 @Data
 @IdClass(TempLogPK.class)
+@Table(name = "TEMPLOG")
 public class TempLog {
 
     @Id

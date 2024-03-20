@@ -8,6 +8,7 @@ import lombok.Data;
 @Entity
 @Data
 @IdClass(PpcPK.class)
+@Table(name = "PPC")
 public class Ppc {
 
     @Id

@@ -13,17 +13,14 @@ import static jakarta.persistence.FetchType.LAZY;
 public class TempLog {
 
     @Id
-    @Column(name = "temp_log")
-    private String tempLog;
+    @Column(name = "temp_code")
+    private String tempCode;
 
     @Id
-    @Column(name = "storage_code")
-    private String storageCode;
-
     @ManyToOne
-    @MapsId
     @JoinColumn(name = "storage_code")
-    private Storage storage;
+    @Column(name = "storage_code")
+    private Storage storageCode;
 
     @Column(name = "temp_temp")
     private Integer tempTemp;

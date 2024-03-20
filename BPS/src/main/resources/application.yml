@@ -4,10 +4,14 @@ spring:
       platform: mariadb
       encoding: UTF-8
       mode: always
-  # private yml import
-  profiles:
-    include: private
-#JPA
+
+  datasource:
+    driverClassName: org.mariadb.jdbc.Driver
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+
+  #JPA
   jpa:
     hibernate:
       ddl-auto: create
@@ -15,5 +19,3 @@ spring:
     show-sql: true
 server:
   port: 8081
-
-

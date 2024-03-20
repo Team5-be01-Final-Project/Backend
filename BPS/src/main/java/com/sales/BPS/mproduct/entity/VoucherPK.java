@@ -10,5 +10,3 @@ public class VoucherPK implements Serializable {
     private Long voucId;
     private Integer product;
 }
-
-}

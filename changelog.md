@@ -44,4 +44,6 @@
 2024-03-20 PM 04:23
 - [fix] Client, Ppc ENTITY 수정
 
-
+2024-03-21
+0.1.0/release
+- [Feat] deploy aws ec2

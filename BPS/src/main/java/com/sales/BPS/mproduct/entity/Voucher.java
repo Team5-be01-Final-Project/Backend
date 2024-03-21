@@ -20,12 +20,10 @@ public class Voucher {
     private Long voucId;
 
     @Id
-    @Column(name = "prd_code", insertable = false, updatable = false)
-    private Integer proCode; // 이 필드를 추가
-
     @ManyToOne
-    @JoinColumn(name = "prd_code") // proCode 필드와 매핑
-    private Product product;
+    @JoinColumn(name = "pro_code")
+    private Product product; // 이 필드를 추가
+
 
     @Column(name = "vouc_date")
     private LocalDate voucDate;
@@ -46,7 +44,7 @@ public class Voucher {
     @JoinColumn(name = "client_code")
     private Client client;
 
-    @OneToOne(fetch = LAZY)
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "app_code")
     private ApprovalCode approvalCode;
 

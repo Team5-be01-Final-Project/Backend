@@ -8,5 +8,5 @@ import java.io.Serializable;
 public class VoucherPK implements Serializable {
 
     private Long voucId;
-    private Integer proCode;
+    private Integer product;
 }

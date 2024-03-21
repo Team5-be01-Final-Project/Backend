@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-cd /home/ubuntu/app/bps
+cd /home/ubuntu/app/BPS
 
-mvn clean package
+./mvnw clean install
 
 sudo docker compose -f docker-compose.yml up -d

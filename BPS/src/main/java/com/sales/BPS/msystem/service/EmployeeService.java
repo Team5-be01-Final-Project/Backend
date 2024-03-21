@@ -6,7 +6,7 @@ import com.sales.BPS.msystem.entity.Employee;
 
 public interface EmployeeService {
 
-    Employee saveEmployee(Employee employee);
+    List<Employee> (String bId);
     Employee getEmployeeByCode(String employeeId);
     Employee updateEmployee(String employeeId, Employee updatedEmployee);
     void deleteEmployee(String employeeId);

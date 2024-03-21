@@ -1,4 +1,4 @@
-name: BPS
+name: bps
 services:
   proxy:
     image: nginx

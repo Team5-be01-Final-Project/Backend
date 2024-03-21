@@ -1,5 +1,6 @@
 package com.sales.BPS.mproduct.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -32,8 +33,9 @@ public class Product {
     @Column(name = "pro_unit")
     private Integer proUnit;
 
-    @OneToMany(mappedBy = "product")
-    private List<Voucher> vouchers = new ArrayList<>();
 
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<Voucher> vouchers = new ArrayList<>();
 
 }

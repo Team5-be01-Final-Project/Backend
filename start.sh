@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-cd /home/ubuntu/app/restdb
+cd /home/ubuntu/app/BPS
 
 ./gradlew clean bootJar
 

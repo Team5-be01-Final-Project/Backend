@@ -1,4 +1,4 @@
-name: restdb
+name: BPS
 services:
   proxy:
     image: nginx

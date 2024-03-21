@@ -17,9 +17,9 @@ services:
     ports:
       - 7777:8080
     environment:
-      - DB_URL: ${{ secrets.DB_URL }}
-      - DB_USER: ${{ secrets.DB_USER }}
-      - DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+      - DB_URL: ${{ DB_URL }}
+      - DB_USER: ${{ DB_USER }}
+      - DB_PASSWORD: ${{ DB_PASSWORD }}
     platform: linux/amd64
     depends_on:
       - db

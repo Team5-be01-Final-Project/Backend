@@ -1,7 +1,6 @@
 package com.sales.BPS.msales.controller;
 
 
-import com.sales.BPS.msales.dto.ClientDto;
 import com.sales.BPS.msales.entity.Client;
 import com.sales.BPS.msales.repository.ClientRepository;
 import com.sales.BPS.msales.service.ClientService;
@@ -29,7 +28,7 @@ public class ClientController {
     }
 
     @GetMapping("/list")
-    public List<ClientDto> getClients() {
+    public List<ClientRepository.ClientProjection> getClients() {
         return clientService.getClientsWithSpecificFields();
     }
 }

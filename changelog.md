@@ -48,6 +48,10 @@
 0.1.0/release
 - [Feat] deploy aws ec2
 
+
+ 2024-03-21
+- [Feat] 4.5.1/0.1.2/MS  JPA Repository 생성
+
 2024-03-21
 - [Feat] 4.10.1/0.1.2/WY 매출 거래처 등록 기능 개발
 

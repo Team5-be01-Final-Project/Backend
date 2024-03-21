@@ -6,4 +6,4 @@ mvn clean install -DskipTests
 
 cd ..
 
-sudo docker compose -f docker-compose.yml up -d
+sudo -E docker compose -f docker-compose.yml up -d

@@ -14,7 +14,9 @@ spring:
   #JPA
   jpa:
     hibernate:
-      ddl-auto: create
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl  # 테이블, 컬럼명 대, 소문자 구분
+      ddl-auto: update
     generate-ddl: false
     show-sql: true
 server:

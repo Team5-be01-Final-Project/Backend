@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-cd /home/ubuntu/app/BPS
+cd /home/ubuntu/app/bps
 
 ./mvnw clean install
 

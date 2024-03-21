@@ -1,7 +1,7 @@
-package com.sales.BPS.mproduct.entity.service;
+package com.sales.BPS.mproduct.service;
 
 import com.sales.BPS.mproduct.entity.Product;
-import com.sales.BPS.mproduct.entity.repository.ProductRepository;
+import com.sales.BPS.mproduct.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

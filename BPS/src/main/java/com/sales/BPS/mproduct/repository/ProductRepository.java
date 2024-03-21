@@ -1,4 +1,4 @@
-package com.sales.BPS.mproduct.entity.repository;
+package com.sales.BPS.mproduct.repository;
 
 import com.sales.BPS.mproduct.entity.Product;
 import org.springframework.data.domain.Page;

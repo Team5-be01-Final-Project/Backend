@@ -17,15 +17,14 @@ services:
     ports:
       - 7777:8080
     environment:
-      DB_URL: ${DB_URL}
-      DB_USER: ${DB_USER}
-      DB_PASSWORD: ${DB_PASSWORD}
+      DB_URL: $DB_URL
+      DB_USERNAME: $DB_USERNAME
+      DB_PASSWORD: $DB_PASSWORD
     platform: linux/amd64
     depends_on:
       - db
     links:
       - db
-
   db:
     image: mariadb:10.5.24-focal
     ports: 

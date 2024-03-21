@@ -24,6 +24,16 @@ public class LoginController {
     private EmployeeService employeeService;
 
     @PostMapping("/login")
+    public String loginSuccess() {
+        return "redirect:/bpm";
+    }
+
+    @GetMapping("/login")
+    public String showLoginForm() {
+        return "login";
+    }
+
+    @PostMapping("/login")
     public String employeeLogin(@RequestParam Integer empCode, @RequestParam String empPw, Model model, HttpSession session) {
         boolean isLogin = employeeService.loginEmployee(empCode, empPw);
 

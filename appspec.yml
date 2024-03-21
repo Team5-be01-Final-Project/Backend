@@ -2,7 +2,7 @@ version: 0.0
 os: linux
 files:
   - source: /
-    destination: /home/ubuntu/app
+    destination: /home/ubuntu/app/restdb
     overwrite: yes
 
 permissions:
@@ -10,7 +10,6 @@ permissions:
     pattern: "**"
     owner: ubuntu
     group: ubuntu
-    mode: 744
 
 hooks:
   AfterInstall:
@@ -19,5 +18,5 @@ hooks:
       runas: ubuntu
   ApplicationStart:
     - location: start.sh
-      timeout: 60
+      timeout: 300
       runas: ubuntu

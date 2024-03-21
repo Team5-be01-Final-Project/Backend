@@ -19,7 +19,7 @@ public class ApprovalCode {
     @Column(name = "app_name")
     private String appName;
 
-    @OneToOne(mappedBy = "approvalCode")
-    private Voucher voucher;
+    @OneToMany(mappedBy = "approvalCode")
+    private List<Voucher> vouchers = new ArrayList<>();
 
 }

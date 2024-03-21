@@ -4,4 +4,6 @@ cd /home/ubuntu/app/bps/BPS
 
 mvn clean install -DskipTests
 
+cd ..
+
 sudo docker compose -f docker-compose.yml up -d

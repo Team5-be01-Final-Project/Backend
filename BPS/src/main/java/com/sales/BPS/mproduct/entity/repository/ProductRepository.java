@@ -10,15 +10,17 @@ import java.util.Optional;
 
 public interface ProductRepository extends JpaRepository <Product, Integer> {
 
-    Page<Product> findAll(Pageable pageable);
+    Page<Product> findAll (Pageable pageable);
 
-    // Search By Production Code
-    Optional<Product> findByProCode (Integer proCode);
+//    //Search By Production Code
+//    List<Product> findByProCode (Integer proCode);
 
     List<Product> findByProName(String proName);
 
     List<Product> findByProSeg(String proSeg);
 
-    List<Product> findByProIngre(String
+    List<Product> findByProIngre(String proIngre);
+
+    List<Product> findByProAtc(String proAtc);
 
 }

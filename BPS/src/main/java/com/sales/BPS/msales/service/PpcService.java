@@ -2,8 +2,10 @@ package com.sales.BPS.msales.service;
 
 // PpcService.java
 
+import com.sales.BPS.msales.entity.Client;
 import com.sales.BPS.msales.entity.Ppc;
 import com.sales.BPS.msales.entity.PpcPK;
+import com.sales.BPS.msales.repository.ClientRepository;
 import com.sales.BPS.msales.repository.PpcRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,10 +17,12 @@ import java.util.Optional;
 public class PpcService {
 
     private final PpcRepository ppcRepository;
+    private final ClientRepository clientRepository;
 
     @Autowired
-    public PpcService(PpcRepository ppcRepository) {
+    public PpcService(PpcRepository ppcRepository, ClientRepository clientRepository) {
         this.ppcRepository = ppcRepository;
+        this.clientRepository = clientRepository;
     }
 
     public List<Ppc> getPpcs(String clientCode) {
@@ -53,7 +57,13 @@ public class PpcService {
 
     // 모든 거래처의 정보를 반환하는 메서드
     public List<Ppc> getAllPpcs() {
-        return ppcRepository.findAll();
+        List<Ppc> allPpcs = ppcRepository.findAll();
+        for (Ppc ppc : allPpcs) {
+            String clientCode = ppc.getClientCode();
+            Optional<Client> optionalClient = clientRepository.findById(clientCode);
+            optionalClient.ifPresent(client -> ppc.setClientName(client.getClientName()));
+        }
+        return allPpcs;
     }
 
 }

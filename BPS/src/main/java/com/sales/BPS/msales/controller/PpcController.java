@@ -46,7 +46,7 @@ public class PpcController {
 
     // 이 메소드는 모든 거래처의 정보를 반환합니다.
     @GetMapping("/all")
-    public ResponseEntity<List<Ppc>> getAllPpcs() {
+    public ResponseEntity<List<Ppc>> getAllPpcs(@PathVariable String clientCode) {
         List<Ppc> allPpcs = ppcService.getAllPpcs();
         return ResponseEntity.ok(allPpcs);
     }

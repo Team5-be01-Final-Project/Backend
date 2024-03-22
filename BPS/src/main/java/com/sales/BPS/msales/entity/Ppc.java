@@ -1,7 +1,9 @@
 package com.sales.BPS.msales.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sales.BPS.mproduct.entity.Product;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 
@@ -21,6 +23,7 @@ public class Ppc {
 
     @ManyToOne
     @JoinColumn(name = "client_code", insertable = false, updatable = false)
+    @JsonIgnore
     private Client client;
 
     @ManyToOne

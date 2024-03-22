@@ -50,4 +50,10 @@ public class PpcService {
     public void deletePpc(String clientCode, Integer proCode) {
         ppcRepository.deleteById(new PpcPK(clientCode, proCode));
     }
+
+    // 모든 거래처의 정보를 반환하는 메서드
+    public List<Ppc> getAllPpcs() {
+        return ppcRepository.findAll();
+    }
+
 }

@@ -33,7 +33,7 @@ public class LoginController {
         return "login";
     }
 
-    @PostMapping("/login")
+    @PostMapping("/loginprocess")
     public String employeeLogin(@RequestParam Integer empCode, @RequestParam String empPw, Model model, HttpSession session) {
         boolean isLogin = employeeService.loginEmployee(empCode, empPw);
 

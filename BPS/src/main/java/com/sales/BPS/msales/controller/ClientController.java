@@ -31,4 +31,13 @@ public class ClientController {
     public List<ClientRepository.ClientProjection> getClients() {
         return clientService.getClientsWithSpecificFields();
     }
+
+
+    @PutMapping("/{clientCode}")
+    public ResponseEntity<Client> updateClient(@PathVariable String clientCode, @RequestBody Client client){
+        Client updatedClient = clientService.updateClient(clientCode,client);
+        return ResponseEntity.ok(updatedClient);
+    }
+
 }
+

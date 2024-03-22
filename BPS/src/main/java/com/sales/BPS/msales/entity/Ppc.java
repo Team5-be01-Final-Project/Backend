@@ -32,4 +32,7 @@ public class Ppc {
 
     @Column(name = "ppc_sale")
     private Integer ppcSale;
+
+    @Transient
+    private String clientName;
 }

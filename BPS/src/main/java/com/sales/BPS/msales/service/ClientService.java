@@ -17,8 +17,15 @@ public class ClientService {
         this.clientrepository = clientrepository;
     }
 
-    public Client saveClient(Client client){
-        return clientrepository.save(client);
+    public Client saveClient(Client client) throws Exception{
+
+        //중복검사로직
+        if(clientrepository.existsByClientCode(client.getClientCode())){
+            throw new Exception("이미 등록된 사업자 번호입니다.");
+        }else
+        {
+            return clientrepository.save(client);
+        }
     }
 
     public List<ClientRepository.ClientProjection> getClientsWithSpecificFields() {

@@ -21,4 +21,7 @@ public interface ClientRepository extends JpaRepository<Client,String> {
         String getClientEmp();
         String getClientEmpTel();
     }
+
+    //중복확인
+    boolean existsByClientCode(String clientCode);
 }

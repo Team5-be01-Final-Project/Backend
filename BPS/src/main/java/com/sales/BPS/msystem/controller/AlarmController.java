@@ -1,13 +1,15 @@
 package com.sales.BPS.msystem.controller;
 
+import com.sales.BPS.msystem.dto.AlarmSettingDTO;
 import lombok.extern.slf4j.Slf4j;
-import com.sales.BPS.msystem.dto.AlarmRequsetDTO;
+import com.sales.BPS.msystem.dto.AlarmRequestDTO;
 import com.sales.BPS.msystem.service.AlarmService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.Console;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
@@ -29,9 +31,15 @@ public class AlarmController {
 //    }
 
     @PostMapping("/update")
-    public ResponseEntity<Void> updateAlarmSetting(@RequestBody AlarmRequsetDTO request) {
+    public ResponseEntity<Void> updateAlarmSetting(@RequestBody AlarmRequestDTO request) {
         log.info("Received empCode: {}, alarmCode: {}, alarmSetting: {}", request.getEmpCode(), request.getAlarmCode(), request.getAlarmSetting());
         alarmService.updateAlarmSetting(request.getEmpCode(), request.getAlarmCode(), request.getAlarmSetting());
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/settings/{empCode}")
+    public ResponseEntity<List<AlarmSettingDTO>> getAlarmSettings(@PathVariable Integer empCode) {
+        List<AlarmSettingDTO> alarmSettings = alarmService.getAlarmSettings(empCode);
+        return ResponseEntity.ok(alarmSettings);
     }
 }

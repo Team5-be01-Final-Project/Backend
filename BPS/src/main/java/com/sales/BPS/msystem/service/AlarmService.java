@@ -1,10 +1,15 @@
 package com.sales.BPS.msystem.service;
 
+import com.sales.BPS.msystem.dto.AlarmRequestDTO;
+import com.sales.BPS.msystem.dto.AlarmSettingDTO;
 import com.sales.BPS.msystem.entity.Alarm;
 import com.sales.BPS.msystem.repository.AlarmRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class AlarmService {
@@ -32,5 +37,11 @@ public class AlarmService {
                     alarmRepository.save(newAlarm);
                 }
         );
+    }
+
+    public List<AlarmSettingDTO> getAlarmSettings(Integer empCode) {
+        return alarmRepository.findByEmpCode(empCode).stream()
+                .map(alarm -> new AlarmSettingDTO(alarm.getAlarmCode(), alarm.isAlarmSettings()))
+                .collect(Collectors.toList());
     }
 }

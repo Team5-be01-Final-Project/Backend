@@ -1,14 +1,22 @@
 package com.sales.BPS.config;
 
 import com.sales.BPS.msystem.service.CustomUserDetailsService;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import java.io.IOException;
 
 @Configuration
 public class SpringSecurityConfig {
@@ -30,16 +38,20 @@ public class SpringSecurityConfig {
                 .csrf().disable()
                 .authorizeRequests()
                 .requestMatchers("/api/login", "/api/login-error").permitAll()
+                .requestMatchers("/api/admin/**").hasAuthority("ADMIN")
+                .requestMatchers("/api/manager/**").hasAuthority("MANAGER")
+                .requestMatchers("/api/employee/**").hasAuthority("EMPLOYEE")
                 .anyRequest().authenticated()
                 .and()
-                .formLogin()
-                .loginPage("/login")
-                .and()
-                .logout()
-                .permitAll()
-                .and()
-                .exceptionHandling()
-                .accessDeniedPage("/access-denied");
+                .exceptionHandling().accessDeniedHandler(new AccessDeniedHandler() {
+                    @Override
+                    public void handle(HttpServletRequest request, HttpServletResponse response,
+                                       AccessDeniedException accessDeniedException) throws IOException, ServletException {
+                        response.sendError(HttpServletResponse.SC_FORBIDDEN, "Access Denied");
+                    }
+                });
+
+        http.addFilterBefore(new JwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

@@ -1,27 +1,30 @@
 package com.sales.BPS.msystem.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import com.sales.BPS.msystem.service.EmployeeService;
 
-@Controller
-@RequestMapping("/Bps")
+@RestController
+@RequestMapping("/api")
 public class LoginController {
 
     @Autowired
     private EmployeeService employeeService;
 
-    @GetMapping("/login")
-    public String showLoginForm() {
-        return "login";
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestParam Integer empCode, @RequestParam String password) {
+        boolean isValidUser = employeeService.loginEmployee(empCode, password);
+        if (isValidUser) {
+            return ResponseEntity.ok("Login successful");
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
+        }
     }
 
-    @GetMapping("/login-error")
-    public String loginError(Model model) {
-        model.addAttribute("loginError", true);
-        return "login";
+    @PostMapping("/login-error")
+    public ResponseEntity<?> loginError() {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Login failed");
     }
 }

@@ -19,21 +19,17 @@ public class AlarmService {
     public void updateAlarmSetting(Integer empCode, String alarmCode, boolean alarmSetting) {
         alarmRepository.findByEmpCodeAndAlarmCode(empCode, alarmCode).ifPresentOrElse(
                 alarm -> {
-                    //알람이 존재하고, 알람을 비활성화(false)하는 경우에만 알람 설정을 false로 변경
-                    if (!alarmSetting && alarm.isAlarmSettings()) {
-                        alarm.setAlarmSettings(false);
-                        alarmRepository.save(alarm);
-                    }
+                    // 알람이 존재하는 경우: 알람 설정을 요청받은 값으로 변경
+                    alarm.setAlarmSettings(alarmSetting);
+                    alarmRepository.save(alarm);
                 },
                 () -> {
-                    //알람이 존재하지 않고, 알람을 활성화(true)하는 경우에는 새로운 Alarm 객체를 생성하여 데이터베이스에 저장
-                    if (alarmSetting) {
-                        Alarm newAlarm = new Alarm();
-                        newAlarm.setEmpCode(empCode);
-                        newAlarm.setAlarmCode(alarmCode);
-                        newAlarm.setAlarmSettings(true);
-                        alarmRepository.save(newAlarm);
-                    }
+                    //알람이 존재하지 않는 경우, 새로운 Alarm 객체를 생성하여 데이터베이스에 저장
+                    Alarm newAlarm = new Alarm();
+                    newAlarm.setEmpCode(empCode);
+                    newAlarm.setAlarmCode(alarmCode);
+                    newAlarm.setAlarmSettings(alarmSetting);
+                    alarmRepository.save(newAlarm);
                 }
         );
     }

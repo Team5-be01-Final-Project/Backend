@@ -1,6 +1,10 @@
 package com.sales.BPS.msales.controller;
 
+import com.sales.BPS.mproduct.entity.Product;
+import com.sales.BPS.mproduct.service.ProductService;
+import com.sales.BPS.msales.entity.Client;
 import com.sales.BPS.msales.entity.Ppc;
+import com.sales.BPS.msales.service.ClientService;
 import com.sales.BPS.msales.service.PpcService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,10 +18,13 @@ import java.util.*;
 public class PpcCrudController {
 
     private final PpcService ppcService;
-
+    private final ProductService productService;
+    private final ClientService clientService;
     @Autowired
-    public PpcCrudController(PpcService ppcService) {
+    public PpcCrudController(PpcService ppcService, ProductService productService, ClientService clientService) {
         this.ppcService = ppcService;
+        this.productService = productService;
+        this.clientService = clientService;
     }
 
     @GetMapping("/all")
@@ -27,46 +34,41 @@ public class PpcCrudController {
     }
 
     @PostMapping("/{proCode}")
-    public ResponseEntity<Ppc> updateSale(@PathVariable Integer proCode, @RequestBody Map<String, Object> request) {
-        String clientCode = (String) request.get("clientCode");
-        Integer ppcSale = (Integer) request.get("ppcSale");
+    public ResponseEntity<?> updateSale(@PathVariable Integer proCode, @RequestBody Map<String, Object> request) {
+        try {
+            String clientCode = (String) request.get("clientCode");
+            Integer ppcSale = (Integer) request.get("ppcSale");
 
-        // 이미 해당 클라이언트에 대한 제품이 등록되어 있는지 확인
-        Ppc existingPpc = ppcService.findPpcByClientCodeAndProCode(clientCode, proCode);
-        if (existingPpc != null) {
-            // 이미 등록된 경우 판매가를 업데이트하고 반환
-            existingPpc.setPpcSale(ppcSale);
-            Ppc updatedPpc = ppcService.updatePpc(existingPpc);
+            if (clientCode == null || clientCode.isEmpty()) {
+                throw new IllegalArgumentException("Client code must not be null or empty");
+            }
+
+            // Update or add PPC entry
+            Ppc updatedPpc = ppcService.addOrUpdatePpc(clientCode, proCode, ppcSale);
+
             return ResponseEntity.ok(updatedPpc);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred: " + e.getMessage());
         }
-
-        // 등록되지 않은 경우 새로운 판매 등록
-        Ppc addedPpc = ppcService.addPpc(clientCode, proCode, ppcSale);
-        return ResponseEntity.ok(addedPpc);
     }
-
-
     @DeleteMapping("/{proCode}")
     public ResponseEntity<String> deleteProduct(@PathVariable Integer proCode) {
         try {
-            // 상품 삭제
             ppcService.deletePpcByProCode(proCode);
-            return ResponseEntity.ok("상품이 삭제되었습니다.");
+            return ResponseEntity.ok("Product deleted successfully.");
         } catch (Exception e) {
-            // 오류 로깅을 추가하여 문제를 더 쉽게 추적할 수 있습니다.
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("상품 삭제에 실패했습니다.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to delete product: " + e.getMessage());
         }
     }
-
 
     @GetMapping("/data")
     public ResponseEntity<Map<String, Object>> getData() {
         List<Ppc> ppcs = ppcService.getAllPpcs();
-
-        // clients 배열 생성
         Set<String> clientSet = new HashSet<>();
         List<Map<String, String>> clients = new ArrayList<>();
+
         for (Ppc ppc : ppcs) {
             String clientKey = ppc.getClientName() + "-" + ppc.getEmpName();
             if (clientSet.add(clientKey)) {

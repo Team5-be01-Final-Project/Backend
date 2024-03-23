@@ -56,7 +56,13 @@ public class Client {
     @OneToMany(mappedBy = "client")
     private List<Ppc> ppcs = new ArrayList<>();
 
-
+    public String getEmpName() {
+        if (employee != null) {
+            return employee.getEmpName();
+        } else {
+            return null;
+        }
+    }
 
 
 }

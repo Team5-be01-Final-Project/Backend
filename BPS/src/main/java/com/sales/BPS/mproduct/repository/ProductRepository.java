@@ -23,4 +23,6 @@ public interface ProductRepository extends JpaRepository <Product, Integer> {
 
     List<Product> findByProAtc(String proAtc);
 
+    Product findByProCode(Integer proCode);
+
 }

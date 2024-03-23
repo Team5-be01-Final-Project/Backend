@@ -3,9 +3,10 @@ package com.sales.BPS.msales.repository;
 import com.sales.BPS.msales.entity.Client;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
-
+@Repository
 public interface ClientRepository extends JpaRepository<Client,String> {
 
     // 거래처 조회 (원하는 컬럼만 조회하기 위해 아래 인터페이스에서 값 불러옴)
@@ -21,4 +22,9 @@ public interface ClientRepository extends JpaRepository<Client,String> {
         String getClientEmp();
         String getClientEmpTel();
     }
+
+    //중복확인
+    boolean existsByClientCode(String clientCode);
+
+
 }

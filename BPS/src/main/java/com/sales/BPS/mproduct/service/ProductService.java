@@ -40,4 +40,9 @@ public class ProductService {
     public List<Product> findByProAtc(String proAtc) {
         return productRepository.findByProAtc(proAtc);
     }
+
+    public Product findProductByProCode(Integer proCode) {
+        return productRepository.findByProCode(proCode);
+    }
+
 }

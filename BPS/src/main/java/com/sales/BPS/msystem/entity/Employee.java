@@ -1,5 +1,6 @@
 package com.sales.BPS.msystem.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.sales.BPS.mproduct.entity.Voucher;
 import com.sales.BPS.msales.entity.Client;
 import jakarta.persistence.*;

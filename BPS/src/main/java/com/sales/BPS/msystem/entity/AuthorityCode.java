@@ -3,6 +3,8 @@ package com.sales.BPS.msystem.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.List;
+
 @Entity
 @Data
 @Table(name = "AUTHORITYCODE")
@@ -15,8 +17,7 @@ public class AuthorityCode {
     @Column(name = "auth_name")
     private String authName;
 
-    @OneToOne(mappedBy = "authorityCode")
-    private Authority authority;
-
+    @OneToMany(mappedBy = "authorityCode")
+    private List<Authority> authorities;
 }
 

@@ -61,7 +61,10 @@ public class PpcService {
         for (Ppc ppc : allPpcs) {
             String clientCode = ppc.getClientCode();
             Optional<Client> optionalClient = clientRepository.findById(clientCode);
-            optionalClient.ifPresent(client -> ppc.setClientName(client.getClientName()));
+            optionalClient.ifPresent(client -> {
+                ppc.setClientName(client.getClientName());
+                ppc.setEmpName(client.getEmpName()); // empName 설정 추가
+            });
         }
         return allPpcs;
     }

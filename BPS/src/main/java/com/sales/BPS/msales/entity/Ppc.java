@@ -35,4 +35,8 @@ public class Ppc {
 
     @Transient
     private String clientName;
+
+    @Transient
+    private String empName;
+
 }

@@ -7,4 +7,13 @@ import java.io.Serializable;
 public class PpcPK implements Serializable {
     private String clientCode;
     private Integer proCode;
+
+    public PpcPK() {
+        // 기본 생성자
+    }
+
+    public PpcPK(String clientCode, Integer proCode) {
+        this.clientCode = clientCode;
+        this.proCode = proCode;
+    }
 }

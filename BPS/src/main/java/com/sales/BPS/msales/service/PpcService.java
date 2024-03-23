@@ -7,6 +7,7 @@ import com.sales.BPS.msales.entity.Ppc;
 import com.sales.BPS.msales.entity.PpcPK;
 import com.sales.BPS.msales.repository.ClientRepository;
 import com.sales.BPS.msales.repository.PpcRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -50,9 +51,14 @@ public class PpcService {
         }
         return null; // or throw an exception
     }
-
-    public void deletePpc(String clientCode, Integer proCode) {
-        ppcRepository.deleteById(new PpcPK(clientCode, proCode));
+    public void deletePpcByProCode(Integer proCode) {
+        // 상품 코드로 상품을 찾아서 삭제
+        Ppc ppc = ppcRepository.findByProCode(proCode);
+        if (ppc != null) {
+            ppcRepository.delete(ppc);
+        } else {
+            throw new IllegalArgumentException("상품을 찾을 수 없습니다: " + proCode);
+        }
     }
 
     // 모든 거래처의 정보를 반환하는 메서드
@@ -69,4 +75,17 @@ public class PpcService {
         return allPpcs;
     }
 
+    public boolean isExistingSale(String clientCode, Integer proCode) {
+        return ppcRepository.existsByClientCodeAndProCode(clientCode, proCode);
+    }
+
+    public Ppc findPpcByClientCodeAndProCode(String clientCode, Integer proCode) {
+        Optional<Ppc> ppc = ppcRepository.findByClientCodeAndProCode(clientCode, proCode);
+        return ppc.orElse(null); // Ppc 객체가 존재하면 반환하고, 그렇지 않으면 null을 반환
+    }
+    // Ppc 엔터티를 업데이트하는 메소드
+    @Transactional
+    public Ppc updatePpc(Ppc existingPpc) {
+        return ppcRepository.save(existingPpc); // JPA의 save 메소드는 주어진 엔터티가 이미 존재하면 업데이트를 수행합니다.
+    }
 }

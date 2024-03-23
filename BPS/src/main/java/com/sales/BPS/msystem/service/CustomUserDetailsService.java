@@ -1,5 +1,7 @@
 package com.sales.BPS.msystem.service;
 
+import com.sales.BPS.msystem.entity.Authority;
+import com.sales.BPS.msystem.entity.Employee;
 import com.sales.BPS.msystem.repository.AuthorityRepository;
 import com.sales.BPS.msystem.repository.EmployeeRepository;
 import org.springframework.security.core.userdetails.User;
@@ -31,30 +33,32 @@ public class CustomUserDetailsService implements UserDetailsService {
         try {
             Integer empCode = Integer.parseInt(username);
             Employee employee = employeeRepository.findById(empCode)
-                    .orElseThrow(() -> new UsernameNotFoundException("Employee not found with emp_code: " + empCode));
+                    .orElseThrow(() ->
+                            new UsernameNotFoundException("Employee not found with emp_code: " + empCode));
 
-            Authority authority = authorityRepository.findById(empCode)
-                    .orElseThrow(() -> new UsernameNotFoundException("Authority not found for employee with emp_code: " + empCode));
+            Authority authority = authorityRepository.findByEmpCode(empCode)
+                    .orElseThrow(() ->
+                            new UsernameNotFoundException("Authority not found for employee with emp_code: " + empCode));
 
             String authCode = authority.getAuthCode();
             List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
 
             switch (authCode) {
                 case "AUTH000":
-                    grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_RESIGNED"));
+                    grantedAuthorities.add(new SimpleGrantedAuthority("RESIGNED"));
                     break;
                 case "AUTH001":
                 case "AUTH002":
-                    grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+                    grantedAuthorities.add(new SimpleGrantedAuthority("ADMIN"));
                     break;
                 case "AUTH003":
-                    grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_MANAGER"));
+                    grantedAuthorities.add(new SimpleGrantedAuthority("MANAGER"));
                     break;
                 case "AUTH004":
-                    grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_EMPLOYEE"));
+                    grantedAuthorities.add(new SimpleGrantedAuthority("EMPLOYEE"));
                     break;
                 default:
-                    grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_GUEST"));
+                    throw new UsernameNotFoundException("Invalid authority code: " + authCode);
             }
 
             return new User(employee.getEmpCode().toString(), employee.getEmpPw(), grantedAuthorities);

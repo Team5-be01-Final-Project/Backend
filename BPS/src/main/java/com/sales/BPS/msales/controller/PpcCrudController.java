@@ -27,6 +27,7 @@ public class PpcCrudController {
         this.clientService = clientService;
     }
 
+
     @GetMapping("/all")
     public ResponseEntity<List<Ppc>> getAllPpcs() {
         List<Ppc> allPpcs = ppcService.getAllPpcs();
@@ -41,6 +42,27 @@ public class PpcCrudController {
 
             if (clientCode == null || clientCode.isEmpty()) {
                 throw new IllegalArgumentException("Client code must not be null or empty");
+            }
+
+            // Check if the product exists
+            Product product = productService.findProductByProCode(proCode);
+            if (product == null) {
+                // If the product doesn't exist, return error response
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product not found with proCode: " + proCode);
+            }
+
+            // Check if the client exists
+            Client client = clientService.findClientByClientCode(clientCode);
+            if (client == null) {
+                // If the client doesn't exist, return error response
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Client not found with clientCode: " + clientCode);
+            }
+
+            // Check if the PPC entry already exists
+            boolean existingSale = ppcService.isExistingSale(clientCode, proCode);
+            if (existingSale) {
+                // If the PPC entry already exists, return error response
+                return ResponseEntity.status(HttpStatus.CONFLICT).body("PPC entry already exists for clientCode: " + clientCode + " and proCode: " + proCode);
             }
 
             // Update or add PPC entry

@@ -1,13 +1,4 @@
-    package com.sales.BPS.msales.service;
-
-
-    import com.sales.BPS.msales.entity.Client;
-    import com.sales.BPS.msales.repository.ClientRepository;
-    import org.springframework.beans.factory.annotation.Autowired;
-    import org.springframework.stereotype.Service;
-
-    import java.util.List;
-    import java.util.Optional;
+package com.sales.BPS.msales.service;
 
 import com.sales.BPS.msales.entity.Client;
 import com.sales.BPS.msales.repository.ClientRepository;
@@ -19,60 +10,24 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
-    @Service
-    public class ClientService {
+@Service
+public class ClientService {
 
-
-        private final ClientRepository clientrepository;
-
-        @Autowired
-        public ClientService(ClientRepository clientrepository) {
-            this.clientrepository = clientrepository;
-        }
-
-        public Client saveClient(Client client){
-            return clientrepository.save(client);
-        }
-
-        public List<ClientRepository.ClientProjection> getClientsWithSpecificFields() {
-            return clientrepository.findClientsWithSpecificFields();
-        }
-
-        public Client updateClient(String clientCode, Client updatedClient){
-            Optional<Client> optionalClient = clientrepository.findById(clientCode);
-            if(optionalClient.isPresent()){
-                Client client = optionalClient.get();
-                client.setClientName(updatedClient.getClientName());
-                client.setClientClass(updatedClient.getClientClass());
-                client.setClientBoss(updatedClient.getClientBoss());
-                client.setClientWhere(updatedClient.getClientWhere());
-                client.setClientPost(updatedClient.getClientPost());
-                client.setClientEmp(updatedClient.getClientEmp());
-                client.setClientEmpTel(updatedClient.getClientEmpTel());
-
-                return clientrepository.save(client);
-
-
-            }else {
-                return null;
-            }
-        }
-
-
-    }
-
-    private final ClientRepository clientrepository;
+    private final ClientRepository clientRepository;
     private final EmployeeRepository employeeRepository;
-
 
     @Autowired
     public ClientService(ClientRepository clientRepository, EmployeeRepository employeeRepository) {
-        this.clientrepository = clientRepository;
+        this.clientRepository = clientRepository;
         this.employeeRepository = employeeRepository;
     }
 
+    public Client saveClient(Client client) {
+        return clientRepository.save(client);
+    }
+
     public Client saveClient(Client client, Integer empCode) throws Exception {
-        if (clientrepository.existsByClientCode(client.getClientCode())) {
+        if (clientRepository.existsByClientCode(client.getClientCode())) {
             throw new Exception("해당 클라이언트 코드는 이미 등록되었습니다.");
         }
 
@@ -83,25 +38,40 @@ import java.util.Optional;
             client.setEmployee(employee);
         }
 
-        return clientrepository.save(client);
+        return clientRepository.save(client);
     }
-
 
     public List<ClientRepository.ClientProjection> getClientsWithSpecificFields() {
-        return clientrepository.findClientsWithSpecificFields();
+        return clientRepository.findClientsWithSpecificFields();
     }
+
     public Client findClientByClientCode(String clientCode) {
-        Optional<Client> client = clientrepository.findById(clientCode);
+        Optional<Client> client = clientRepository.findById(clientCode);
         return client.orElse(null); // 클라이언트 객체가 존재하면 반환하고, 그렇지 않으면 null을 반환
     }
 
     public void deleteClientByClientCode(String clientCode) throws Exception {
-        if (clientrepository.existsById(clientCode)) {
-            clientrepository.deleteById(clientCode);
+        if (clientRepository.existsById(clientCode)) {
+            clientRepository.deleteById(clientCode);
         } else {
             throw new Exception("Client with code " + clientCode + " does not exist.");
         }
     }
 
+    public Client updateClient(String clientCode, Client updatedClient) {
+        Optional<Client> optionalClient = clientRepository.findById(clientCode);
+        if (optionalClient.isPresent()) {
+            Client client = optionalClient.get();
+            client.setClientName(updatedClient.getClientName());
+            client.setClientClass(updatedClient.getClientClass());
+            client.setClientBoss(updatedClient.getClientBoss());
+            client.setClientWhere(updatedClient.getClientWhere());
+            client.setClientPost(updatedClient.getClientPost());
+            client.setClientEmp(updatedClient.getClientEmp());
+            client.setClientEmpTel(updatedClient.getClientEmpTel());
+            return clientRepository.save(client);
+        } else {
+            return null;
+        }
+    }
 }
-

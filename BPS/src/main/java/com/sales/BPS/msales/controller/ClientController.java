@@ -1,6 +1,7 @@
 package com.sales.BPS.msales.controller;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sales.BPS.msales.entity.Client;
 import com.sales.BPS.msales.repository.ClientRepository;
 import com.sales.BPS.msales.service.ClientService;
@@ -10,24 +11,32 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/clients")
 public class ClientController {
 
     private final ClientService clientService;
+    private final ObjectMapper objectMapper;
 
     @Autowired
-    public ClientController(ClientService clientService) {
+    public ClientController(ClientService clientService, ObjectMapper objectMapper) {
         this.clientService = clientService;
+        this.objectMapper = objectMapper;
     }
 
     @PostMapping
-    public ResponseEntity<?> addClient(@RequestBody Client client){
+    public ResponseEntity<?> addClient(@RequestBody Map<String, Object> payload) {
         try {
-            Client savedClient = clientService.saveClient(client);
+            // empCode를 제외한 Client 데이터 역직렬화
+            Integer empCode = (Integer) payload.get("empCode");
+            payload.remove("empCode"); // payload에서 empCode 제거
+            Client client = objectMapper.convertValue(payload, Client.class);
+
+            Client savedClient = clientService.saveClient(client, empCode);
             return ResponseEntity.ok(savedClient);
-        }catch (Exception e){
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }

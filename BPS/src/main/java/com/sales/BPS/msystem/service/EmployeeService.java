@@ -29,4 +29,8 @@ public class EmployeeService {
     public List<EmployeeInfoDTO> findByCriteria(String deptName, String empName, String empTel) {
         return employeeRepository.findByCriteria(deptName, empName, empTel);
     }
+
+    public List<Employee> getAllEmployees() {
+        return employeeRepository.findAll();
+    }
 }

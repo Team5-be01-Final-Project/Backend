@@ -3,10 +3,13 @@ package com.sales.BPS.msales.repository;
 import com.sales.BPS.msales.entity.Client;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
-
+@Repository
 public interface ClientRepository extends JpaRepository<Client,String> {
+
+
 
     @Query("SELECT c.clientCode AS clientCode, c.clientName AS clientName, c.clientClass AS clientClass, c.clientBoss AS clientBoss, c.clientWhere AS clientWhere, c.clientPost AS clientPost, c.clientEmp AS clientEmp, c.clientEmpTel AS clientEmpTel FROM Client c")
     List<ClientProjection> findClientsWithSpecificFields();
@@ -24,4 +27,6 @@ public interface ClientRepository extends JpaRepository<Client,String> {
 
     //중복확인
     boolean existsByClientCode(String clientCode);
+
+
 }

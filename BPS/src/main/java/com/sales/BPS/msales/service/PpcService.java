@@ -20,15 +20,38 @@ public class PpcService {
 
     private final PpcRepository ppcRepository;
     private final ClientRepository clientRepository;
+    private final ClientService clientService;
+
 
     @Autowired
-    public PpcService(PpcRepository ppcRepository, ClientRepository clientRepository) {
+    public PpcService(PpcRepository ppcRepository, ClientRepository clientRepository, ClientService clientService) {
         this.ppcRepository = ppcRepository;
         this.clientRepository = clientRepository;
+        this.clientService = clientService; // ClientService 주입
     }
 
     public List<Ppc> getPpcs(String clientCode) {
         return ppcRepository.findByClientCode(clientCode);
+    }
+
+    public Ppc addOrUpdatePpc(String clientCode, Integer proCode, Integer ppcSale) {
+        // Find client by clientCode
+        Client client = clientService.findClientByClientCode(clientCode);
+        if (client == null) {
+            // Handle case when client does not exist
+            throw new IllegalArgumentException("Client with code " + clientCode + " does not exist");
+        }
+
+        // Find PPC entry by clientCode and proCode
+        Ppc ppc = ppcRepository.findByClientCodeAndProCode(clientCode, proCode).orElse(new Ppc());
+
+        // Update PPC properties
+        ppc.setClientCode(clientCode);
+        ppc.setProCode(proCode);
+        ppc.setPpcSale(ppcSale);
+
+        // Save or update PPC entry
+        return ppcRepository.save(ppc);
     }
 
     public Ppc addPpc(String clientCode, Integer proCode, Integer ppcSale) {

@@ -31,4 +31,5 @@ public class ClientService {
     public List<ClientRepository.ClientProjection> getClientsWithSpecificFields() {
         return clientrepository.findClientsWithSpecificFields();
     }
+
 }

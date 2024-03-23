@@ -7,6 +7,8 @@ import com.sales.BPS.msales.entity.Ppc;
 import com.sales.BPS.msales.entity.PpcPK;
 import com.sales.BPS.msales.repository.ClientRepository;
 import com.sales.BPS.msales.repository.PpcRepository;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,15 +20,38 @@ public class PpcService {
 
     private final PpcRepository ppcRepository;
     private final ClientRepository clientRepository;
+    private final ClientService clientService;
+
 
     @Autowired
-    public PpcService(PpcRepository ppcRepository, ClientRepository clientRepository) {
+    public PpcService(PpcRepository ppcRepository, ClientRepository clientRepository, ClientService clientService) {
         this.ppcRepository = ppcRepository;
         this.clientRepository = clientRepository;
+        this.clientService = clientService; // ClientService 주입
     }
 
     public List<Ppc> getPpcs(String clientCode) {
         return ppcRepository.findByClientCode(clientCode);
+    }
+
+    public Ppc addOrUpdatePpc(String clientCode, Integer proCode, Integer ppcSale) {
+        // Find client by clientCode
+        Client client = clientService.findClientByClientCode(clientCode);
+        if (client == null) {
+            // Handle case when client does not exist
+            throw new IllegalArgumentException("Client with code " + clientCode + " does not exist");
+        }
+
+        // Find PPC entry by clientCode and proCode
+        Ppc ppc = ppcRepository.findByClientCodeAndProCode(clientCode, proCode).orElse(new Ppc());
+
+        // Update PPC properties
+        ppc.setClientCode(clientCode);
+        ppc.setProCode(proCode);
+        ppc.setPpcSale(ppcSale);
+
+        // Save or update PPC entry
+        return ppcRepository.save(ppc);
     }
 
     public Ppc addPpc(String clientCode, Integer proCode, Integer ppcSale) {
@@ -40,20 +65,27 @@ public class PpcService {
         return ppcRepository.save(ppc);
     }
 
-    public Ppc updatePpc(String clientCode, Integer proCode, Integer ppcSale) {
-        Optional<Ppc> optionalPpc = ppcRepository.findById(new PpcPK(clientCode, proCode));
-        if (optionalPpc.isPresent()) {
-            Ppc ppc = optionalPpc.get();
-            ppc.setProCode(proCode);
-            ppc.setPpcSale(ppcSale);
-            return ppcRepository.save(ppc);
-        }
-        return null; // or throw an exception
+    // Ppc 엔터티를 업데이트하는 메소드
+    @Transactional
+    public Ppc updatePpc(Ppc existingPpc) {
+        return ppcRepository.save(existingPpc); // JPA의 save 메소드는 주어진 엔터티가 이미 존재하면 업데이트를 수행합니다.
     }
 
-    public void deletePpc(String clientCode, Integer proCode) {
-        ppcRepository.deleteById(new PpcPK(clientCode, proCode));
+    // proCode를 사용하여 Ppc 엔터티를 삭제하는 메소드
+    public void deletePpcByProCode(Integer proCode) {
+        List<Ppc> ppcs = ppcRepository.findByProCode(proCode);
+        if (!ppcs.isEmpty()) {
+            for (Ppc ppc : ppcs) {
+                ppcRepository.delete(ppc);
+            }
+        } else {
+            // 적절한 예외 처리 또는 로깅
+            throw new EntityNotFoundException("해당 proCode를 가진 상품이 존재하지 않습니다: " + proCode);
+        }
     }
+
+
+
 
     // 모든 거래처의 정보를 반환하는 메서드
     public List<Ppc> getAllPpcs() {
@@ -61,9 +93,22 @@ public class PpcService {
         for (Ppc ppc : allPpcs) {
             String clientCode = ppc.getClientCode();
             Optional<Client> optionalClient = clientRepository.findById(clientCode);
-            optionalClient.ifPresent(client -> ppc.setClientName(client.getClientName()));
+            optionalClient.ifPresent(client -> {
+                ppc.setClientName(client.getClientName());
+                ppc.setEmpName(client.getEmpName()); // empName 설정 추가
+            });
         }
         return allPpcs;
     }
+
+    public boolean isExistingSale(String clientCode, Integer proCode) {
+        return ppcRepository.existsByClientCodeAndProCode(clientCode, proCode);
+    }
+
+    public Ppc findPpcByClientCodeAndProCode(String clientCode, Integer proCode) {
+        Optional<Ppc> ppc = ppcRepository.findByClientCodeAndProCode(clientCode, proCode);
+        return ppc.orElse(null); // Ppc 객체가 존재하면 반환하고, 그렇지 않으면 null을 반환
+    }
+    // Ppc 엔터티를 업데이트하는 메소드
 
 }

@@ -47,4 +47,12 @@ public class ClientService {
         return client.orElse(null); // 클라이언트 객체가 존재하면 반환하고, 그렇지 않으면 null을 반환
     }
 
+    public void deleteClientByClientCode(String clientCode) throws Exception {
+        if (clientrepository.existsById(clientCode)) {
+            clientrepository.deleteById(clientCode);
+        } else {
+            throw new Exception("Client with code " + clientCode + " does not exist.");
+        }
+    }
+
 }

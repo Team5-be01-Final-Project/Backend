@@ -45,4 +45,14 @@ public class ClientController {
     public List<ClientRepository.ClientProjection> getClients() {
         return clientService.getClientsWithSpecificFields();
     }
+
+    @DeleteMapping("/{clientCode}")
+    public ResponseEntity<?> deleteClient(@PathVariable String clientCode) {
+        try {
+            clientService.deleteClientByClientCode(clientCode);
+            return ResponseEntity.ok().body("Client with code " + clientCode + " has been deleted successfully.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
 }

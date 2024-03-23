@@ -7,6 +7,7 @@ import com.sales.BPS.msales.entity.Ppc;
 import com.sales.BPS.msales.entity.PpcPK;
 import com.sales.BPS.msales.repository.ClientRepository;
 import com.sales.BPS.msales.repository.PpcRepository;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -41,25 +42,27 @@ public class PpcService {
         return ppcRepository.save(ppc);
     }
 
-    public Ppc updatePpc(String clientCode, Integer proCode, Integer ppcSale) {
-        Optional<Ppc> optionalPpc = ppcRepository.findById(new PpcPK(clientCode, proCode));
-        if (optionalPpc.isPresent()) {
-            Ppc ppc = optionalPpc.get();
-            ppc.setProCode(proCode);
-            ppc.setPpcSale(ppcSale);
-            return ppcRepository.save(ppc);
-        }
-        return null; // or throw an exception
+    // Ppc 엔터티를 업데이트하는 메소드
+    @Transactional
+    public Ppc updatePpc(Ppc existingPpc) {
+        return ppcRepository.save(existingPpc); // JPA의 save 메소드는 주어진 엔터티가 이미 존재하면 업데이트를 수행합니다.
     }
+
+    // proCode를 사용하여 Ppc 엔터티를 삭제하는 메소드
     public void deletePpcByProCode(Integer proCode) {
-        // 상품 코드로 상품을 찾아서 삭제
-        Ppc ppc = ppcRepository.findByProCode(proCode);
-        if (ppc != null) {
-            ppcRepository.delete(ppc);
+        List<Ppc> ppcs = ppcRepository.findByProCode(proCode);
+        if (!ppcs.isEmpty()) {
+            for (Ppc ppc : ppcs) {
+                ppcRepository.delete(ppc);
+            }
         } else {
-            throw new IllegalArgumentException("상품을 찾을 수 없습니다: " + proCode);
+            // 적절한 예외 처리 또는 로깅
+            throw new EntityNotFoundException("해당 proCode를 가진 상품이 존재하지 않습니다: " + proCode);
         }
     }
+
+
+
 
     // 모든 거래처의 정보를 반환하는 메서드
     public List<Ppc> getAllPpcs() {
@@ -84,8 +87,5 @@ public class PpcService {
         return ppc.orElse(null); // Ppc 객체가 존재하면 반환하고, 그렇지 않으면 null을 반환
     }
     // Ppc 엔터티를 업데이트하는 메소드
-    @Transactional
-    public Ppc updatePpc(Ppc existingPpc) {
-        return ppcRepository.save(existingPpc); // JPA의 save 메소드는 주어진 엔터티가 이미 존재하면 업데이트를 수행합니다.
-    }
+
 }

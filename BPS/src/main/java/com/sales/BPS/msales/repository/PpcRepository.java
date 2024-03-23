@@ -16,7 +16,7 @@ public interface PpcRepository extends JpaRepository<Ppc, PpcPK> {
 
     boolean existsByClientCodeAndProCode(String clientCode, Integer proCode);
 
-    Ppc findByProCode(Integer proCode);
+    List<Ppc> findByProCode(Integer proCode);
 
     Optional<Ppc> findByClientCodeAndProCode(String clientCode, Integer proCode);
 

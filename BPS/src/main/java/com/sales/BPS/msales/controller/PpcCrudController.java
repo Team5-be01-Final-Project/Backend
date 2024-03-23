@@ -53,9 +53,12 @@ public class PpcCrudController {
             ppcService.deletePpcByProCode(proCode);
             return ResponseEntity.ok("상품이 삭제되었습니다.");
         } catch (Exception e) {
+            // 오류 로깅을 추가하여 문제를 더 쉽게 추적할 수 있습니다.
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("상품 삭제에 실패했습니다.");
         }
     }
+
 
     @GetMapping("/data")
     public ResponseEntity<Map<String, Object>> getData() {

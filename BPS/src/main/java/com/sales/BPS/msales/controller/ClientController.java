@@ -46,6 +46,15 @@ public class ClientController {
         return clientService.getClientsWithSpecificFields();
     }
 
+
+
+    @PutMapping("/{clientCode}")
+    public ResponseEntity<Client> updateClient(@PathVariable String clientCode, @RequestBody Client client){
+        Client updatedClient = clientService.updateClient(clientCode,client);
+        return ResponseEntity.ok(updatedClient);
+    }
+
+
     @DeleteMapping("/{clientCode}")
     public ResponseEntity<?> deleteClient(@PathVariable String clientCode) {
         try {
@@ -55,4 +64,6 @@ public class ClientController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
+
 }
+

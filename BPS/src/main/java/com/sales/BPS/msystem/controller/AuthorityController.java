@@ -2,11 +2,12 @@ package com.sales.BPS.msystem.controller;
 
 
 import com.sales.BPS.msystem.dto.AuthorityCodeDTO;
+import com.sales.BPS.msystem.dto.AuthorityUpdateRequestDTO;
 import com.sales.BPS.msystem.service.AuthorityCodeService;
+import com.sales.BPS.msystem.service.AuthorityService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -15,14 +16,27 @@ import java.util.List;
 public class AuthorityController {
     private final AuthorityCodeService authorityCodeService;
 
+    private final AuthorityService authorityService;
+
     @Autowired
-    public AuthorityController(AuthorityCodeService authorityCodeService) {
+    public AuthorityController(AuthorityCodeService authorityCodeService, AuthorityService authorityService) {
         this.authorityCodeService = authorityCodeService;
+        this.authorityService = authorityService;
     }
 
     @GetMapping("/codes")
     public List<AuthorityCodeDTO> getAllAuthorityCodes() {
         return authorityCodeService.findAllAuthorityCodes();
+    }
+
+    @PostMapping("/changeAuthority")
+    public ResponseEntity<?> changeAuthority(@RequestBody AuthorityUpdateRequestDTO request) {
+        try {
+            authorityService.updateAuthority(request.getEmpCode(), request.getAuthCode(), request.getNewAuthCode());
+            return ResponseEntity.ok().body("Authority updated successfully.");
+        } catch (Exception ex) {
+            return ResponseEntity.badRequest().body("Error updating authority: " + ex.getMessage());
+        }
     }
 }
 

@@ -1,5 +1,6 @@
 package com.sales.BPS.msales.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.sales.BPS.msystem.entity.Employee;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -51,6 +52,7 @@ public class Client {
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "emp_code")
+    @JsonBackReference // 무한 재귀 문제(StackOverflowError) 해결하기 위한 어노테이션
     private Employee employee;
 
     @OneToMany(mappedBy = "client")

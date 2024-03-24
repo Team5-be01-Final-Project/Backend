@@ -1,5 +1,6 @@
 package com.sales.BPS.msales.service;
 
+import com.sales.BPS.msales.dto.ClientDTO;
 import com.sales.BPS.msales.entity.Client;
 import com.sales.BPS.msales.repository.ClientRepository;
 import com.sales.BPS.msystem.entity.Employee;
@@ -58,18 +59,51 @@ public class ClientService {
         }
     }
 
-    public Client updateClient(String clientCode, Client updatedClient) {
-        Optional<Client> optionalClient = clientRepository.findById(clientCode);
-        if (optionalClient.isPresent()) {
-            Client client = optionalClient.get();
-            client.setClientName(updatedClient.getClientName());
-            client.setClientClass(updatedClient.getClientClass());
-            client.setClientBoss(updatedClient.getClientBoss());
-            client.setClientWhere(updatedClient.getClientWhere());
-            client.setClientPost(updatedClient.getClientPost());
-            client.setClientEmp(updatedClient.getClientEmp());
-            client.setClientEmpTel(updatedClient.getClientEmpTel());
-            return clientRepository.save(client);
+    public Client saveOrUpdateClient(ClientDTO clientDTO) {
+        Client client = new Client();
+        client.setClientCode(clientDTO.getClientCode());
+        client.setClientName(clientDTO.getClientName());
+        client.setClientClass(clientDTO.getClientClass());
+        client.setClientBoss(clientDTO.getClientBoss());
+        client.setClientWhere(clientDTO.getClientWhere());
+        client.setClientPost(clientDTO.getClientPost());
+        client.setClientEmp(clientDTO.getClientEmp());
+        client.setClientEmpTel(clientDTO.getClientEmpTel());
+        client.setClientStart(clientDTO.getClientStart());
+        client.setClientEnd(clientDTO.getClientEnd());
+        client.setClientNote(clientDTO.getClientNote());
+        if (clientDTO.getEmpCode() != null) {
+            Employee employee = employeeRepository.findById(clientDTO.getEmpCode())
+                    .orElseThrow(() -> new RuntimeException("Employee with empCode " + clientDTO.getEmpCode() + " not found"));
+            client.setEmployee(employee);
+        }
+
+        return clientRepository.save(client);
+    }
+
+    public ClientDTO convertToDTO(Client client) {
+        ClientDTO dto = new ClientDTO();
+        dto.setClientCode(client.getClientCode());
+        dto.setClientName(client.getClientName());
+        dto.setClientClass(client.getClientClass());
+        dto.setClientBoss(client.getClientBoss());
+        dto.setClientWhere(client.getClientWhere());
+        dto.setClientPost(client.getClientPost());
+        dto.setClientEmp(client.getClientEmp());
+        dto.setClientEmpTel(client.getClientEmpTel());
+        dto.setClientStart(client.getClientStart());
+        dto.setClientEnd(client.getClientEnd());
+        dto.setClientNote(client.getClientNote());
+        if (client.getEmployee() != null) {
+            dto.setEmpCode(client.getEmployee().getEmpCode());
+        }
+        return dto;
+    }
+
+    public ClientDTO findByClientCode(String clientCode) {
+        Optional<Client> client = clientRepository.findById(clientCode);
+        if (client.isPresent()) {
+            return convertToDTO(client.get());
         } else {
             return null;
         }

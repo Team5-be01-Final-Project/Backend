@@ -108,4 +108,39 @@ public class PpcCrudController {
 
         return ResponseEntity.ok(response);
     }
+
+    @PutMapping("/{proCode}")
+    public ResponseEntity<?> updatePpcEntry(@PathVariable Integer proCode, @RequestBody Map<String, Object> request) {
+        try {
+            String clientCode = (String) request.get("clientCode");
+            Integer ppcSale = (Integer) request.get("ppcSale");
+
+            if (clientCode == null || clientCode.isEmpty()) {
+                return ResponseEntity.badRequest().body("Client code must not be null or empty");
+            }
+
+            Product product = productService.findProductByProCode(proCode);
+            if (product == null) {
+                return ResponseEntity.notFound().build();
+            }
+
+            Client client = clientService.findClientByClientCode(clientCode);
+            if (client == null) {
+                return ResponseEntity.notFound().build();
+            }
+
+            Ppc existingPpc = ppcService.findPpcByClientCodeAndProCode(clientCode, proCode);
+            if (existingPpc == null) {
+                return ResponseEntity.notFound().build();
+            }
+
+            existingPpc.setPpcSale(ppcSale);
+            ppcService.save(existingPpc);
+
+            return ResponseEntity.ok(existingPpc);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred: " + e.getMessage());
+        }
+    }
+
 }

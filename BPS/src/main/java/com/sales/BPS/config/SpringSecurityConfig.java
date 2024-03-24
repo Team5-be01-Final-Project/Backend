@@ -4,7 +4,6 @@ import com.sales.BPS.msystem.service.CustomUserDetailsService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
@@ -12,11 +11,10 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.io.IOException;
 
@@ -25,19 +23,15 @@ import java.io.IOException;
 public class SpringSecurityConfig {
 
     private final CustomUserDetailsService customUserDetailsService;
-    private final PasswordEncoder passwordEncoder; // PasswordEncoder를 필드로 선언
 
-    // CustomUserDetailsService를 생성자 주입 방식으로 받음
-    // CustomUserDetailsService와 PasswordEncoder를 생성자 주입
-    public SpringSecurityConfig(@Lazy CustomUserDetailsService customUserDetailsService, @Lazy PasswordEncoder passwordEncoder) {
-        this.customUserDetailsService = customUserDetailsService;
-        this.passwordEncoder = passwordEncoder; // 필드에 주입
-    }
-
-    // PasswordEncoder 빈 정의
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+        return NoOpPasswordEncoder.getInstance();
+    }
+
+    // CustomUserDetailsService를 생성자 주입 방식으로 받음
+    public SpringSecurityConfig(@Lazy CustomUserDetailsService customUserDetailsService) {
+        this.customUserDetailsService = customUserDetailsService;
     }
 
     // SecurityFilterChain 빈 정의
@@ -62,17 +56,14 @@ public class SpringSecurityConfig {
                         response.sendError(HttpServletResponse.SC_FORBIDDEN, "Access Denied");
                     }
                 });
+
         // 필요한 추가 설정을 여기에 추가
 
         return http.build();
     }
 
     // AuthenticationManagerBuilder 구성을 위한 메서드
-    // @Autowired 어노테이션 사용
-    // configureGlobal 메서드 수정
-    // @Autowired 어노테이션을 제거하고, 빈 생성 메서드가 아님을 명확히 합니다.
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(customUserDetailsService)
-                .passwordEncoder(passwordEncoder); // 필드 주입된 PasswordEncoder 사용
+        auth.userDetailsService(customUserDetailsService);
     }
 }

@@ -21,7 +21,7 @@ public class Authority {
     @JoinColumn(name = "emp_code", insertable = false, updatable = false)
     private Employee employee;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "auth_code", insertable = false, updatable = false)
     private AuthorityCode authorityCode;
 }

@@ -19,13 +19,20 @@ public class AuthorityService {
     }
 
     @Transactional
-    public void updateAuthority(Integer empCode, String authCode, String newAuthCode) {
-        // 복합 키 인스턴스 생성
-        AuthorityPK id = new AuthorityPK(empCode, authCode);
-        Authority authority = authorityRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Authority not found with empCode: " + empCode + " and authCode: " + authCode));
+    public void updateAuthority(Integer empCode, String oldAuthCode, String newAuthCode) {
+        // 기존 Authority 엔티티 찾기
+        AuthorityPK oldId = new AuthorityPK(empCode, oldAuthCode);
+        Authority oldAuthority = authorityRepository.findById(oldId)
+                .orElseThrow(() -> new RuntimeException("Existing authority not found"));
 
-        authority.setAuthCode(newAuthCode);
-        authorityRepository.save(authority);
+        // 기존 Authority 엔티티 삭제
+        authorityRepository.delete(oldAuthority);
+
+        // 새 Authority 엔티티 생성 및 저장
+        Authority newAuthority = new Authority();
+        newAuthority.setEmpCode(empCode); // 직접 필드 설정
+        newAuthority.setAuthCode(newAuthCode); // 직접 필드 설정
+
+        authorityRepository.save(newAuthority);
     }
 }

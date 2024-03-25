@@ -11,10 +11,17 @@ import java.util.List;
 @Service
 public class EmployeeService {
     private final EmployeeRepository employeeRepository;
+    public boolean loginEmployee(Integer empCode, String empPw);            // login
     
     @Autowired
     EmployeeService(EmployeeRepository employeeRepository){
         this.employeeRepository = employeeRepository;
+    }
+  
+      public boolean loginEmployee(Integer empCode, String empPw) {
+        return employeeRepository.findById(empCode)
+                .map(employee -> employee.getEmpPw().equals(empPw))
+                .orElse(false);
     }
 
 
@@ -34,3 +41,4 @@ public class EmployeeService {
         return employeeRepository.findAll();
     }
 }
+

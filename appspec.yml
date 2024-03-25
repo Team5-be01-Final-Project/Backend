@@ -1,9 +1,9 @@
 version: 0.0
 os: linux
 files:
-#  - source: /
-#    destination: /home/ubuntu/app/bps
-#    overwrite: yes
+  - source: /
+    destination: /home/ubuntu/app/bps
+    overwrite: yes
   - source: /*.jar
     destination: /home/ubuntu/app/bps
     overwrite: yes

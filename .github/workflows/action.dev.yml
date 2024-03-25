@@ -31,20 +31,12 @@ jobs:
         run: echo "vars.AWS_REGION=${{ vars.AWS_REGION }}"
 
       - name: Build with Maven
-#        run: mvn -B package --file pom.xml
         run: mvn -B package --file pom.xml
         working-directory: ./BPS
         env:
           DB_URL: "${{ secrets.DB_URL }}"
           DB_USERNAME: ${{ secrets.DB_USERNAME }}
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-
-#      - name: Run a script
-#        env:
-#          DB_URL: ${{ secrets.DB_URL }}
-#          DB_USERNAME: ${{ secrets.DB_USERNAME }}
-#          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-#        run: echo "Run a script"
 
       # .env 파일 생성
       - name: Create .env file
@@ -73,12 +65,12 @@ jobs:
       # .env 파일을 S3로 업로드
       - name: Upload .env to AWS S3
         run: |
-          aws s3 cp .env s3://${{ vars.S3_BUCKET_NAME }}/${{ github.run_id }}/.env
+          aws s3 cp .env s3://${{ vars.S3_BUCKET_NAME }}/.env
 
       # 빌드된 JAR 파일을 S3 버킷에 업로드
       - name: Upload JAR to AWS S3
         run: |
-          aws s3 cp ./BPS/target/*.jar s3://${{ vars.S3_BUCKET_NAME }}/${{ github.run_id }}.jar
+          aws s3 cp ./BPS/target/*.jar s3://${{ vars.S3_BUCKET_NAME }}/BPS.jar
 
       # S3 버킷에 있는 파일을 대상으로 CodeDeploy 실행
       - name: Deploy to AWS EC2 from S3

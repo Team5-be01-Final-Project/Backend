@@ -24,9 +24,7 @@ jobs:
           cache: maven
       - name: Build with Maven
 #        run: mvn -B package --file pom.xml
-        run: |
-          mvn -B package --file pom.xml -Dspring-boot.run.arguments=
-          --DB_URL='${{ secrets.DB_URL }}',--DB_USERNAME='${{ secrets.DB_USERNAME }}',--DB_PASSWORD='${{ secrets.DB_PASSWORD }}'
+        run: mvn -B package --file pom.xml -Dspring-boot.run.arguments=--DB_URL='${{ secrets.DB_URL }}',--DB_USERNAME='${{ secrets.DB_USERNAME }}',--DB_PASSWORD='${{ secrets.DB_PASSWORD }}'
         working-directory: ./BPS
 
 #      - name: Run a script

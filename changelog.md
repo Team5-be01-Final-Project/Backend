@@ -112,7 +112,8 @@
 4.2.2/0.1.1/SM
 - [Feat] 권한 리스트 조회 및 권한 변경
 
-
 2024-03-25
+- [Feat] 4.10/test/WY 단위test 코드 작성
 - [Feat] 4.2/test/SH 단위 test 코드 작성
 - [Feat] 4.5/test/SH 단위 test 코드 작성
+

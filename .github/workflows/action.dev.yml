@@ -20,7 +20,7 @@ jobs:
 
       # Maven을 사용하여 JAR 파일 빌드
       - name: Change build directory
-        run: cd BPS
+        run: cd Backend/BPS
 
       - name: Build JAR
         run: mvn clean package

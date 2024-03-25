@@ -110,5 +110,7 @@ public class PpcService {
         return ppc.orElse(null); // Ppc 객체가 존재하면 반환하고, 그렇지 않으면 null을 반환
     }
     // Ppc 엔터티를 업데이트하는 메소드
-
+    public Ppc save(Ppc ppc) {
+        return ppcRepository.save(ppc); // Ppc 엔터티를 저장하거나 업데이트
+    }
 }

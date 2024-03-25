@@ -78,7 +78,7 @@ jobs:
       # 빌드된 JAR 파일을 S3 버킷에 업로드
       - name: Upload JAR to AWS S3
         run: |
-          aws s3 cp /BPS/target/*.jar s3://${{ vars.S3_BUCKET_NAME }}/${{ github.run_id }}.jar
+          aws s3 cp ./BPS/target/*.jar s3://${{ vars.S3_BUCKET_NAME }}/${{ github.run_id }}.jar
 
       # S3 버킷에 있는 파일을 대상으로 CodeDeploy 실행
       - name: Deploy to AWS EC2 from S3

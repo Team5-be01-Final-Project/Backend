@@ -27,8 +27,8 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      - name: Print DB_URL
-        run: echo "DB_URL=${{ secrets.DB_URL }}"
+      - name: Print vars.AWS_REGION
+        run: echo "vars.AWS_REGION=${{ vars.AWS_REGION }}"
 
       - name: Build with Maven
 #        run: mvn -B package --file pom.xml

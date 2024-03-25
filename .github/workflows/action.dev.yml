@@ -18,9 +18,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: directory
+        run: pwd
+
       # Maven을 사용하여 JAR 파일 빌드
       - name: Change build directory
-        run: cd Backend/BPS
+        run: cd BPS
 
       - name: Build JAR
         run: mvn clean package

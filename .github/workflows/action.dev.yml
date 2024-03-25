@@ -22,12 +22,16 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
           cache: maven
+
+      - name: Print DB_URL
+        run: echo "DB_URL=${{ secrets.DB_URL }}"
+        
       - name: Build with Maven
 #        run: mvn -B package --file pom.xml
         run: mvn -B package --file pom.xml
         working-directory: ./BPS
         env:
-          DB_URL: ${{ secrets.DB_URL }}
+          DB_URL: "${{ secrets.DB_URL }}"
           DB_USERNAME: ${{ secrets.DB_USERNAME }}
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
 #          spring.datasource.url: ${{ secrets.DB_URL }}

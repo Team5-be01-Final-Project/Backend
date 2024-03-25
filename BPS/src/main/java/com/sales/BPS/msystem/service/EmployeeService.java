@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class EmployeeService {
@@ -20,12 +21,17 @@ public class EmployeeService {
 
     // 직원 로그인 검증 메서드
     public boolean loginEmployee(Integer empCode, String empPw) {
-        return employeeRepository.findById(empCode)
-                .map(employee -> employee.getEmpPw().equals(empPw))
-                .orElse(false);
+        Optional<Employee> employeeOptional = employeeRepository.findById(empCode);
+        if (employeeOptional.isPresent()) {
+            Employee employee = employeeOptional.get();
+            String storedEmpPw = employee.getEmpPw();
+            return empPw.equals(storedEmpPw); // 비밀번호 일치 여부 반환
+        } else {
+            return false; // 해당 직원 코드로 검색된 직원이 없는 경우
+        }
     }
-
     // 기준에 따른 직원 검색
+
     public List<EmployeeInfoDTO> findByCriteria(String deptName, String empName, String empTel) {
         return employeeRepository.findByCriteria(deptName, empName, empTel);
     }

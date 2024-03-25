@@ -15,18 +15,16 @@ jobs:
     environment: release
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: directory
-        run: pwd
-
-      # Maven을 사용하여 JAR 파일 빌드
-      - name: Change build directory
-        run: cd BPS
-
-      - name: Build JAR
-        run: mvn clean package
+      - uses: actions/checkout@v3
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+      - name: Build with Maven
+        run: mvn -B package --file pom.xml
+        working-directory: ./BPS
 
 #      - name: Run a script
 #        env:

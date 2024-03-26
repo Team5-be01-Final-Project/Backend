@@ -1,17 +1,10 @@
 package com.sales.BPS.mproduct.service;
 
-// VoucherService.java
-
 import com.sales.BPS.mproduct.dto.VoucherDTO;
 import com.sales.BPS.mproduct.entity.Voucher;
 import com.sales.BPS.mproduct.repository.VoucherRepository;
-import com.sales.BPS.msystem.entity.Employee;
-
-import com.sales.BPS.msystem.repository.EmployeeRepository;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,35 +12,36 @@ import java.util.stream.Collectors;
 public class VoucherService {
 
     private final VoucherRepository voucherRepository;
-    private final EmployeeRepository employeeRepository;
 
     @Autowired
-    public VoucherService(VoucherRepository voucherRepository, EmployeeRepository employeeRepository) {
+    public VoucherService(VoucherRepository voucherRepository) {
         this.voucherRepository = voucherRepository;
-        this.employeeRepository = employeeRepository;
     }
 
-    public List<Voucher> getAllVouchers() {
-        return voucherRepository.findAll();
-    }
-
-    public List<VoucherDTO> getAllVouchersDTO() {
+    public List<VoucherDTO> getAllVouchers() {
         List<Voucher> vouchers = voucherRepository.findAll();
         return vouchers.stream().map(this::mapToDTO).collect(Collectors.toList());
     }
 
-    private VoucherDTO mapToDTO(Voucher voucher) {
-        Employee employee = voucher.getEmployee();
-        String empName = employee != null ? employee.getEmpName() : "";
-        String clientName = voucher.getClientName(); // Assuming there's a method to get client name from voucher
-
+    public VoucherDTO mapToDTO(Voucher voucher) {
         VoucherDTO dto = new VoucherDTO();
-        dto.setVoucId(voucher.getVoucId());
-        dto.setEmpName(empName);
-        dto.setClientName(clientName);
-        dto.setVoucDate(voucher.getVoucDate());
-        dto.setAppName(voucher.getAppName());
-        dto.setVoucApproval(String.valueOf(voucher.getVoucApproval()));
+
+        if (voucher != null) {
+            dto.setVoucId(voucher.getVoucId());
+            dto.setProName(voucher.getProduct() != null ? voucher.getProduct().getProName() : null); // 제품 엔티티에서 제품명 추출, 널 체크 추가
+            dto.setVoucDate(voucher.getVoucDate());
+            dto.setVoucSale(voucher.getVoucSale());
+            dto.setVoucAmount(voucher.getVoucAmount());
+            dto.setVoucSales(voucher.getVoucSales());
+            dto.setVoucApproval(voucher.getVoucApproval());
+            dto.setClientName(voucher.getClient() != null ? voucher.getClient().getClientName() : null); // 클라이언트 엔티티에서 거래처명 추출, 널 체크 추가
+            dto.setEmpName(voucher.getEmployee() != null ? voucher.getEmployee().getEmpName() : null); // 담당자 엔티티에서 이름 추출, 널 체크 추가
+            dto.setSignerName(voucher.getEmployeeSign() != null ? voucher.getEmployeeSign().getEmpName() : null); // 결재자 엔티티에서 이름 추출, 널 체크 추가
+            dto.setVoucNote(voucher.getVoucNote());
+            dto.setApprovalStatus(voucher.getApprovalCode() != null ? voucher.getApprovalCode().getAppName() : null); // 승인 코드 엔티티에서 승인 상태 이름 추출, 널 체크 추가
+        }
+
         return dto;
     }
+
 }

@@ -1,4 +1,4 @@
-package com.sales.BPS.test;
+package com.sales.BPS.service;
 
 import com.sales.BPS.mproduct.entity.Product;
 import com.sales.BPS.mproduct.repository.ProductRepository;

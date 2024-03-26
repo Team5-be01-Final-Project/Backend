@@ -1,4 +1,4 @@
-package com.sales.BPS.test;
+package com.sales.BPS.service;
 
 import com.sales.BPS.msystem.dto.EmployeeInfoDTO;
 import com.sales.BPS.msystem.entity.Employee;

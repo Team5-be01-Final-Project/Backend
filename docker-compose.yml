@@ -14,25 +14,9 @@ services:
   bpsapp:
     build: .
     ports:
-      - 7777:8080
+      - 8081:8080
     environment:
       DB_URL: $DB_URL
       DB_USERNAME: $DB_USERNAME
       DB_PASSWORD: $DB_PASSWORD
     platform: linux/amd64
-#    depends_on:
-#      - db
-#    links:
-#      - db
-#  db:
-#    image: mariadb:10.5.24-focal
-#    ports:
-#      - 33306:3306
-#    volumes:
-#        - ./mariadb/conf.d:/etc/mysql/conf.d
-#        - ./mariadb/data:/var/lib/mysql
-#    environment:
-#      MARIADB_ROOT_PASSWORD: my_root_password
-#      MARIADB_USER: my_user
-#      MARIADB_PASSWORD: my_password
-#      MARIADB_DATABASE: my_database

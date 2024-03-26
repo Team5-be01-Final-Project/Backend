@@ -2,8 +2,8 @@
 
 cd /home/ubuntu/app/bps
 
-sudo cp .env ../../
+cp .env ../../
 
-sudo cp /BPS/target/*.jar app.jar
+cp ./BPS/target/*.jar app.jar
 
-sudo -E docker compose -f docker-compose.yml up -d
+docker compose -f docker-compose.yml up -d

@@ -84,7 +84,7 @@ jobs:
       # S3 버킷에 업로드 할 파일 압축
       - name: Zip deployment files
         run: |
-          zip $GITHUB_SHA.zip .env appspec.yml docker-compose.yml Dockerfile start.sh stop.sh ./BPS/target/*.jar
+          zip $GITHUB_SHA.zip .env .gitignore appspec.yml docker-compose.yml Dockerfile start.sh stop.sh ./BPS/target/*.jar
           
 
       # Zip 파일을 S3로 업로드

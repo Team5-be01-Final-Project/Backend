@@ -5,7 +5,9 @@ import java.time.LocalDate;
 public class IncentiveDTO {
     private String clientCode;
 
-    private
+    private String deptCode;
+
+    private String deptName;
 
     private LocalDate voucDate;
 

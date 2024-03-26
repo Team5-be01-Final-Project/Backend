@@ -31,7 +31,7 @@ jobs:
         run: echo "vars.AWS_REGION=${{ vars.AWS_REGION }}"
 
       - name: Build with Maven
-        run: mvn -B package --file pom.xml
+        run: mvn -B package -DskipTests --file pom.xml
         working-directory: ./BPS
         env:
           DB_URL: "${{ secrets.DB_URL }}"

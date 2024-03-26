@@ -45,11 +45,11 @@ public class IncentiveService {
                 int addincentive = 0;
 
                 if (rank == 1) {
-                    addincentive = (int)(voucMonthSales*0.05); // 1위
+                    addincentive = (int)(voucMonthSales*0.005); // 1위
                 } else if (rank == 2) {
-                    addincentive = (int)(voucMonthSales*0.03); // 2위
+                    addincentive = (int)(voucMonthSales*0.003); // 2위
                 } else if (rank == 3) {
-                    addincentive = (int)(voucMonthSales*0.01); // 3위
+                    addincentive = (int)(voucMonthSales*0.001); // 3위
                 }
                 incentive += addincentive;
 

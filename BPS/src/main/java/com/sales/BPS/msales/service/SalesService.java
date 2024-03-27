@@ -8,7 +8,10 @@ import com.sales.BPS.msales.repository.ClientRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class SalesService {
@@ -47,5 +50,46 @@ public class SalesService {
 
         }
         return allSalesData;
+    }
+
+    public List<ClientSalesDTO> aggregateSalesByProduct() {
+        List<Voucher> vouchers = voucherRepository.findAll();
+        Map<String, List<Voucher>> groupedByProductName = new HashMap<>();
+
+        // 상품 이름을 기준으로 데이터를 그룹화합니다.
+        for (Voucher voucher : vouchers) {
+            String proName = voucher.getProduct().getProName();
+            groupedByProductName.putIfAbsent(proName, new ArrayList<>());
+            groupedByProductName.get(proName).add(voucher);
+        }
+
+        List<ClientSalesDTO> aggregatedProducts = new ArrayList<>();
+        for (Map.Entry<String, List<Voucher>> entry : groupedByProductName.entrySet()) {
+            String proName = entry.getKey();
+            List<Voucher> vouchersForProduct = entry.getValue();
+
+            int totalVoucAmount = 0;
+            long totalVoucSales = 0;
+            long totalCostOfSales = 0;
+            for (Voucher voucher : vouchersForProduct) {
+                totalVoucAmount += voucher.getVoucAmount();
+                totalVoucSales += (long) voucher.getVoucSale() * voucher.getVoucAmount();
+                totalCostOfSales += (long) voucher.getProduct().getProUnit() * voucher.getVoucAmount();
+            }
+            long totalGrossProfit = totalVoucSales - totalCostOfSales;
+            double profitMargin = totalVoucSales > 0 ? (double) totalGrossProfit / totalVoucSales * 100 : 0;
+
+            ClientSalesDTO aggregatedProduct = new ClientSalesDTO();
+            aggregatedProduct.setProName(proName);
+            aggregatedProduct.setVoucAmount(totalVoucAmount);
+            aggregatedProduct.setVoucSales(totalVoucSales);
+            aggregatedProduct.setGrossProfit(totalGrossProfit);
+            aggregatedProduct.setCostOfSales((int) totalCostOfSales);
+            aggregatedProduct.setProfitMargin(profitMargin);
+
+            aggregatedProducts.add(aggregatedProduct);
+        }
+
+        return aggregatedProducts;
     }
 }

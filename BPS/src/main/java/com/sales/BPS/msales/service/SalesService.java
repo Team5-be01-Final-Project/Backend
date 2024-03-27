@@ -3,6 +3,7 @@ package com.sales.BPS.msales.service;
 import com.sales.BPS.mproduct.entity.Voucher;
 import com.sales.BPS.mproduct.repository.VoucherRepository;
 import com.sales.BPS.msales.dto.ClientSalesDTO;
+import com.sales.BPS.msales.dto.ProductSalesDTO;
 import com.sales.BPS.msales.entity.Client;
 import com.sales.BPS.msales.repository.ClientRepository;
 import org.springframework.stereotype.Service;
@@ -52,7 +53,7 @@ public class SalesService {
         return allSalesData;
     }
 
-    public List<ClientSalesDTO> aggregateSalesByProduct() {
+    public List<ProductSalesDTO> aggregateSalesByProduct() {
         List<Voucher> vouchers = voucherRepository.findAll();
         Map<String, List<Voucher>> groupedByProductName = new HashMap<>();
 
@@ -63,7 +64,7 @@ public class SalesService {
             groupedByProductName.get(proName).add(voucher);
         }
 
-        List<ClientSalesDTO> aggregatedProducts = new ArrayList<>();
+        List<ProductSalesDTO> aggregatedProducts = new ArrayList<>();
         for (Map.Entry<String, List<Voucher>> entry : groupedByProductName.entrySet()) {
             String proName = entry.getKey();
             List<Voucher> vouchersForProduct = entry.getValue();
@@ -71,6 +72,7 @@ public class SalesService {
             int totalVoucAmount = 0;
             long totalVoucSales = 0;
             long totalCostOfSales = 0;
+            Integer proUnit  = vouchersForProduct.get(0).getProduct().getProUnit();
             for (Voucher voucher : vouchersForProduct) {
                 totalVoucAmount += voucher.getVoucAmount();
                 totalVoucSales += (long) voucher.getVoucSale() * voucher.getVoucAmount();
@@ -79,8 +81,9 @@ public class SalesService {
             long totalGrossProfit = totalVoucSales - totalCostOfSales;
             double profitMargin = totalVoucSales > 0 ? (double) totalGrossProfit / totalVoucSales * 100 : 0;
 
-            ClientSalesDTO aggregatedProduct = new ClientSalesDTO();
+            ProductSalesDTO aggregatedProduct = new ProductSalesDTO();
             aggregatedProduct.setProName(proName);
+            aggregatedProduct.setProUnit(proUnit);
             aggregatedProduct.setVoucAmount(totalVoucAmount);
             aggregatedProduct.setVoucSales(totalVoucSales);
             aggregatedProduct.setGrossProfit(totalGrossProfit);

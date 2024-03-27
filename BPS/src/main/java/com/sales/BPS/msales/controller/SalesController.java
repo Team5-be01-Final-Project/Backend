@@ -1,6 +1,7 @@
 package com.sales.BPS.msales.controller;
 
 import com.sales.BPS.msales.dto.ClientSalesDTO;
+import com.sales.BPS.msales.dto.ProductSalesDTO;
 import com.sales.BPS.msales.service.SalesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -28,8 +29,8 @@ public class SalesController {
     }
 
     @GetMapping("/productsales")
-    public ResponseEntity<List<ClientSalesDTO>> ProductSales(){
-        List<ClientSalesDTO> clientSalesDTOList = salesService.aggregateSalesByProduct();
-        return ResponseEntity.ok(clientSalesDTOList);
+    public ResponseEntity<List<ProductSalesDTO>> ProductSales(){
+        List<ProductSalesDTO> productSalesDTOS = salesService.aggregateSalesByProduct();
+        return ResponseEntity.ok(productSalesDTOS);
     }
 }

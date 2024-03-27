@@ -12,7 +12,6 @@ public class AuthorityService {
 
     private final AuthorityRepository authorityRepository;
 
-
     @Autowired
     public AuthorityService(AuthorityRepository authorityRepository) {
         this.authorityRepository = authorityRepository;
@@ -35,4 +34,9 @@ public class AuthorityService {
 
         authorityRepository.save(newAuthority);
     }
+
+    public String findAuthNameByEmpCode(Integer empCode) {
+        return authorityRepository.findAuthNameByEmpCode(empCode);
+    }
+
 }

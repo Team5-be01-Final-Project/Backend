@@ -4,6 +4,8 @@ spring:
       platform: mariadb
       encoding: UTF-8
       mode: always
+  jwt:
+    secret: test
 
   datasource:
     driverClassName: org.mariadb.jdbc.Driver

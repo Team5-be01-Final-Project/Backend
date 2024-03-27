@@ -5,6 +5,7 @@ import lombok.Data;
 
 @Entity
 @Data
+// @IdClass(StockPK.class)
 @Table(name = "STOCK")
 public class Stock {
     @Id

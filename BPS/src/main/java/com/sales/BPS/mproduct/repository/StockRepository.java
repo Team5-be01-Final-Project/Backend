@@ -1,12 +1,15 @@
 package com.sales.BPS.mproduct.repository;
 
 import com.sales.BPS.mproduct.dto.StockListDTO;
+import com.sales.BPS.mproduct.entity.Product;
 import com.sales.BPS.mproduct.entity.Stock;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface StockRepository extends JpaRepository<Stock, Integer> {
 
@@ -22,5 +25,8 @@ public interface StockRepository extends JpaRepository<Stock, Integer> {
             "AND (:proName IS NULL OR p.proName LIKE %:proName%)")
     List<StockListDTO> findStockList(@Param("proCode") Integer proCode,
                                      @Param("proName") String proName);
+
+    @Query("SELECT p FROM Product p WHERE p.proCode = :proCode")
+    Optional<Product> findProductByProCode(@Param("proCode") Integer proCode);
 
 }

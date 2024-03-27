@@ -1,13 +1,21 @@
 package com.sales.BPS.mproduct.service;
 
+import com.sales.BPS.mproduct.dto.VoucherApprovalDTO;
 import com.sales.BPS.mproduct.dto.VoucherDTO;
+import com.sales.BPS.mproduct.entity.Stock;
 import com.sales.BPS.mproduct.entity.Voucher;
+import com.sales.BPS.mproduct.entity.VoucherPK;
+import com.sales.BPS.mproduct.repository.ApprovalCodeRepository;
+import com.sales.BPS.mproduct.repository.StockRepository;
 import com.sales.BPS.mproduct.repository.VoucherRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.sales.BPS.msystem.repository.EmployeeRepository;
+
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -80,4 +88,53 @@ public class VoucherService {
             voucher.setVoucSales(sales);
         }
     }
+
+    @Autowired
+    private StockRepository stockRepository;
+    @Autowired
+    private ApprovalCodeRepository approvalCodeRepository;
+    @Autowired
+    private EmployeeRepository employeeRepository;
+
+    public void approveVoucher(Long voucId, VoucherApprovalDTO request) {
+        VoucherPK voucherPK = new VoucherPK();
+        voucherPK.setVoucId(voucId);
+        voucherPK.setProduct(request.getProCode());
+
+        Voucher voucher = voucherRepository.findById(voucherPK)
+                .orElseThrow(() -> new RuntimeException("Voucher not found"));
+
+        // 재고 차감 로직 수정
+        Optional<Stock> stockOptional = stockRepository.findById(request.getProCode());
+        if (stockOptional.isPresent()) {
+            Stock stock = stockOptional.get();
+            int remainingStock = stock.getStoAmo() - voucher.getVoucAmount();
+            if (remainingStock < 0) {
+                throw new RuntimeException("Insufficient stock");
+            }
+            stock.setStoAmo(remainingStock);
+            stockRepository.save(stock);
+        } else {
+            throw new RuntimeException("Stock not found");
+        }
+
+        // PPC 테이블에 판매 정보 저장 로직 추가
+        // ...
+
+        voucher.setApprovalCode(approvalCodeRepository.findById("A01").orElse(null));
+        voucher.setEmployeeSign(employeeRepository.findById(request.getEmpCode()).orElse(null));
+        voucher.setVoucApproval(LocalDate.now());
+        voucherRepository.save(voucher);
+    }
+
+    public void rejectVoucher(Long voucId, VoucherApprovalDTO request) {
+        Voucher voucher = voucherRepository.findById(new VoucherPK(voucId, request.getProCode()))
+                .orElseThrow(() -> new RuntimeException("Voucher not found"));
+
+        voucher.setApprovalCode(approvalCodeRepository.findById("A02").orElse(null));
+        voucher.setEmployeeSign(employeeRepository.findById(request.getEmpCode()).orElse(null));
+        voucher.setVoucApproval(LocalDate.now());
+        voucherRepository.save(voucher);
+    }
+
 }

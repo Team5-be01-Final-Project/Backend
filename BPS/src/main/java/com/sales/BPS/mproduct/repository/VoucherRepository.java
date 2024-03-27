@@ -4,8 +4,11 @@ import com.sales.BPS.mproduct.entity.Voucher;
 import com.sales.BPS.mproduct.entity.VoucherPK;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
+
 import java.util.List;
 
+@Repository
 public interface VoucherRepository extends JpaRepository<Voucher, VoucherPK> {
 
     // 직원별, 월별, 매출 데이터를 매출 금액이 큰 순으로 가져옴

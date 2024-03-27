@@ -35,7 +35,7 @@ public class Voucher {
     private Integer voucAmount;
 
     @Column(name = "vouc_sales")
-    private long voucSales;
+    private Long voucSales;
 
     @Column(name = "vouc_approval")
     private LocalDate voucApproval;

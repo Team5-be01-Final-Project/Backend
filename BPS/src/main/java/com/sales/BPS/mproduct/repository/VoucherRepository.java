@@ -2,6 +2,17 @@ package com.sales.BPS.mproduct.repository;
 
 import com.sales.BPS.mproduct.entity.Voucher;
 import com.sales.BPS.mproduct.entity.VoucherPK;
+import com.sales.BPS.msales.entity.Client;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.List;
+
+public interface VoucherRepository extends JpaRepository<Voucher, VoucherPK> {
+
+    List<Voucher> findAllByProductProCode(Integer proCode);
+
+    List<Voucher> findByClient(Client client);
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -16,4 +27,5 @@ public interface VoucherRepository extends JpaRepository<Voucher, VoucherPK> {
     List<Object[]> findSalesByEmployeeAndMonth(int month);
   
     List<Voucher> findByVoucId(Long voucId);
+
 }

@@ -1,12 +1,13 @@
 package com.sales.BPS.mproduct.controller;
 
 import com.sales.BPS.mproduct.dto.StockListDTO;
+import com.sales.BPS.mproduct.dto.StockProductDTO;
+import com.sales.BPS.mproduct.dto.StockRegisterDTO;
 import com.sales.BPS.mproduct.service.StockService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -32,5 +33,26 @@ public class StockController {
         return stockService.findStockListByCondition(proCode, proName);
     }
 
+    @PostMapping("/register")
+    public ResponseEntity<String> registerStock(@RequestBody StockRegisterDTO stockRegisterDTO) {
+        try {
+            stockService.registerStock(stockRegisterDTO);
+            return ResponseEntity.ok("재고 등록이 완료되었습니다.");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("재고 등록 중 오류가 발생했습니다.");
+        }
+    }
+
+    @GetMapping("/product/{proCode}")
+    public ResponseEntity<StockProductDTO> getProductByCode(@PathVariable Integer proCode) {
+        StockProductDTO product = stockService.getProductByCode(proCode);
+        if (product != null) {
+            return ResponseEntity.ok(product);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 
 }

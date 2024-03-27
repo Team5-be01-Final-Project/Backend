@@ -18,7 +18,7 @@ public class IncentiveController {
     @Autowired
     private IncentiveService incentiveService;
 
-    @GetMapping
+    @GetMapping("/list")
     public List<IncentiveDTO> getSalesPerformance(@RequestParam int month) {
         return incentiveService.calculateIncentive(month);
     }

@@ -49,6 +49,9 @@ public class VoucherService {
             dto.setSignerName(voucher.getEmployeeSign() != null ? voucher.getEmployeeSign().getEmpName() : null); // 결재자 엔티티에서 이름 추출, 널 체크 추가
             dto.setVoucNote(voucher.getVoucNote());
             dto.setApprovalStatus(voucher.getApprovalCode() != null ? voucher.getApprovalCode().getAppName() : null); // 승인 코드 엔티티에서 승인 상태 이름 추출, 널 체크 추가
+            // 버튼 표시 여부 설정
+            dto.setShowApproveButton(voucher.getApprovalCode() != null && voucher.getApprovalCode().getAppCode().equals("A00"));
+            dto.setShowRejectButton(voucher.getApprovalCode() != null && voucher.getApprovalCode().getAppCode().equals("A00"));
         }
 
         return dto;
@@ -68,6 +71,10 @@ public class VoucherService {
         dto.setSignerName(voucher.getEmployeeSign() != null ? voucher.getEmployeeSign().getEmpName() : null);
         dto.setVoucNote(voucher.getVoucNote());
         dto.setApprovalStatus(voucher.getApprovalCode() != null ? voucher.getApprovalCode().getAppName() : null);
+
+        dto.setShowApproveButton(voucher.getApprovalCode() != null && voucher.getApprovalCode().getAppCode().equals("A00"));
+        dto.setShowRejectButton(voucher.getApprovalCode() != null && voucher.getApprovalCode().getAppCode().equals("A00"));
+
         if (voucher.getEmployee() != null && voucher.getEmployee().getStorage() != null) {
             dto.setStorageCar(voucher.getEmployee().getStorage().getStorageCar());
         }
@@ -144,5 +151,7 @@ public class VoucherService {
         voucher.setVoucApproval(LocalDate.now());
         voucherRepository.save(voucher);
     }
+
+
 
 }

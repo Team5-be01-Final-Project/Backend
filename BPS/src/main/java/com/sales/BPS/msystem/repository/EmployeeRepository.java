@@ -35,4 +35,9 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
     List<EmployeeInfoDTO> findByCriteria(@Param("deptName") String deptName,
                                          @Param("empName") String empName,
                                          @Param("empTel") String empTel);
+
+    Boolean existsByEmpCode(Integer empCode);
+
+    Employee findByEmpCode(Integer empCode);
+
 }

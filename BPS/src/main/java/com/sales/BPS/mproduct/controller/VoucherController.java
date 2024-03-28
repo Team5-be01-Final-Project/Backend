@@ -1,5 +1,6 @@
 package com.sales.BPS.mproduct.controller;
 
+import com.sales.BPS.mproduct.dto.VoucherApprovalDTO;
 import com.sales.BPS.mproduct.dto.VoucherDTO;
 import com.sales.BPS.mproduct.entity.Voucher;
 import com.sales.BPS.mproduct.service.VoucherService;
@@ -7,10 +8,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
@@ -44,4 +43,17 @@ public class VoucherController {
         }
         return ResponseEntity.ok(dtoList);
     }
+
+    @PutMapping("/{voucId}/approve")
+    public ResponseEntity<Void> approveVoucher(@PathVariable Long voucId, @RequestBody VoucherApprovalDTO request) {
+        voucherService.approveVoucher(voucId, request);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/{voucId}/reject")
+    public ResponseEntity<Void> rejectVoucher(@PathVariable Long voucId, @RequestBody VoucherApprovalDTO request) {
+        voucherService.rejectVoucher(voucId, request);
+        return ResponseEntity.ok().build();
+    }
+
 }

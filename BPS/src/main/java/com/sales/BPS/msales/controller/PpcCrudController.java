@@ -6,6 +6,8 @@ import com.sales.BPS.msales.entity.Client;
 import com.sales.BPS.msales.entity.Ppc;
 import com.sales.BPS.msales.service.ClientService;
 import com.sales.BPS.msales.service.PpcService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +17,7 @@ import java.util.*;
 
 @RestController
 @RequestMapping("/ppc")
+@Tag(name = "Products API", description = "상품관리 API입니다.")
 public class PpcCrudController {
 
     private final PpcService ppcService;
@@ -29,12 +32,16 @@ public class PpcCrudController {
 
 
     @GetMapping("/all")
+    @Tag(name = "Products API")
+    @Operation(summary = "거래처별 상품조회",description = "거래처별 상품 리스트를 조회합니다.")
     public ResponseEntity<List<Ppc>> getAllPpcs() {
         List<Ppc> allPpcs = ppcService.getAllPpcs();
         return ResponseEntity.ok(allPpcs);
     }
 
     @PostMapping("/{proCode}")
+    @Tag(name = "Products API")
+    @Operation(summary = "거래처별 판매상품 판매가수정",description = "거래처별 판매상품 판매가를 수정합니다.")
     public ResponseEntity<?> updateSale(@PathVariable Integer proCode, @RequestBody Map<String, Object> request) {
         try {
             String clientCode = (String) request.get("clientCode");
@@ -75,6 +82,8 @@ public class PpcCrudController {
         }
     }
     @DeleteMapping("/{proCode}")
+    @Tag(name = "Products API")
+    @Operation(summary = "거래처별 판매상품삭제",description = "거래처별 판매상품을 삭제합니다.")
     public ResponseEntity<String> deleteProduct(@PathVariable Integer proCode) {
         try {
             ppcService.deletePpcByProCode(proCode);
@@ -86,6 +95,8 @@ public class PpcCrudController {
     }
 
     @GetMapping("/data")
+    @Tag(name = "Products API")
+    @Operation(summary = "담당자별 거래처 조회",description = "거래처별 판매상품을 삭제합니다.")
     public ResponseEntity<Map<String, Object>> getData() {
         List<Ppc> ppcs = ppcService.getAllPpcs();
         Set<String> clientSet = new HashSet<>();
@@ -110,6 +121,8 @@ public class PpcCrudController {
     }
 
     @PutMapping("/{proCode}")
+    @Tag(name = "Products API")
+    @Operation(summary = "거래처별 판매상품수정",description = "거래처별 판매상품을 수정합니다.")
     public ResponseEntity<?> updatePpcEntry(@PathVariable Integer proCode, @RequestBody Map<String, Object> request) {
         try {
             String clientCode = (String) request.get("clientCode");

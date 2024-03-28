@@ -128,8 +128,16 @@ public class VoucherService {
     }
 
     public void rejectVoucher(Long voucId, VoucherApprovalDTO request) {
-        Voucher voucher = voucherRepository.findById(new VoucherPK(voucId, request.getProCode()))
+        VoucherPK voucherPK = new VoucherPK();
+        voucherPK.setVoucId(voucId);
+        voucherPK.setProduct(request.getProCode());
+
+        Voucher voucher = voucherRepository.findById(voucherPK)
                 .orElseThrow(() -> new RuntimeException("Voucher not found"));
+
+        if (!voucher.getProduct().getProCode().equals(request.getProCode())) {
+            throw new RuntimeException("Invalid product code");
+        }
 
         voucher.setApprovalCode(approvalCodeRepository.findById("A02").orElse(null));
         voucher.setEmployeeSign(employeeRepository.findById(request.getEmpCode()).orElse(null));

@@ -76,7 +76,7 @@ public class VoucherService {
     // 매출액 계산 로직
     private void calculateVoucSales(Voucher voucher) {
         if (voucher.getVoucSale() != null && voucher.getVoucAmount() != null) {
-            Long sales = ((long) voucher.getVoucSale() * voucher.getVoucAmount());
+            Long sales = (long) (voucher.getVoucSale() * voucher.getVoucAmount());
             voucher.setVoucSales(sales);
         }
     }

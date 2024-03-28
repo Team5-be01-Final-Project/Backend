@@ -58,23 +58,5 @@ public class Voucher {
 
     @Column(name = "vouc_note")
     private String voucNote;
-    // Client 이름 반환 메서드
-    public String getClientName() {
-        if (client != null) {
-            return client.getClientName();
-        } else {
-            return null;
-        }
-    }
-
-    // Employee 이름 반환 메서드
-    public String getAppName() {
-        if (employee != null) {
-            return employee.getEmpName();
-        } else {
-            return null;
-        }
-    }
-
 
 }

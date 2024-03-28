@@ -20,6 +20,7 @@ public class LoginController {
     @Autowired
     private EmployeeService employeeService;
 
+
     @PostMapping("/login")
     @Tag(name = "System API")
     @Operation(summary = "로그인",description = "로그인 시도 후 결과 반환")
@@ -29,10 +30,31 @@ public class LoginController {
 
         boolean isValidUser = employeeService.loginEmployee(loginRequest.getEmpCode(), loginRequest.getEmpPw());
         if (isValidUser) {
-            Cookie empCodeCookie = new Cookie("empCode", loginRequest.getEmpCode().toString());
+            Integer empCode = loginRequest.getEmpCode();
+
+            Cookie empCodeCookie = new Cookie("empCode", empCode.toString());
             empCodeCookie.setMaxAge(12 * 60 * 60); // 쿠키의 유효 기간을 12시간으로 설정
             empCodeCookie.setPath("/"); // 쿠키의 경로 설정(모든 경로에서 쿠키 사용 가능)
             response.addCookie(empCodeCookie);
+
+
+            Cookie empNameCookie = new Cookie("empName", employeeService.findByEmpCode(empCode).getEmpName());
+            empNameCookie.setMaxAge(12 * 60 * 60);
+            empNameCookie.setPath("/");
+            response.addCookie(empNameCookie);
+
+
+            Cookie empImgCookie = new Cookie("empImg", employeeService.findByEmpCode(empCode).getEmpImg());
+            empImgCookie.setMaxAge(12 * 60 * 60);
+            empImgCookie.setPath("/");
+            response.addCookie(empImgCookie);
+
+
+            Cookie empaAuthCodeCookie = new Cookie("empAuthCode",employeeService.findByEmpCode(empCode).getAuthority().getAuthCode());
+            empaAuthCodeCookie.setMaxAge(12 * 60 * 60);
+            empaAuthCodeCookie.setPath("/");
+            response.addCookie(empaAuthCodeCookie);
+
             return ResponseEntity.ok("Login successful");
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
@@ -47,14 +69,42 @@ public class LoginController {
 
     @PostMapping("/logout")
     public ResponseEntity<?> logout(HttpServletResponse response) {
-        // 쿠키 무효화
-        Cookie cookie = new Cookie("empCode", null); //empCode 쿠키 만료
-        cookie.setPath("/"); // 쿠키의 경로 설정
-        cookie.setMaxAge(0); // 쿠키의 만료 시간을 0으로 설정하여 즉시 만료
-        response.addCookie(cookie);
 
+        // 쿠키 무효화
+        Cookie empCodeCookie = new Cookie("empCode", null); //empCode 쿠키 만료
+        empCodeCookie.setPath("/");
+        empCodeCookie.setMaxAge(0); // 쿠키의 만료 시간을 0으로 설정하여 즉시 만료
+        response.addCookie(empCodeCookie);
+
+        Cookie empNameCookie = new Cookie("empName", null); //empCode 쿠키 만료
+        empNameCookie.setPath("/");
+        empNameCookie.setMaxAge(0); // 쿠키의 만료 시간을 0으로 설정하여 즉시 만료
+        response.addCookie(empNameCookie);
+
+        Cookie empImgCookie = new Cookie("empImg", null); //empCode 쿠키 만료
+        empImgCookie.setPath("/");
+        empImgCookie.setMaxAge(0); // 쿠키의 만료 시간을 0으로 설정하여 즉시 만료
+        response.addCookie(empImgCookie);
+
+        Cookie empaAuthCodeCookie = new Cookie("empAuthCode", null); //empCode 쿠키 만료
+        empaAuthCodeCookie.setPath("/");
+        empaAuthCodeCookie.setMaxAge(0); // 쿠키의 만료 시간을 0으로 설정하여 즉시 만료
+        response.addCookie(empaAuthCodeCookie);
+
+        // 쿠키 무효화 2
+//        invalidateCookies(response);
 
         return ResponseEntity.ok("Logout successful");
     }
 
+//    // 쿠키 무효화를 위한 메소드
+//    private void invalidateCookies(HttpServletResponse response) {
+//        String[] cookieNames = {"empCode", "empName", "empImg", "empAuthCode"};
+//        for (String cookieName : cookieNames) {
+//            Cookie cookie = new Cookie(cookieName, null);
+//            cookie.setPath("/");
+//            cookie.setMaxAge(0); // 쿠키 즉시 만료
+//            response.addCookie(cookie);
+//        }
+//    }
 }

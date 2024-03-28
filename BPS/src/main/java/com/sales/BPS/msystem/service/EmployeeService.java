@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -31,7 +32,6 @@ public class EmployeeService {
         }
     }
     // 기준에 따른 직원 검색
-
     public List<EmployeeInfoDTO> findByCriteria(String deptName, String empName, String empTel) {
         return employeeRepository.findByCriteria(deptName, empName, empTel);
     }
@@ -39,5 +39,10 @@ public class EmployeeService {
     // 모든 직원 목록을 반환하는 메서드
     public List<Employee> getAllEmployees() {
         return employeeRepository.findAll();
+    }
+
+    public Employee  findByEmpCode(Integer empCode){
+        return employeeRepository.findById(empCode)
+                .orElseThrow(() -> new NoSuchElementException("해당하는 직원을 찾을 수 없습니다. EmpCode: " + empCode));
     }
 }

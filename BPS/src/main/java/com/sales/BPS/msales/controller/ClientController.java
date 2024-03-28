@@ -8,6 +8,8 @@ import com.sales.BPS.msales.repository.ClientRepository;
 import com.sales.BPS.msales.service.ClientService;
 import com.sales.BPS.msystem.entity.Employee;
 import com.sales.BPS.msystem.service.EmployeeService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +20,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/clients")
+@Tag(name = "Client API", description = "거래처관리 API입니다.")
 public class ClientController {
 
     private final ClientService clientService;
@@ -30,6 +33,8 @@ public class ClientController {
     }
 
     @PostMapping
+    @Tag(name = "Client API")
+    @Operation(summary = "거래처 등록",description = "거래처를 등록합니다.")
     public ResponseEntity<?> addClient(@RequestBody Map<String, Object> payload) {
         try {
             // empCode를 제외한 Client 데이터 역직렬화
@@ -45,6 +50,8 @@ public class ClientController {
     }
 
     @GetMapping("/list")
+    @Tag(name = "Client API")
+    @Operation(summary = "거래처 조회",description = "거래처를 조회합니다.")
     public List<ClientRepository.ClientProjection> getClients() {
         return clientService.getClientsWithSpecificFields();
     }
@@ -52,6 +59,8 @@ public class ClientController {
 
 
     @PutMapping("/{clientCode}")
+    @Tag(name = "Client API")
+    @Operation(summary = "ClientDTO update",description = "ClientDTO에 정보를 업데이트 합니다.")
     public ResponseEntity<Client> updateClient(@PathVariable String clientCode, @RequestBody ClientDTO clientDTO){
         clientDTO.setClientCode(clientCode);
         Client updatedClient = clientService.saveOrUpdateClient(clientDTO);
@@ -60,6 +69,8 @@ public class ClientController {
 
 
     @DeleteMapping("/{clientCode}")
+    @Tag(name = "Client API")
+    @Operation(summary = "거래처 삭제",description = "거래처를 삭제합니다.")
     public ResponseEntity<?> deleteClient(@PathVariable String clientCode) {
         try {
             clientService.deleteClientByClientCode(clientCode);
@@ -70,6 +81,8 @@ public class ClientController {
     }
 
     @GetMapping("/{clientCode}")
+    @Tag(name = "Client API")
+    @Operation(summary = "수정 전 조회",description = "거래처 수정 전 거래처를 조회합니다.")
     public ResponseEntity<ClientDTO> getClientByCode(@PathVariable String clientCode) {
         try {
             ClientDTO clientDTO = clientService.findByClientCode(clientCode);

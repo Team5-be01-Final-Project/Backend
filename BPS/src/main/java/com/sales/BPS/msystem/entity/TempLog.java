@@ -1,5 +1,6 @@
 package com.sales.BPS.msystem.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -21,6 +22,7 @@ public class TempLog {
     @Column(name = "storage_code")
     private String storageCode; // 직접 선언
 
+    @JsonBackReference
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "storage_code", insertable = false, updatable = false)
     private Storage storage;

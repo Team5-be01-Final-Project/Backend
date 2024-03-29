@@ -21,3 +21,9 @@ spring:
     show-sql: true
 server:
   port: 8081
+
+  # 스케줄링 활성화
+  task:
+    scheduling:
+      pool:
+        size: 5

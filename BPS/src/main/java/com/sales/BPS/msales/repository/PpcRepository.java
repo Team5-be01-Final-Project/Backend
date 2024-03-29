@@ -1,7 +1,5 @@
 package com.sales.BPS.msales.repository;
 
-// PpcRepository.java
-
 import com.sales.BPS.msales.entity.Ppc;
 import com.sales.BPS.msales.entity.PpcPK;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -19,6 +17,4 @@ public interface PpcRepository extends JpaRepository<Ppc, PpcPK> {
     List<Ppc> findByProCode(Integer proCode);
 
     Optional<Ppc> findByClientCodeAndProCode(String clientCode, Integer proCode);
-
 }
-

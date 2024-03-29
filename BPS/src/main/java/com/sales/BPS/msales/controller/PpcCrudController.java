@@ -1,159 +1,70 @@
-package com.sales.BPS.msales.controller;
+package com.sales.BPS.msales.controller;// PpcCrudController.java
 
-import com.sales.BPS.mproduct.entity.Product;
-import com.sales.BPS.mproduct.service.ProductService;
-import com.sales.BPS.msales.entity.Client;
-import com.sales.BPS.msales.entity.Ppc;
-import com.sales.BPS.msales.service.ClientService;
+import com.sales.BPS.msales.dto.PpcDTO;
 import com.sales.BPS.msales.service.PpcService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.*;
+import java.util.List;
 
 @RestController
 @RequestMapping("/ppc")
-@Tag(name = "Products API", description = "상품관리 API입니다.")
 public class PpcCrudController {
 
     private final PpcService ppcService;
-    private final ProductService productService;
-    private final ClientService clientService;
+
     @Autowired
-    public PpcCrudController(PpcService ppcService, ProductService productService, ClientService clientService) {
+    public PpcCrudController(PpcService ppcService) {
         this.ppcService = ppcService;
-        this.productService = productService;
-        this.clientService = clientService;
     }
 
+    // 거래처별 상품 가격 정보 조회
+    @GetMapping("/client/{clientCode}")
+    public ResponseEntity<List<PpcDTO>> getPpcsByClientCode(@PathVariable String clientCode) {
+        List<PpcDTO> ppcDTOs = ppcService.getPpcs(clientCode);
+        return ResponseEntity.ok(ppcDTOs);
+    }
+
+    // 거래처별 상품 가격 정보 추가 또는 업데이트
+    @PutMapping("/update/{proCode}")
+    public ResponseEntity<Void> updatePpc(@PathVariable Integer proCode, @RequestBody PpcDTO ppcDTO) {
+        ppcService.updatePpc(proCode, ppcDTO);
+        return ResponseEntity.ok().build();
+    }
+
+    // 거래처별 상품 가격 정보 삭제
+    @DeleteMapping("/{proCode}")
+    public ResponseEntity<?> deletePpc(@PathVariable Integer proCode) {
+        ppcService.deletePpcByProCode(proCode);
+        return ResponseEntity.ok().build();
+    }
 
     @GetMapping("/all")
-    @Tag(name = "Products API")
-    @Operation(summary = "거래처별 상품조회",description = "거래처별 상품 리스트를 조회합니다.")
-    public ResponseEntity<List<Ppc>> getAllPpcs() {
-        List<Ppc> allPpcs = ppcService.getAllPpcs();
-        return ResponseEntity.ok(allPpcs);
+    public ResponseEntity<List<PpcDTO>> getAllPpcs() {
+        List<PpcDTO> allPpcDTOs = ppcService.getAllPpcs();
+        return ResponseEntity.ok(allPpcDTOs);
     }
 
-    @PostMapping("/{proCode}")
-    @Tag(name = "Products API")
-    @Operation(summary = "거래처별 판매상품 판매가수정",description = "거래처별 판매상품 판매가를 수정합니다.")
-    public ResponseEntity<?> updateSale(@PathVariable Integer proCode, @RequestBody Map<String, Object> request) {
-        try {
-            String clientCode = (String) request.get("clientCode");
-            Integer ppcSale = (Integer) request.get("ppcSale");
+    @PostMapping("/register")
+    public ResponseEntity<Void> registerPpc(@RequestBody PpcDTO ppcDTO) {
+        boolean isExisting = ppcService.isExistingSale(ppcDTO.getClientCode(), ppcDTO.getProCode());
 
-            if (clientCode == null || clientCode.isEmpty()) {
-                throw new IllegalArgumentException("Client code must not be null or empty");
-            }
-
-            // Check if the product exists
-            Product product = productService.findProductByProCode(proCode);
-            if (product == null) {
-                // If the product doesn't exist, return error response
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product not found with proCode: " + proCode);
-            }
-
-            // Check if the client exists
-            Client client = clientService.findClientByClientCode(clientCode);
-            if (client == null) {
-                // If the client doesn't exist, return error response
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Client not found with clientCode: " + clientCode);
-            }
-
-            // Check if the PPC entry already exists
-            boolean existingSale = ppcService.isExistingSale(clientCode, proCode);
-            if (existingSale) {
-                // If the PPC entry already exists, return error response
-                return ResponseEntity.status(HttpStatus.CONFLICT).body("PPC entry already exists for clientCode: " + clientCode + " and proCode: " + proCode);
-            }
-
-            // Update or add PPC entry
-            Ppc updatedPpc = ppcService.addOrUpdatePpc(clientCode, proCode, ppcSale);
-
-            return ResponseEntity.ok(updatedPpc);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred: " + e.getMessage());
-        }
-    }
-    @DeleteMapping("/{proCode}")
-    @Tag(name = "Products API")
-    @Operation(summary = "거래처별 판매상품삭제",description = "거래처별 판매상품을 삭제합니다.")
-    public ResponseEntity<String> deleteProduct(@PathVariable Integer proCode) {
-        try {
-            ppcService.deletePpcByProCode(proCode);
-            return ResponseEntity.ok("Product deleted successfully.");
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to delete product: " + e.getMessage());
-        }
-    }
-
-    @GetMapping("/data")
-    @Tag(name = "Products API")
-    @Operation(summary = "담당자별 거래처 조회",description = "거래처별 판매상품을 삭제합니다.")
-    public ResponseEntity<Map<String, Object>> getData() {
-        List<Ppc> ppcs = ppcService.getAllPpcs();
-        Set<String> clientSet = new HashSet<>();
-        List<Map<String, String>> clients = new ArrayList<>();
-
-        for (Ppc ppc : ppcs) {
-            String clientKey = ppc.getClientName() + "-" + ppc.getEmpName();
-            if (clientSet.add(clientKey)) {
-                Map<String, String> client = new HashMap<>();
-                client.put("clientCode", ppc.getClientCode());
-                client.put("clientName", ppc.getClientName());
-                client.put("empName", ppc.getEmpName());
-                clients.add(client);
-            }
+        if (isExisting) {
+            return ResponseEntity.badRequest().build(); // Return bad request status if the combination already exists
         }
 
-        Map<String, Object> response = new HashMap<>();
-        response.put("clients", clients);
-        response.put("products", ppcs);
-
-        return ResponseEntity.ok(response);
+        // If the combination does not exist, proceed with registration
+        ppcService.registerPpc(ppcDTO);
+        return ResponseEntity.ok().build();
     }
 
-    @PutMapping("/{proCode}")
-    @Tag(name = "Products API")
-    @Operation(summary = "거래처별 판매상품수정",description = "거래처별 판매상품을 수정합니다.")
-    public ResponseEntity<?> updatePpcEntry(@PathVariable Integer proCode, @RequestBody Map<String, Object> request) {
-        try {
-            String clientCode = (String) request.get("clientCode");
-            Integer ppcSale = (Integer) request.get("ppcSale");
-
-            if (clientCode == null || clientCode.isEmpty()) {
-                return ResponseEntity.badRequest().body("Client code must not be null or empty");
-            }
-
-            Product product = productService.findProductByProCode(proCode);
-            if (product == null) {
-                return ResponseEntity.notFound().build();
-            }
-
-            Client client = clientService.findClientByClientCode(clientCode);
-            if (client == null) {
-                return ResponseEntity.notFound().build();
-            }
-
-            Ppc existingPpc = ppcService.findPpcByClientCodeAndProCode(clientCode, proCode);
-            if (existingPpc == null) {
-                return ResponseEntity.notFound().build();
-            }
-
-            existingPpc.setPpcSale(ppcSale);
-            ppcService.save(existingPpc);
-
-            return ResponseEntity.ok(existingPpc);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred: " + e.getMessage());
-        }
+    @PostMapping("/existing")
+    public ResponseEntity<Boolean> checkExistingSale(@RequestBody PpcDTO ppcDTO) {
+        boolean isExisting = ppcService.isExistingSale(ppcDTO.getClientCode(), ppcDTO.getProCode());
+        return ResponseEntity.ok(isExisting);
+    }
     }
 
-}
+
+

@@ -5,6 +5,7 @@ import com.sales.BPS.mproduct.entity.VoucherPK;
 import com.sales.BPS.msales.entity.Client;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
@@ -16,8 +17,8 @@ public interface VoucherRepository extends JpaRepository<Voucher, VoucherPK> {
 
     List<Voucher> findByVoucId(Long voucId);
 
-    List<Voucher> findAllByProductProCode(Integer proCode);
-
     List<Voucher> findByClient(Client client);
 
+    @Query("SELECT v FROM Voucher v WHERE FUNCTION('YEAR', v.voucApproval) = :year AND FUNCTION('MONTH', v.voucApproval) = :month")
+    List<Voucher> findByYearAndMonth(@Param("year") int year, @Param("month") int month);
 }

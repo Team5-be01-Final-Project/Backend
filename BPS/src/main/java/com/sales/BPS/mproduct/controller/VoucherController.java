@@ -2,13 +2,13 @@ package com.sales.BPS.mproduct.controller;
 
 import com.sales.BPS.mproduct.dto.VoucherApprovalDTO;
 import com.sales.BPS.mproduct.dto.VoucherDTO;
-import com.sales.BPS.mproduct.entity.Voucher;
 import com.sales.BPS.mproduct.service.VoucherService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 
 import java.util.List;
 
@@ -46,14 +46,28 @@ public class VoucherController {
 
     @PutMapping("/{voucId}/approve")
     public ResponseEntity<Void> approveVoucher(@PathVariable Long voucId, @RequestBody VoucherApprovalDTO request) {
-        voucherService.approveVoucher(voucId, request);
-        return ResponseEntity.ok().build();
+        try {
+            voucherService.approveVoucher(voucId, request);
+            return ResponseEntity.ok().build();
+        } catch (RuntimeException e) {
+            if (e.getMessage().equals("Voucher not found")) {
+                return ResponseEntity.notFound().build();
+            }
+            throw e;
+        }
     }
 
     @PutMapping("/{voucId}/reject")
     public ResponseEntity<Void> rejectVoucher(@PathVariable Long voucId, @RequestBody VoucherApprovalDTO request) {
-        voucherService.rejectVoucher(voucId, request);
-        return ResponseEntity.ok().build();
+        try {
+            voucherService.rejectVoucher(voucId, request);
+            return ResponseEntity.ok().build();
+        } catch (RuntimeException e) {
+            if (e.getMessage().equals("Voucher not found")) {
+                return ResponseEntity.notFound().build();
+            }
+            throw e;
+        }
     }
 
 }

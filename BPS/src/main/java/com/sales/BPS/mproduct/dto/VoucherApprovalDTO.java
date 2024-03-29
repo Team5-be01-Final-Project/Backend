@@ -5,5 +5,5 @@ import lombok.Data;
 @Data
 public class VoucherApprovalDTO {
     private Integer proCode;
-    private Integer empCode;
+    private Integer empCodeSign;
 }

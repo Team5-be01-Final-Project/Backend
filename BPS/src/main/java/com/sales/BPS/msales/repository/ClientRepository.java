@@ -14,9 +14,6 @@ public interface ClientRepository extends JpaRepository<Client,String> {
     @Query("SELECT c.clientCode AS clientCode, c.clientName AS clientName, c.clientClass AS clientClass, c.clientBoss AS clientBoss, c.clientWhere AS clientWhere, c.clientPost AS clientPost, c.clientEmp AS clientEmp, c.clientEmpTel AS clientEmpTel FROM Client c")
     List<ClientProjection> findClientsWithSpecificFields();
 
-    Client findByClientCode(String clientCode);
-
-
     interface ClientProjection {
         String getClientCode();
         String getClientName();

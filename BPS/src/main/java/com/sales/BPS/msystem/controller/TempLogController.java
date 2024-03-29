@@ -1,5 +1,6 @@
 package com.sales.BPS.msystem.controller;
 
+import com.sales.BPS.msystem.dto.TempLogDTO;
 import com.sales.BPS.msystem.entity.TempLog;
 import com.sales.BPS.msystem.repository.TempLogRepository;
 import com.sales.BPS.msystem.service.TempLogService;
@@ -18,8 +19,8 @@ public class TempLogController {
     private TempLogService tempLogService;
 
     @GetMapping("/all")
-    public List<TempLog> getAllTempLogs() {
-        return tempLogService.getAllTempLogs();
+    public List<TempLogDTO> getAllTempLogsForFrontend() {
+        return tempLogService.getAllTempLogsForFrontend();
     }
 
     @GetMapping("/all-random-temps")

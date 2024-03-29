@@ -8,6 +8,7 @@ import com.sales.BPS.msales.entity.Client;
 import com.sales.BPS.msales.repository.ClientRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -75,8 +76,10 @@ public class SalesService {
             int totalVoucAmount = 0;
             long totalVoucSales = 0;
             long totalCostOfSales = 0;
+            LocalDate appro = null;
             Integer proUnit  = vouchersForProduct.get(0).getProduct().getProUnit();
             for (Voucher voucher : vouchersForProduct) {
+                appro = voucher.getVoucApproval();
                 totalVoucAmount += voucher.getVoucAmount();
                 totalVoucSales += (long) voucher.getVoucSale() * voucher.getVoucAmount();
                 totalCostOfSales += (long) voucher.getProduct().getProUnit() * voucher.getVoucAmount();
@@ -87,6 +90,7 @@ public class SalesService {
             ProductSalesDTO aggregatedProduct = new ProductSalesDTO();
             aggregatedProduct.setProName(proName);
             aggregatedProduct.setProUnit(proUnit);
+            aggregatedProduct.setVoucApproval(appro);
             aggregatedProduct.setVoucAmount(totalVoucAmount);
             aggregatedProduct.setVoucSales(totalVoucSales);
             aggregatedProduct.setGrossProfit(totalGrossProfit);

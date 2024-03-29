@@ -25,12 +25,13 @@ public class SalesService {
         this.clientRepository = clientRepository;
     }
 
-    public List<ClientSalesDTO> getAllSalesData() {
+    //거래처별 매출조회
+    public List<ClientSalesDTO> getAllSalesData(int year,int month) {
         List<ClientSalesDTO> allSalesData = new ArrayList<>();
         List<Client> clients = clientRepository.findAll();
 
         for (Client client : clients) {
-            List<Voucher> vouchers = voucherRepository.findByClient(client);
+            List<Voucher> vouchers = voucherRepository.findByYearAndMonth(year,month);
 
 
             for (Voucher voucher : vouchers) {
@@ -39,6 +40,7 @@ public class SalesService {
                 dto.setProName(voucher.getProduct().getProName());
                 dto.setProUnit(voucher.getProduct().getProUnit());
                 dto.setVoucSale(voucher.getVoucSale());
+                dto.setVoucApproval(voucher.getVoucApproval());
                 dto.setVoucAmount(voucher.getVoucAmount());
                 dto.setCostOfSales(voucher.getProduct().getProUnit() * voucher.getVoucAmount());
                 dto.setVoucSales((long) voucher.getVoucSale() * voucher.getVoucAmount());
@@ -53,8 +55,9 @@ public class SalesService {
         return allSalesData;
     }
 
-    public List<ProductSalesDTO> aggregateSalesByProduct() {
-        List<Voucher> vouchers = voucherRepository.findAll();
+    //판매상품별 매출조회
+    public List<ProductSalesDTO> aggregateSalesByProduct(int year, int month) {
+        List<Voucher> vouchers = voucherRepository.findByYearAndMonth(year,month);
         Map<String, List<Voucher>> groupedByProductName = new HashMap<>();
 
         // 상품 이름을 기준으로 데이터를 그룹화합니다.

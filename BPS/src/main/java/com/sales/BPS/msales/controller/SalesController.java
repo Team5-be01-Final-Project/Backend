@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -28,16 +29,16 @@ public class SalesController {
     @GetMapping("/Clientsales")
     @Tag(name = "Sales API")
     @Operation(summary = "거래처별 매출조회",description = "거래처별 매출, 이익 등 조회합니다.")
-    public ResponseEntity<List<ClientSalesDTO>> ClientSales(){
-        List<ClientSalesDTO> clientSalesDTOList = salesService.getAllSalesData();
+    public ResponseEntity<List<ClientSalesDTO>> ClientSales(@RequestParam int year,@RequestParam int month){
+        List<ClientSalesDTO> clientSalesDTOList = salesService.getAllSalesData(year,month);
         return ResponseEntity.ok(clientSalesDTOList);
     }
 
     @GetMapping("/productsales")
     @Tag(name = "Sales API")
     @Operation(summary = "상품별 매출조회",description = "상품별 매출, 이익 등 조회합니다.")
-    public ResponseEntity<List<ProductSalesDTO>> ProductSales(){
-        List<ProductSalesDTO> productSalesDTOS = salesService.aggregateSalesByProduct();
+    public ResponseEntity<List<ProductSalesDTO>> ProductSales(@RequestParam int year, @RequestParam int month){
+        List<ProductSalesDTO> productSalesDTOS = salesService.aggregateSalesByProduct(year,month);
         return ResponseEntity.ok(productSalesDTOS);
     }
 }

@@ -37,6 +37,8 @@ public class ClientService {
             Employee employee = employeeRepository.findById(empCode)
                     .orElseThrow(() -> new RuntimeException("해당 empCode를 가진 직원을 찾을 수 없습니다: " + empCode));
             client.setEmployee(employee);
+        }else {
+            client.setEmployee(null);
         }
 
         return clientRepository.save(client);

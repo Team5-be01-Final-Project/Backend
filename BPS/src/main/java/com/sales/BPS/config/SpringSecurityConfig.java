@@ -40,24 +40,16 @@
 //        http
 //                .csrf(csrf -> csrf.disable()) // CSRF 보호 비활성화
 //                .authorizeRequests(auth -> auth
-//                        .requestMatchers("/resources/**", "/static/**", "/css/**", "/js/**").permitAll() // 정적 리소스에 대한 접근 허용
-//                        .requestMatchers("/api/login", "/api/login-error").permitAll() // 특정 경로에 대해 접근 허용
-//                        .requestMatchers("/api/admin/**").hasAuthority("ADMIN") // ADMIN 권한 필요
-//                        .requestMatchers("/api/manager/**").hasAuthority("MANAGER") // MANAGER 권한 필요
-//                        .requestMatchers("/api/employee/**").hasAuthority("EMPLOYEE") // EMPLOYEE 권한 필요
-//                        .anyRequest().authenticated() // 나머지 경로는 인증 필요
-//                )
-//                .formLogin() // 기본 로그인 폼 활성화
-//                .and()
-//                .exceptionHandling().accessDeniedHandler(new AccessDeniedHandler() { // 접근 거부 처리자 정의
-//                    @Override
-//                    public void handle(HttpServletRequest request, HttpServletResponse response,
-//                                       AccessDeniedException accessDeniedException) throws IOException, ServletException {
-//                        response.sendError(HttpServletResponse.SC_FORBIDDEN, "Access Denied");
-//                    }
-//                });
+//                        .requestMatchers("/").permitAll() // 전체 경로에 대한 접근 허용
+////                        .requestMatchers("/resources/**", "/static/**", "/css/**", "/js/**").permitAll() // 정적 리소스에 대한 접근 허용
+////                        .requestMatchers("/api/login", "/api/login-error").permitAll() // 특정 경로에 대해 접근 허용(
+////                        .requestMatchers("/api/admin/**").hasAuthority("ITADMIN") // ITADMIN 권한 필요
+////                        .requestMatchers("/api/admin/**").hasAuthority("ADMIN") // ADMIN 권한 필요
+////                        .requestMatchers("/api/manager/**").hasAuthority("MANAGER") // MANAGER 권한 필요
+////                        .requestMatchers("/api/employee/**").hasAuthority("EMPLOYEE") // EMPLOYEE 권한 필요
+////                        .anyRequest().authenticated() // 나머지 경로는 인증 필요
+//                );
 //
-//        // 필요한 추가 설정을 여기에 추가
 //
 //        return http.build();
 //    }

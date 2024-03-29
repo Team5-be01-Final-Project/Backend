@@ -2,10 +2,12 @@ package com.sales.BPS.mproduct.service;
 
 import com.sales.BPS.mproduct.dto.VoucherApprovalDTO;
 import com.sales.BPS.mproduct.dto.VoucherDTO;
+import com.sales.BPS.mproduct.entity.Product;
 import com.sales.BPS.mproduct.entity.Stock;
 import com.sales.BPS.mproduct.entity.Voucher;
 import com.sales.BPS.mproduct.entity.VoucherPK;
 import com.sales.BPS.mproduct.repository.ApprovalCodeRepository;
+import com.sales.BPS.mproduct.repository.ProductRepository;
 import com.sales.BPS.mproduct.repository.StockRepository;
 import com.sales.BPS.mproduct.repository.VoucherRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,14 +23,16 @@ import java.util.stream.Collectors;
 @Service
 public class VoucherService {
 
+    private final ProductRepository productRepository;
     private final VoucherRepository voucherRepository;
     private final StockRepository stockRepository;
     private final ApprovalCodeRepository approvalCodeRepository;
     private final EmployeeRepository employeeRepository;
 
     @Autowired
-    public VoucherService(VoucherRepository voucherRepository, StockRepository stockRepository,
+    public VoucherService(ProductRepository productRepository, VoucherRepository voucherRepository, StockRepository stockRepository,
                           ApprovalCodeRepository approvalCodeRepository, EmployeeRepository employeeRepository) {
+        this.productRepository = productRepository;
         this.voucherRepository = voucherRepository;
         this.stockRepository = stockRepository;
         this.approvalCodeRepository = approvalCodeRepository;
@@ -103,51 +107,60 @@ public class VoucherService {
         }
     }
 
-    public void approveVoucher(Long voucId, VoucherApprovalDTO request) {
+    public VoucherDTO approveVoucher(Long voucId, VoucherApprovalDTO request) {
         VoucherPK voucherPK = new VoucherPK();
         voucherPK.setVoucId(voucId);
-        voucherPK.setProduct(request.getProCode());
 
-        Optional<Voucher> optionalVoucher = voucherRepository.findById(voucherPK);
-        if (optionalVoucher.isPresent()) {
-            Voucher voucher = optionalVoucher.get();
-            voucher.setApprovalCode(approvalCodeRepository.findById("A01").orElse(null));
-            voucher.setEmployeeSign(employeeRepository.findById(request.getEmpCodeSign()).orElse(null));
-            voucher.setVoucApproval(LocalDate.now());
-            voucherRepository.save(voucher);
-        } else {
-            throw new RuntimeException("Voucher not found");
+        Product product = productRepository.findByProCode(request.getProCode());
+        if (product == null) {
+            throw new IllegalArgumentException("Product not found for proCode: " + request.getProCode());
         }
+        voucherPK.setProduct(product);
+
+        Voucher voucher = voucherRepository.findById(voucherPK)
+                .orElseThrow(() -> new IllegalArgumentException("Voucher not found for voucId: " + voucId + " and proCode: " + request.getProCode()));
+
+        voucher.setApprovalCode(approvalCodeRepository.findById("A01").orElse(null));
+        voucher.setEmployeeSign(employeeRepository.findById(request.getEmpCodeSign()).orElse(null));
+        voucher.setVoucApproval(LocalDate.now());
+        voucherRepository.save(voucher);
+
+        return convertToDto(voucher);
     }
 
-    public void rejectVoucher(Long voucId, VoucherApprovalDTO request) {
+    public VoucherDTO rejectVoucher(Long voucId, VoucherApprovalDTO request) {
         VoucherPK voucherPK = new VoucherPK();
         voucherPK.setVoucId(voucId);
-        voucherPK.setProduct(request.getProCode());
 
-        Optional<Voucher> optionalVoucher = voucherRepository.findById(voucherPK);
-        if (optionalVoucher.isPresent()) {
-            Voucher voucher = optionalVoucher.get();
-            if (!voucher.getProduct().getProCode().equals(request.getProCode())) {
-                throw new RuntimeException("Invalid product code");
-            }
-            voucher.setApprovalCode(approvalCodeRepository.findById("A02").orElse(null));
-            voucher.setEmployeeSign(employeeRepository.findById(request.getEmpCodeSign()).orElse(null));
-            voucher.setVoucApproval(LocalDate.now());
-            voucherRepository.save(voucher);
-
-            // 재고 되돌리기 로직 추가
-            Optional<Stock> stockOptional = stockRepository.findById(request.getProCode());
-            if (stockOptional.isPresent()) {
-                Stock stock = stockOptional.get();
-                int restoredStock = stock.getStoAmo() + voucher.getVoucAmount();
-                stock.setStoAmo(restoredStock);
-                stockRepository.save(stock);
-            } else {
-                throw new RuntimeException("Stock not found");
-            }
-        } else {
-            throw new RuntimeException("Voucher not found");
+        Product product = productRepository.findByProCode(request.getProCode());
+        if (product == null) {
+            throw new IllegalArgumentException("Product not found for proCode: " + request.getProCode());
         }
+        voucherPK.setProduct(product);
+
+        Voucher voucher = voucherRepository.findById(voucherPK)
+                .orElseThrow(() -> new IllegalArgumentException("Voucher not found for voucId: " + voucId + " and proCode: " + request.getProCode()));
+
+        if (!voucher.getProduct().getProCode().equals(request.getProCode())) {
+            throw new IllegalArgumentException("Invalid product code");
+        }
+
+        voucher.setApprovalCode(approvalCodeRepository.findById("A02").orElse(null));
+        voucher.setEmployeeSign(employeeRepository.findById(request.getEmpCodeSign()).orElse(null));
+        voucher.setVoucApproval(LocalDate.now());
+        voucherRepository.save(voucher);
+
+        Optional<Stock> stockOptional = stockRepository.findById(request.getProCode());
+        if (stockOptional.isPresent()) {
+            Stock stock = stockOptional.get();
+            int restoredStock = stock.getStoAmo() + voucher.getVoucAmount();
+            stock.setStoAmo(restoredStock);
+            stockRepository.save(stock);
+        } else {
+            throw new IllegalArgumentException("Stock not found for proCode: " + request.getProCode());
+        }
+
+        return convertToDto(voucher);
     }
+
 }

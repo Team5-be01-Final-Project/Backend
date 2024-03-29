@@ -1,5 +1,6 @@
 package com.sales.BPS.msystem.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -24,6 +25,7 @@ public class Storage {
     @Column(name = "storage_ware")
     private String storageWare;
 
+   @JsonManagedReference
     @OneToMany(mappedBy = "storage")
     private List<TempLog> tempLogs = new ArrayList<>();
 

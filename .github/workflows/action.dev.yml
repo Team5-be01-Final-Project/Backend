@@ -3,7 +3,7 @@ name: BPSdeployBE
 on:
   push:
     branches:
-      - release/1.0.0
+      - release/2.0.0
   pull_request:
     types:
       - closed
@@ -14,10 +14,7 @@ jobs:
 #    if: github.event.pull_request.merged == true
     environment: release
     runs-on: ubuntu-latest
-#    env:
-#      DB_URL: "${{ secrets.DB_URL }}"
-#      DB_USERNAME: ${{ secrets.DB_USERNAME }}
-#      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+
     steps:
       - uses: actions/checkout@v3
       - name: Set up JDK 17
@@ -52,34 +49,6 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ vars.AWS_REGION }}
-
-#      # 빌드 결과물을 S3 버킷에 업로드
-#      - name: Upload to AWS S3
-#        run: |
-#          aws deploy push \
-#            --application-name ${{ vars.CODE_DEPLOY_APP_NAME }} \
-#            --ignore-hidden-files \
-#            --s3-location s3://${{ vars.S3_BUCKET_NAME }}/$GITHUB_SHA.zip \
-#            --source .
-
-#      # .env 파일을 S3로 업로드
-#      - name: Upload .env to AWS S3
-#        run: |
-#          aws s3 cp .env s3://${{ vars.S3_BUCKET_NAME }}/.env
-#
-#      # 빌드된 JAR 파일을 S3 버킷에 업로드
-#      - name: Upload JAR to AWS S3
-#        run: |
-#          aws s3 cp ./BPS/target/*.jar s3://${{ vars.S3_BUCKET_NAME }}/BPS.jar
-#
-#      # 기타 필요한 파일을 S3 버킷에 업로드
-#      - name: Upload etc
-#        run: |
-#          aws s3 cp appspec.yml s3://${{ vars.S3_BUCKET_NAME }}/
-#          aws s3 cp docker-compose.yml s3://${{ vars.S3_BUCKET_NAME }}/
-#          aws s3 cp Dockerfile s3://${{ vars.S3_BUCKET_NAME }}/
-#          aws s3 cp start.sh s3://${{ vars.S3_BUCKET_NAME }}/
-#          aws s3 cp stop.sh s3://${{ vars.S3_BUCKET_NAME }}/
 
       # S3 버킷에 업로드 할 파일 압축
       - name: Zip deployment files

@@ -3,11 +3,13 @@ package com.sales.BPS.mproduct.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Data
+@NoArgsConstructor
 @Entity
 @Table(name = "PRODUCT")
 public class Product {
@@ -37,5 +39,12 @@ public class Product {
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     @JsonIgnore
     private List<Voucher> vouchers = new ArrayList<>();
+
+
+    // proCode를 매개변수로 받는 생성자 추가
+    public Product(Integer proCode) {
+        this.proCode = proCode;
+        // 필요한 경우, 다른 필드들도 초기화할 수 있습니다.
+    }
 
 }

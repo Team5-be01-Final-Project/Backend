@@ -30,7 +30,7 @@ public class ColdchainService {
 
         storages.forEach(storage -> {
             int temperature = random.nextInt(11); // 0에서 10 사이의 랜덤 값 생성
-            System.out.println("Generated random temperature for " + storage.getStorageCode() + ": " + temperature);
+           // System.out.println("Generated random temperature for " + storage.getStorageCode() + ": " + temperature);
 
             if (temperature < 2 || temperature > 8) {
                 TempLog tempLog = new TempLog();

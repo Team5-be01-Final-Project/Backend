@@ -36,6 +36,9 @@ public class PpcCrudController {
     // 거래처별 상품 가격 정보 삭제
     @DeleteMapping("/{proCode}")
     public ResponseEntity<?> deletePpc(@PathVariable Integer proCode) {
+        if (proCode == null) {
+            return ResponseEntity.badRequest().build();
+        }
         ppcService.deletePpcByProCode(proCode);
         return ResponseEntity.ok().build();
     }

@@ -1,7 +1,9 @@
 package com.sales.BPS.msystem.service;
 
+import com.sales.BPS.msystem.entity.Alarm;
 import com.sales.BPS.msystem.entity.Storage;
 import com.sales.BPS.msystem.entity.TempLog;
+import com.sales.BPS.msystem.repository.AlarmRepository;
 import com.sales.BPS.msystem.repository.StorageRepository;
 import com.sales.BPS.msystem.repository.TempLogRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,7 @@ import java.io.Console;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 @Service
@@ -22,6 +25,9 @@ public class ColdchainService {
 
     @Autowired
     private TempLogRepository tempLogRepository;
+
+    @Autowired
+    private AlarmRepository alarmRepository;
 
     private final EmailService emailService;
 
@@ -47,15 +53,44 @@ public class ColdchainService {
                 tempLog.setTempDate(LocalDateTime.now());
                 tempLogRepository.save(tempLog);
 
-                // 차량번호에 매칭된 유저가 있으면 해당 유저에게 이메일 전송
-                if (storage.getEmployee() != null && storage.getEmployee().getEmpEmail() != null) {
-                    String to = storage.getEmployee().getEmpEmail();
-                    String subject = "Temperature Alert for Storage " + storage.getStorageCode();
-                    String text = String.format("The temperature of '%s' has been recorded at %d°C, Please check immediately.", storage.getStorageCode(), temperature);
+                if(storage.getStorageSeg().equals("차량")){ //차량인경우
+                    // 차량번호에 매칭된 유저가 있으면 해당 유저에게 이메일 전송
+                    if (storage.getEmployee() != null) {
+                        //해당 유저의 "AL01"의 알람의 옵션이 어떤지 검사함
+                        Optional<Alarm> alarmOptional = alarmRepository.findByEmpCodeAndAlarmCode(storage.getEmployee().getEmpCode(), "AL01");
+                        // 알람 설정이 존재하고, true인 경우, 이메일 전송
+                        if (alarmOptional.isPresent() && alarmOptional.get().isAlarmSettings()){
+                            String to = storage.getEmployee().getEmpEmail();
+                            String subject = "차량 온도 이상 알림: " + storage.getStorageCode();
+                            String text = String.format("The temperature of '%s' has been recorded at %d°C, Please check immediately.", storage.getStorageCar(), temperature);
 
-                    emailService.sendEmail(to, subject, text);
+                            emailService.sendEmail(to, subject, text);
 
-                    System.out.println("메일 전송");
+                            System.out.println("메일 전송 완료(차량): "+ storage.getStorageCode());
+                        }
+                        else {
+                            System.out.println("담당자에게 알람 설정이 되어 있지 않아서 메일 전송을 실패했습니다. : "+ storage.getStorageCode());
+                        }
+                    }
+                }
+                else{//창고인경우
+                    if (storage.getEmployee() != null) {
+                        //해당 유저의 "AL01"의 알람의 옵션이 어떤지 검사함
+                        Optional<Alarm> alarmOptional = alarmRepository.findByEmpCodeAndAlarmCode(storage.getEmployee().getEmpCode(), "AL01");
+                        // 알람 설정이 존재하고, true인 경우, 이메일 전송
+                        if (alarmOptional.isPresent() && alarmOptional.get().isAlarmSettings()){
+                            String to = storage.getEmployee().getEmpEmail();
+                            String subject = "창고 온도 이상 알림: " + storage.getStorageCode();
+                            String text = String.format("The temperature of '%s' has been recorded at %d°C, Please check immediately.", storage.getStorageWare(), temperature);
+
+                            emailService.sendEmail(to, subject, text);
+
+                            System.out.println("메일 전송 완료(창고): "+ storage.getStorageCode());
+                        }
+                        else {
+                            System.out.println("매칭된 담당자에게 알람설정이 없기 때문에 메일 전송을 실패했습니다.: "+ storage.getStorageCode());
+                        }
+                    }
                 }
             }
         });

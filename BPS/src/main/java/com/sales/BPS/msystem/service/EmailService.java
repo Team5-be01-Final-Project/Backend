@@ -18,8 +18,8 @@ public class EmailService {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom("luinadel33@gmail.com");
         message.setTo(to);
-        message.setSubject(subject);
-        message.setText(text);
+        message.setSubject(subject);//제목
+        message.setText(text);//본문
         mailSender.send(message);
     }
 }

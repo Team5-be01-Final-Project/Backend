@@ -39,7 +39,10 @@ public class ColdchainService {
                 tempLog.setTempTemp(temperature);
                 tempLog.setTempDate(LocalDateTime.now());
                 tempLogRepository.save(tempLog);
+                
             }
         });
     }
+
+
 }

@@ -5,6 +5,21 @@ spring:
       encoding: UTF-8
       mode: always
 
+  # 메일 전송
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: luinadel33@gmail.com
+    password: ${GMAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+
+
   datasource:
     driverClassName: org.mariadb.jdbc.Driver
     url: ${DB_URL}

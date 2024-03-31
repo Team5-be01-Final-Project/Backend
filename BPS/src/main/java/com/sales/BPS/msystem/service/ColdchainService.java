@@ -64,7 +64,7 @@ public class ColdchainService {
                             String subject = "차량 온도 이상 알림: " + storage.getStorageCode();
                             String text = String.format("The temperature of '%s' has been recorded at %d°C, Please check immediately.", storage.getStorageCar(), temperature);
 
-                            emailService.sendEmail(to, subject, text);
+                            //emailService.sendEmail(to, subject, text);
 
                             System.out.println("메일 전송 완료(차량): "+ storage.getStorageCode());
                         }
@@ -83,7 +83,7 @@ public class ColdchainService {
                             String subject = "창고 온도 이상 알림: " + storage.getStorageCode();
                             String text = String.format("The temperature of '%s' has been recorded at %d°C, Please check immediately.", storage.getStorageWare(), temperature);
 
-                            emailService.sendEmail(to, subject, text);
+                            //emailService.sendEmail(to, subject, text);
 
                             System.out.println("메일 전송 완료(창고): "+ storage.getStorageCode());
                         }

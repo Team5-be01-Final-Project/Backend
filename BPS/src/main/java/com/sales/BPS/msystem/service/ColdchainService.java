@@ -1,5 +1,6 @@
 package com.sales.BPS.msystem.service;
 
+import com.sales.BPS.msystem.dto.TempLogDTO;
 import com.sales.BPS.msystem.entity.Alarm;
 import com.sales.BPS.msystem.entity.Storage;
 import com.sales.BPS.msystem.entity.TempLog;
@@ -14,11 +15,16 @@ import java.io.Console;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 @Service
 public class ColdchainService {
+
+    private Map<String, Integer> latestTemperatures = new ConcurrentHashMap<>();
 
     @Autowired
     private StorageRepository storageRepository;
@@ -43,7 +49,8 @@ public class ColdchainService {
 
         storages.forEach(storage -> {
             int temperature = random.nextInt(11); // 0에서 10 사이의 랜덤 값 생성
-           // System.out.println("Generated random temperature for " + storage.getStorageCode() + ": " + temperature);
+            System.out.println("Generated random temperature for " + storage.getStorageCode() + ": " + temperature);
+            latestTemperatures.put(storage.getStorageCode(), temperature);
 
             if (temperature < 2 || temperature > 8) { // 온도 범위를 벗어 난 경우
                 TempLog tempLog = new TempLog();
@@ -94,6 +101,34 @@ public class ColdchainService {
                 }
             }
         });
+    }
+
+    /* // 모든 온도 로그를 조회하는 메소드
+     public List<TempLogDTO> getAllTempLogsForFrontend() {
+         List<TempLog> allLogs = tempLogRepository.findAll();
+
+         return allLogs.stream()
+                 .map(this::convertToDTO)
+                 .collect(Collectors.toList());
+     }
+
+     private TempLogDTO convertToDTO(TempLog log) {
+         TempLogDTO dto = new TempLogDTO();
+         // TempLog 엔티티에서 필요한 정보를 추출하여 DTO에 설정
+         dto.setStorageCode(log.getStorageCode()); // storageCode 설정 추가
+         dto.setTempTemp(log.getTempTemp());
+         dto.setTempDate(log.getTempDate().toLocalDate());
+         if (log.getStorage() != null) {
+             dto.setStorageSeg(log.getStorage().getStorageSeg());
+             dto.setStorageCar(log.getStorage().getStorageCar());
+             if (log.getStorage().getEmployee() != null) {
+                 dto.setEmpName(log.getStorage().getEmployee().getEmpName());
+             }
+         }
+         return dto;
+     }*/
+    public Map<String, Integer> getLatestTemperatures() {
+        return new ConcurrentHashMap<>(latestTemperatures);
     }
 
 

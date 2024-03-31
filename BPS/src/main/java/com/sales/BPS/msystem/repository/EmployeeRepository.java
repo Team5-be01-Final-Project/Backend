@@ -7,21 +7,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
-
-
-//    List<Employee> findAll();
-
-//    @Query("SELECT new com.sales.BPS.msystem.dto.EmployeeInfoDTO" +
-//            "(e.empCode, e.empName, p.posName, d.deptName, e.empTel, ac.authName) " +
-//            "FROM Employee e " +
-//            "JOIN e.department d " +
-//            "JOIN e.positions p " +
-//            "JOIN e.authority a " +
-//            "JOIN a.authorityCode ac")
-//    List<EmployeeInfoDTO> findAllEmployees();
-
 
     @Query("SELECT new com.sales.BPS.msystem.dto.EmployeeInfoDTO(e.empCode, e.empName, p.posName, d.deptName, e.empTel,ac.authCode, ac.authName) " +
             "FROM Employee e " +
@@ -35,4 +23,12 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
     List<EmployeeInfoDTO> findByCriteria(@Param("deptName") String deptName,
                                          @Param("empName") String empName,
                                          @Param("empTel") String empTel);
+
+
+
+    // 부서코드와, 직급코드로 해당하는 사람 이름 찾기
+    @Query("SELECT e FROM Employee e JOIN e.department d JOIN e.positions p WHERE d.deptCode = :deptCode AND p.posCode = :posCode")
+    Employee findByDeptCodeAndPositionCode(@Param("deptCode") String deptCode, @Param("posCode") String posCode);
+
+
 }

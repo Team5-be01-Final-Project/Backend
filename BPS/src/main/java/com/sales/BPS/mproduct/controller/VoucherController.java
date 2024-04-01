@@ -45,32 +45,6 @@ public class VoucherController {
         return ResponseEntity.ok(dtoList);
     }
 
-/*    @PutMapping("/{voucId}/approve")
-    public ResponseEntity<Void> approveVoucher(@PathVariable Long voucId, @RequestBody VoucherApprovalDTO request) {
-        try {
-            voucherService.approveVoucher(voucId, request);
-            return ResponseEntity.ok().build();
-        } catch (RuntimeException e) {
-            if (e.getMessage().equals("Voucher not found")) {
-                return ResponseEntity.notFound().build();
-            }
-            throw e;
-        }
-    }
-
-    @PutMapping("/{voucId}/reject")
-    public ResponseEntity<Void> rejectVoucher(@PathVariable Long voucId, @RequestBody VoucherApprovalDTO request) {
-        try {
-            voucherService.rejectVoucher(voucId, request);
-            return ResponseEntity.ok().build();
-        } catch (RuntimeException e) {
-            if (e.getMessage().equals("Voucher not found")) {
-                return ResponseEntity.notFound().build();
-            }
-            throw e;
-        }
-    }*/
-
     @PutMapping("/{voucId}/approve")
     public ResponseEntity<VoucherDTO> approveVoucher(@PathVariable Long voucId, @RequestBody VoucherApprovalDTO request) {
         try {
@@ -90,5 +64,4 @@ public class VoucherController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
-
 }

@@ -116,8 +116,6 @@ public class VoucherService {
                 .orElseThrow(() -> new IllegalArgumentException("Voucher not found for voucId: " + voucId + " and proCode: " + request.getProCode()));
 
         voucher.setApprovalCode(approvalCodeRepository.findById("A01").orElse(null));
-        voucher.setEmployeeSign(employeeRepository.findById(request.getEmpCodeSign()).orElse(null));
-        voucher.setVoucApproval(LocalDate.now());
         voucherRepository.save(voucher);
 
         return convertToDto(voucher);
@@ -131,13 +129,7 @@ public class VoucherService {
         Voucher voucher = voucherRepository.findById(voucherPK)
                 .orElseThrow(() -> new IllegalArgumentException("Voucher not found for voucId: " + voucId + " and proCode: " + request.getProCode()));
 
-        if (!voucher.getProCode().equals(request.getProCode())) {
-            throw new IllegalArgumentException("Invalid product code");
-        }
-
         voucher.setApprovalCode(approvalCodeRepository.findById("A02").orElse(null));
-        voucher.setEmployeeSign(employeeRepository.findById(request.getEmpCodeSign()).orElse(null));
-        voucher.setVoucApproval(LocalDate.now());
         voucherRepository.save(voucher);
 
         Optional<Stock> stockOptional = stockRepository.findById(request.getProCode());

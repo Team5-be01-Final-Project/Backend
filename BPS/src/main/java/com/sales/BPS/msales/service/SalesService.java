@@ -3,12 +3,14 @@ package com.sales.BPS.msales.service;
 import com.sales.BPS.mproduct.entity.Voucher;
 import com.sales.BPS.mproduct.repository.VoucherRepository;
 import com.sales.BPS.msales.dto.ClientSalesDTO;
+import com.sales.BPS.msales.dto.MonthlySalesDTO;
 import com.sales.BPS.msales.dto.ProductSalesDTO;
 import com.sales.BPS.msales.entity.Client;
 import com.sales.BPS.msales.repository.ClientRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -101,5 +103,40 @@ public class SalesService {
         }
 
         return aggregatedProducts;
+    }
+
+    public List<MonthlySalesDTO> getMonthlySales(int year) {
+        List<Voucher> vouchers = voucherRepository.findAllByYear(year);
+        Map<YearMonth, List<Voucher>> monthlyVouchers = vouchers.stream()
+                .collect(Collectors.groupingBy(voucher -> YearMonth.from(voucher.getVoucApproval())));
+
+        List<MonthlySalesDTO> monthlySalesList = new ArrayList<>();
+
+        for (Map.Entry<YearMonth, List<Voucher>> entry : monthlyVouchers.entrySet()) {
+            YearMonth yearMonth = entry.getKey();
+            List<Voucher> monthlyVoucherList = entry.getValue();
+
+            long totalVoucSales = 0;
+            long totalCostOfSales = 0;
+
+            for (Voucher voucher : monthlyVoucherList) {
+                long voucSales = voucher.getVoucSales();
+                long costOfSales = voucher.getProduct().getProUnit() * voucher.getVoucAmount();
+
+                totalVoucSales += voucSales;
+                totalCostOfSales += costOfSales;
+            }
+
+            long totalGrossProfit = totalVoucSales - totalCostOfSales;
+
+            MonthlySalesDTO monthlySalesDTO = new MonthlySalesDTO();
+            monthlySalesDTO.setYearMonth(yearMonth);
+            monthlySalesDTO.setVoucSales(totalVoucSales);
+            monthlySalesDTO.setTotalGrossProfit(totalGrossProfit);
+
+            monthlySalesList.add(monthlySalesDTO);
+        }
+
+        return monthlySalesList;
     }
 }

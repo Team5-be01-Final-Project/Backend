@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
+
 @Repository
 public interface ClientRepository extends JpaRepository<Client,String> {
 
@@ -27,6 +29,8 @@ public interface ClientRepository extends JpaRepository<Client,String> {
 
     //중복확인
     boolean existsByClientCode(String clientCode);
+
+    Optional<Client> findByClientCode(String clientCode);
 
     
 

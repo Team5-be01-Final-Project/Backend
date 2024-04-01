@@ -21,4 +21,5 @@ public interface VoucherRepository extends JpaRepository<Voucher, VoucherPK> {
 
     @Query("SELECT v FROM Voucher v WHERE FUNCTION('YEAR', v.voucApproval) = :year AND FUNCTION('MONTH', v.voucApproval) = :month")
     List<Voucher> findByYearAndMonth(@Param("year") int year, @Param("month") int month);
+
 }

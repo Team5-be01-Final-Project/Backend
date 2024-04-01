@@ -29,4 +29,6 @@ public interface StockRepository extends JpaRepository<Stock, Integer> {
     @Query("SELECT p FROM Product p WHERE p.proCode = :proCode")
     Optional<Product> findProductByProCode(@Param("proCode") Integer proCode);
 
+    Optional<Stock> findByProduct(Product product);
+
 }

@@ -110,12 +110,7 @@ public class VoucherService {
     public VoucherDTO approveVoucher(Long voucId, VoucherApprovalDTO request) {
         VoucherPK voucherPK = new VoucherPK();
         voucherPK.setVoucId(voucId);
-
-        Product product = productRepository.findByProCode(request.getProCode());
-        if (product == null) {
-            throw new IllegalArgumentException("Product not found for proCode: " + request.getProCode());
-        }
-        voucherPK.setProduct(product);
+        voucherPK.setProCode(request.getProCode());
 
         Voucher voucher = voucherRepository.findById(voucherPK)
                 .orElseThrow(() -> new IllegalArgumentException("Voucher not found for voucId: " + voucId + " and proCode: " + request.getProCode()));
@@ -131,17 +126,12 @@ public class VoucherService {
     public VoucherDTO rejectVoucher(Long voucId, VoucherApprovalDTO request) {
         VoucherPK voucherPK = new VoucherPK();
         voucherPK.setVoucId(voucId);
-
-        Product product = productRepository.findByProCode(request.getProCode());
-        if (product == null) {
-            throw new IllegalArgumentException("Product not found for proCode: " + request.getProCode());
-        }
-        voucherPK.setProduct(product);
+        voucherPK.setProCode(request.getProCode());
 
         Voucher voucher = voucherRepository.findById(voucherPK)
                 .orElseThrow(() -> new IllegalArgumentException("Voucher not found for voucId: " + voucId + " and proCode: " + request.getProCode()));
 
-        if (!voucher.getProduct().getProCode().equals(request.getProCode())) {
+        if (!voucher.getProCode().equals(request.getProCode())) {
             throw new IllegalArgumentException("Invalid product code");
         }
 

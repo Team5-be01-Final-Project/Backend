@@ -15,14 +15,18 @@ import static jakarta.persistence.FetchType.LAZY;
 @IdClass(VoucherPK.class)
 @Table(name = "VOUCHER")
 public class Voucher {
+
     @Id
     @Column(name = "vouc_id")
     private Long voucId;
 
     @Id
+    @Column(name = "pro_code")
+    private Integer proCode;
+
     @ManyToOne
-    @JoinColumn(name = "pro_code")
-    private Product product; // 이 필드를 추가
+    @JoinColumn(name = "pro_code", insertable = false, updatable = false)
+    private Product product;
 
 
     @Column(name = "vouc_date")

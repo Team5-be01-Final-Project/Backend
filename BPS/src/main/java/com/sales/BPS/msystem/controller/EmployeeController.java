@@ -1,5 +1,6 @@
 package com.sales.BPS.msystem.controller;
 
+import com.sales.BPS.msales.entity.Client;
 import com.sales.BPS.msystem.dto.EmployeeInfoDTO;
 import com.sales.BPS.msystem.entity.Employee;
 import com.sales.BPS.msystem.service.EmployeeService;
@@ -7,10 +8,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -39,5 +37,12 @@ public class EmployeeController {
                                                  @RequestParam(required = false) String empTel) {
         return employeeService.findByCriteria(deptName, empName, empTel);
     }
+
+    @GetMapping("/{empCode}/clients")
+    public ResponseEntity<List<Client>> getClientsByEmployee(@PathVariable Integer empCode) {
+        Employee employee = employeeService.findByEmpCode(empCode);
+        return ResponseEntity.ok(employee.getClients());
+    }
+
 
 }

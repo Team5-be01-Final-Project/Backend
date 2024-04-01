@@ -1,6 +1,7 @@
 package com.sales.BPS.msales.controller;
 
 import com.sales.BPS.msales.dto.ClientSalesDTO;
+import com.sales.BPS.msales.dto.MonthlySalesDTO;
 import com.sales.BPS.msales.dto.ProductSalesDTO;
 import com.sales.BPS.msales.service.SalesService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -40,5 +41,11 @@ public class SalesController {
     public ResponseEntity<List<ProductSalesDTO>> ProductSales(@RequestParam int year, @RequestParam int month){
         List<ProductSalesDTO> productSalesDTOS = salesService.aggregateSalesByProduct(year,month);
         return ResponseEntity.ok(productSalesDTOS);
+    }
+
+    @GetMapping("/monthlySales")
+    public ResponseEntity<List<MonthlySalesDTO>> getMonthlySales(@RequestParam int year) {
+        List<MonthlySalesDTO> monthlySales = salesService.getMonthlySales(year);
+        return ResponseEntity.ok(monthlySales);
     }
 }

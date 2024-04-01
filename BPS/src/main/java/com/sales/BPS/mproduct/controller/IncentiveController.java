@@ -24,7 +24,7 @@ public class IncentiveController {
     @GetMapping("/list")
     @Tag(name = "Incentive API")
     @Operation(summary = "인센티브 조회" ,description = "각 직원의 인센티브를 조회합니다.")
-    public List<IncentiveDTO> getSalesPerformance(@RequestParam int month) {
-        return incentiveService.calculateIncentive(month);
+    public List<IncentiveDTO> getSalesPerformance(@RequestParam int year, @RequestParam int month) {
+        return incentiveService.calculateIncentive(year, month);
     }
 }

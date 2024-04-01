@@ -28,7 +28,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
 
     // 부서코드와, 직급코드로 해당하는 사람 이름 찾기
     @Query("SELECT e FROM Employee e JOIN e.department d JOIN e.positions p WHERE d.deptCode = :deptCode AND p.posCode = :posCode")
-    Employee findByDeptCodeAndPositionCode(@Param("deptCode") String deptCode, @Param("posCode") String posCode);
+    List<Employee> findByDeptCodeAndPositionCode(@Param("deptCode") String deptCode, @Param("posCode") String posCode);
 
 
 }

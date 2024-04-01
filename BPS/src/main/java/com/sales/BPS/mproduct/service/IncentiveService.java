@@ -88,8 +88,9 @@ public class IncentiveService {
         }//end for
 
         for (int i = 0; i < teamlist_code.length; i++) {
-            Employee manager = employeeRepository.findByDeptCodeAndPositionCode(teamlist_code[i], "P02");
-            if (manager != null) {
+            List<Employee> managers = employeeRepository.findByDeptCodeAndPositionCode(teamlist_code[i], "P02");
+            if (!managers.isEmpty()) {
+                Employee manager = managers.get(0);
                 String empName = manager.getEmpName();
                 String deptName = manager.getDepartment().getDeptName();
                 long voucMonthSales = teamvoucMonthSales[i];

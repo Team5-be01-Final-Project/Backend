@@ -15,6 +15,12 @@ public interface VoucherRepository extends JpaRepository<Voucher, VoucherPK> {
     @Query("SELECT v.employee.empCode, SUM(v.voucSales) FROM Voucher v WHERE MONTH(v.voucDate) = :month GROUP BY v.employee.empCode ORDER BY SUM(v.voucSales) DESC")
     List<Object[]> findSalesByEmployeeAndMonth(int month);
 
+
+    // 직원별, 연도별, 매출 데이터를 매출 금액이 큰 순으로 가져옴
+    @Query("SELECT v.employee.empCode, SUM(v.voucSales) FROM Voucher v WHERE YEAR(v.voucDate) = :year AND MONTH(v.voucDate) = :month GROUP BY v.employee.empCode ORDER BY SUM(v.voucSales) DESC")
+    List<Object[]> findSalesByEmploteeAndYearAndMonth(int year, int month);
+
+
     List<Voucher> findByVoucId(Long voucId);
 
     List<Voucher> findByClient(Client client);

@@ -2,11 +2,13 @@ package com.sales.BPS.mproduct.controller;
 
 import com.sales.BPS.mproduct.dto.VoucherApprovalDTO;
 import com.sales.BPS.mproduct.dto.VoucherDTO;
+import com.sales.BPS.mproduct.dto.VoucherDto;
 import com.sales.BPS.mproduct.entity.Voucher;
 import com.sales.BPS.mproduct.service.VoucherService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -56,4 +58,14 @@ public class VoucherController {
         return ResponseEntity.ok().build();
     }
 
+    @PostMapping("/save")
+    public ResponseEntity<?> createVoucher(@RequestBody VoucherDto voucherDto) {
+        try {
+            voucherService.createVoucher(voucherDto);
+            return new ResponseEntity<>("Voucher created successfully.", HttpStatus.CREATED);
+        } catch (Exception e) {
+            // 예외 처리 로직 (예외에 따라 적절한 HTTP 상태 코드와 메시지 반환)
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
 }

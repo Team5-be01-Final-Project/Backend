@@ -34,7 +34,9 @@ public class SalesService {
         List<Client> clients = clientRepository.findAll();
 
         for (Client client : clients) {
-            List<Voucher> vouchers = voucherRepository.findByYearAndMonth(year,month);
+            List<Voucher> vouchers = voucherRepository.findByClientClientCodeAndYearAndMonth(client.getClientCode(), year, month);
+
+
 
 
             for (Voucher voucher : vouchers) {

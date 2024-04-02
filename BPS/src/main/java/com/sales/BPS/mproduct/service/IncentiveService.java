@@ -23,7 +23,7 @@ public class IncentiveService {
     public List<IncentiveDTO> calculateIncentive(int year, int month) {
 
         //직원별, 월별, 매출 데이터 리스트
-        List<Object[]> salesData = voucherRepository.findSalesByEmploteeAndYearAndMonth(year, month);
+        List<Object[]> salesData = voucherRepository.findSalesByEmployeeAndYearAndMonth(year, month);
 
         //뷰에 보내줄 DTO를 저장하는 리스트
         List<IncentiveDTO> incentiveList = new ArrayList<>();

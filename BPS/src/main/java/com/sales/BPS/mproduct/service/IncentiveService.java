@@ -40,6 +40,7 @@ public class IncentiveService {
             if (empExits) {
                 String empName = employeeRepository.findById(empCode).get().getEmpName();
                 String deptName = employeeRepository.findById(empCode).get().getDepartment().getDeptName();
+                String empImg = employeeRepository.findById(empCode).get().getEmpImg();
 
                 long voucMonthSales = ((Number) data[1]).longValue(); // 월 매출액
                 int salesRank = rank;
@@ -57,6 +58,7 @@ public class IncentiveService {
                 incentive += addincentive;
 
                 IncentiveDTO incentiveDTO = new IncentiveDTO(empName, deptName, voucMonthSales, salesRank, incentive);
+                incentiveDTO.setEmpImg(empImg);
                 System.out.println(incentiveDTO);
                 incentiveList.add(incentiveDTO);
 

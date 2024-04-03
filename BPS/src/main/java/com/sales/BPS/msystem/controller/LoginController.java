@@ -33,7 +33,7 @@ public class LoginController {
             Integer empCode = loginRequest.getEmpCode();
 
             Cookie empCodeCookie = new Cookie("empCode", empCode.toString());
-            empCodeCookie.setDomain("3.38.95.130");
+            empCodeCookie.setDomain(".bpssystem.store");
             empCodeCookie.setHttpOnly(true);
             empCodeCookie.setMaxAge(12 * 60 * 60); // 쿠키의 유효 기간을 12시간으로 설정
             empCodeCookie.setPath("/"); // 쿠키의 경로 설정(모든 경로에서 쿠키 사용 가능)
@@ -45,7 +45,7 @@ public class LoginController {
 
 
             Cookie empNameCookie = new Cookie("empName", employeeService.findByEmpCode(empCode).getEmpName());
-            empNameCookie.setDomain("3.38.95.130");
+            empNameCookie.setDomain(".bpssystem.store");
             empNameCookie.setHttpOnly(true);
             empNameCookie.setMaxAge(12 * 60 * 60);
             empNameCookie.setPath("/");
@@ -53,7 +53,7 @@ public class LoginController {
 
 
             Cookie empImgCookie = new Cookie("empImg", employeeService.findByEmpCode(empCode).getEmpImg());
-            empImgCookie.setDomain("3.38.95.130");
+            empImgCookie.setDomain(".bpssystem.store");
             empImgCookie.setHttpOnly(true);
             empImgCookie.setMaxAge(12 * 60 * 60);
             empImgCookie.setPath("/");
@@ -61,7 +61,7 @@ public class LoginController {
 
 
             Cookie empaAuthCodeCookie = new Cookie("empAuthCode",employeeService.findByEmpCode(empCode).getAuthority().getAuthCode());
-            empaAuthCodeCookie.setDomain("3.38.95.130");
+            empaAuthCodeCookie.setDomain(".bpssystem.store");
             empaAuthCodeCookie.setHttpOnly(true);
             empaAuthCodeCookie.setMaxAge(12 * 60 * 60);
             empaAuthCodeCookie.setPath("/");

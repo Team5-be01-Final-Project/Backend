@@ -9,7 +9,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import java.util.HashMap;
+import java.util.Map;
 import java.util.List;
 
 
@@ -46,9 +47,15 @@ public class EmployeeController {
 
 
     @GetMapping("/{empCode}/approver") //담당자의 담당 거래처 찾기
-    public ResponseEntity<String> getByDeptCodeAndPositionCode(@PathVariable Integer empCode) {
+    public ResponseEntity<?> getByDeptCodeAndPositionCode(@PathVariable Integer empCode) {
         String deptCode = employeeService.findByEmpCode(empCode).getDepartment().getDeptCode();
         Employee employee = employeeService.findByDeptCodeAndPositionCode(deptCode);
-        return ResponseEntity.ok(employee.getEmpName());
+        if (employee != null) {
+            Map<String, String> approverInfo = new HashMap<>();
+            approverInfo.put("approverName", employee.getEmpName());
+            return ResponseEntity.ok(approverInfo);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 }

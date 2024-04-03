@@ -110,4 +110,9 @@ public class ClientService {
             return null;
         }
     }
+
+    // 로그인한 사원의 담당 거래처 목록 조회 메서드
+    public List<Client> findByEmployeeEmpCode(Integer empCode) {
+        return clientRepository.findByEmployeeEmpCode(empCode);
+    }
 }

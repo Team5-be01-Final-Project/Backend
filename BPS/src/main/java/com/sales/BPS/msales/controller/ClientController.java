@@ -95,5 +95,14 @@ public class ClientController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
+
+    // 로그인한 사원의 담당 거래처 목록을 조회
+    @GetMapping("/employee/{empCode}")
+    @Tag(name = "Client API")
+    @Operation(summary = "담당 거래처 조회", description = "로그인한 사원의 담당 거래처 목록을 조회합니다.")
+    public ResponseEntity<List<Client>> getClientsByEmployeeCode(@PathVariable Integer empCode) {
+        List<Client> clients = clientService.findByEmployeeEmpCode(empCode);
+        return ResponseEntity.ok(clients);
+    }
 }
 

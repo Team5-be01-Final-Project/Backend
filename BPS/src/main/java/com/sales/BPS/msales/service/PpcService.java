@@ -1,12 +1,13 @@
 package com.sales.BPS.msales.service;// PpcService.java
 
 import com.sales.BPS.mproduct.entity.Product;
+import com.sales.BPS.mproduct.repository.StockRepository;
+import com.sales.BPS.mproduct.service.StockService;
 import com.sales.BPS.msales.dto.PpcDTO;
+import com.sales.BPS.msales.dto.PpcVoucherDTO;
 import com.sales.BPS.msales.entity.Client;
 import com.sales.BPS.msales.entity.Ppc;
-import com.sales.BPS.msales.repository.ClientRepository;
 import com.sales.BPS.msales.repository.PpcRepository;
-import com.sales.BPS.msales.service.ClientService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,18 +15,19 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 public class PpcService {
 
     private final PpcRepository ppcRepository;
+    private final StockService stockService; // 가정
     private final ClientService clientService;
 
     @Autowired
-    public PpcService(PpcRepository ppcRepository, ClientService clientService) {
+    public PpcService(PpcRepository ppcRepository, StockService stockService, ClientService clientService) {
         this.ppcRepository = ppcRepository;
+        this.stockService = stockService;
         this.clientService = clientService;
     }
 
@@ -130,5 +132,24 @@ public class PpcService {
         Ppc ppc = convertToEntity(ppcDTO, client);
         ppcRepository.save(ppc);
     }
+
+
+    public List<PpcVoucherDTO> findPpcByClient(String clientCode){
+        List<Ppc> ppcs = ppcRepository.findByClientCode(clientCode);
+        List<PpcVoucherDTO> ppcVoucherDTOS = new ArrayList<>();
+
+
+        for(Ppc ppc : ppcs){
+            Integer proCode = ppc.getProCode();
+            String proName = ppc.getProduct().getProName();
+            Integer ppcSale = ppc.getPpcSale();
+            Integer ppcStock = stockService.getStockAmountByProductCode(proCode);
+            PpcVoucherDTO ppcVoucherDTO = new PpcVoucherDTO(proCode, proName, ppcSale, ppcStock);
+            ppcVoucherDTOS.add(ppcVoucherDTO);
+        }
+        return ppcVoucherDTOS;
+    }
+
+
 
 }

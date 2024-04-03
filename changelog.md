@@ -94,3 +94,6 @@
 
 2024-03-29
 - [Fix] 4.11/1.1.0/MS 콜드체인 (all) 수정
+
+2024-04-03
+- [Add] AWS Health Check를 위한 Controller 생성

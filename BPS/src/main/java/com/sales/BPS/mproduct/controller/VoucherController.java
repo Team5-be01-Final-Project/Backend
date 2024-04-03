@@ -73,7 +73,7 @@ public class VoucherController {
         }
     }
 
-    @GetMapping("/voucherid")
+    @GetMapping("/voucId")
     public ResponseEntity<?> generateVoucherId() {
         Map<String, Long> voucId = new HashMap<>();
         voucId.put("voucId", sequenceService.generateVoucherId());

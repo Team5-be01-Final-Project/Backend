@@ -62,7 +62,7 @@ public class VoucherController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/save")
+    @PostMapping("/save") //전표 저장
     public ResponseEntity<?> createVoucher(@RequestBody VoucherDto voucherDto) {
         try {
             voucherService.createVoucher(voucherDto);
@@ -73,7 +73,7 @@ public class VoucherController {
         }
     }
 
-    @GetMapping("/voucId")
+    @GetMapping("/voucId") //전표 번호 생성
     public ResponseEntity<?> generateVoucherId() {
         Map<String, Long> voucId = new HashMap<>();
         voucId.put("voucId", sequenceService.generateVoucherId());

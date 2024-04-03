@@ -51,8 +51,9 @@ public class EmployeeController {
         String deptCode = employeeService.findByEmpCode(empCode).getDepartment().getDeptCode();
         Employee employee = employeeService.findByDeptCodeAndPositionCode(deptCode);
         if (employee != null) {
-            Map<String, String> approverInfo = new HashMap<>();
+            Map<String, Object> approverInfo = new HashMap<>();
             approverInfo.put("approverName", employee.getEmpName());
+            approverInfo.put("approverCode", employee.getEmpCode());
             return ResponseEntity.ok(approverInfo);
         } else {
             return ResponseEntity.notFound().build();

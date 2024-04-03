@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 @Service
-public class sequenceService {
+public class SequenceService {
 
     @PersistenceContext
     private EntityManager entityManager;

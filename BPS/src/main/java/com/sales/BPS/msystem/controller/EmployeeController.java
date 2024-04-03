@@ -38,11 +38,17 @@ public class EmployeeController {
         return employeeService.findByCriteria(deptName, empName, empTel);
     }
 
-    @GetMapping("/{empCode}/clients")
+    @GetMapping("/{empCode}/clients") //담당자의 담당 거래처 찾기
     public ResponseEntity<List<Client>> getClientsByEmployee(@PathVariable Integer empCode) {
         Employee employee = employeeService.findByEmpCode(empCode);
         return ResponseEntity.ok(employee.getClients());
     }
 
 
+    @GetMapping("/{empCode}/approver") //담당자의 담당 거래처 찾기
+    public ResponseEntity<String> getByDeptCodeAndPositionCode(@PathVariable Integer empCode) {
+        String deptCode = employeeService.findByEmpCode(empCode).getDepartment().getDeptCode();
+        Employee employee = employeeService.findByDeptCodeAndPositionCode(deptCode);
+        return ResponseEntity.ok(employee.getEmpName());
+    }
 }

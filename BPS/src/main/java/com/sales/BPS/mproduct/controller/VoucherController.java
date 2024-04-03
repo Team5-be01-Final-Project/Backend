@@ -62,7 +62,7 @@ public class VoucherController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/save") //전표 저장
+    @PostMapping("/save") //전표 저장 1개씩
     public ResponseEntity<?> createVoucher(@RequestBody VoucherDto voucherDto) {
         try {
             voucherService.createVoucher(voucherDto);
@@ -79,4 +79,14 @@ public class VoucherController {
         voucId.put("voucId", sequenceService.generateVoucherId());
         return ResponseEntity.ok(voucId);
     }
+
+//    @PostMapping("/saveAll") // 여러 전표 저장
+//    public ResponseEntity<?> createVouchers(@RequestBody List<VoucherDto> voucherDtos) {
+//        try {
+//            voucherService.createVouchers(voucherDtos);
+//            return new ResponseEntity<>("Vouchers created successfully.", HttpStatus.CREATED);
+//        } catch (Exception e) {
+//            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+//        }
+//    }
 }

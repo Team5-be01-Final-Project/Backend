@@ -37,10 +37,9 @@ public class LoginController {
             empCodeCookie.setHttpOnly(true);
             empCodeCookie.setMaxAge(12 * 60 * 60); // 쿠키의 유효 기간을 12시간으로 설정
             empCodeCookie.setPath("/"); // 쿠키의 경로 설정(모든 경로에서 쿠키 사용 가능)
-//            empCodeCookie.setSecure(true);
+            empCodeCookie.setSecure(true);
             // SameSite 설정을 위해 별도의 헤더를 추가합니다.
-//            String cookieValue = "Path=/; HttpOnly; Secure; SameSite=None";
-            String cookieValue = "Path=/;";
+            String cookieValue = "Path=/; HttpOnly; Secure; SameSite=None";
             response.addHeader("Set-Cookie", cookieValue);
             response.addCookie(empCodeCookie);
 

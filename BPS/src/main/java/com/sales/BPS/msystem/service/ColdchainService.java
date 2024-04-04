@@ -42,7 +42,7 @@ public class ColdchainService {
         this.emailService = emailService;
     }
 
-    @Scheduled(fixedRate = 5000) // 5초마다 실행
+    @Scheduled(fixedRate = 500000) // 5초마다 실행
     public void checkAndLogTemperature() {
         List<Storage> storages = storageRepository.findAll();
         Random random = new Random();

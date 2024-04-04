@@ -20,9 +20,12 @@ public class Voucher {
     private Long voucId;
 
     @Id
-    @ManyToOne
-    @JoinColumn(name = "pro_code")
-    private Product product; // 이 필드를 추가
+    @Column(name = "pro_code")
+    private Integer proCode; // proCode를 직접 필드로 선언
+
+    @ManyToOne(fetch = FetchType.LAZY) // Product 엔티티와의 관계는 별도로 맺음
+    @JoinColumn(name = "pro_code", insertable = false, updatable = false) // proCode를 기반으로 Product 엔티티와 조인
+    private Product product;
 
 
     @Column(name = "vouc_date")
@@ -58,5 +61,6 @@ public class Voucher {
 
     @Column(name = "vouc_note")
     private String voucNote;
+
 
 }

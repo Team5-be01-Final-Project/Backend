@@ -1,11 +1,6 @@
 package com.sales.BPS.mproduct.service;
 
-import com.sales.BPS.mproduct.dto.VoucherApprovalDTO;
 import com.sales.BPS.mproduct.dto.VoucherDTO;
-import com.sales.BPS.mproduct.entity.ApprovalCode;
-import com.sales.BPS.mproduct.entity.Stock;
-import com.sales.BPS.mproduct.entity.Voucher;
-import com.sales.BPS.mproduct.entity.VoucherPK;
 import com.sales.BPS.mproduct.dto.VoucherDto;
 import com.sales.BPS.mproduct.entity.*;
 import com.sales.BPS.mproduct.repository.ApprovalCodeRepository;
@@ -15,12 +10,12 @@ import com.sales.BPS.mproduct.repository.VoucherRepository;
 import com.sales.BPS.msales.entity.Client;
 import com.sales.BPS.msales.repository.ClientRepository;
 import com.sales.BPS.msystem.entity.Employee;
+import com.sales.BPS.msystem.repository.EmployeeRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.sales.BPS.msystem.repository.EmployeeRepository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -32,15 +27,19 @@ public class VoucherService {
     private final StockRepository stockRepository;
     private final ApprovalCodeRepository approvalCodeRepository;
     private final EmployeeRepository employeeRepository;
+    private final ProductRepository productRepository;
+    private final ClientRepository clientRepository;
 
     @Autowired
-    public VoucherService(VoucherRepository voucherRepository, StockRepository stockRepository,
-                          ApprovalCodeRepository approvalCodeRepository, EmployeeRepository employeeRepository) {
+    public VoucherService(VoucherRepository voucherRepository, StockRepository stockRepository, ApprovalCodeRepository approvalCodeRepository, EmployeeRepository employeeRepository, ProductRepository productRepository, ClientRepository clientRepository) {
         this.voucherRepository = voucherRepository;
         this.stockRepository = stockRepository;
         this.approvalCodeRepository = approvalCodeRepository;
         this.employeeRepository = employeeRepository;
+        this.productRepository = productRepository;
+        this.clientRepository = clientRepository;
     }
+
 
     public List<VoucherDTO> getAllVouchers() {
         return voucherRepository.findAll().stream()
@@ -81,20 +80,6 @@ public class VoucherService {
     }
 
 
-/*    public void approveVoucher(Long voucId, VoucherApprovalDTO request) {
-        Voucher voucher = findVoucherById(voucId, request.getProCode());
-        Stock stock = findStockById(request.getProCode());
-        updateStock(stock, -voucher.getVoucAmount());
-        updateVoucherApproval(voucher, "A01", request.getEmpCode());
-    }
-
-    // VoucherService.java
-    public void rejectVoucher(Long voucId, VoucherApprovalDTO request) {
-        Voucher voucher = findVoucherById(voucId, request.getProCode());
-        updateVoucherApproval(voucher, "A02", request.getEmpCode());
-    }*/
-
-
     private Voucher findVoucherById(Long voucId, Integer proCode) {
         Optional<Voucher> voucher = voucherRepository.findById(new VoucherPK(voucId, proCode));
         if (voucher.isPresent()) {
@@ -109,20 +94,12 @@ public class VoucherService {
         Optional<Stock> stock = stockRepository.findById(proCode);
         if (stock.isPresent()) {
             return stock.get();
+        }
+        return stock.get();///////////////////////////////////////////////////////////////////////////!!!!!!!!!!!
+    }
 
-    @Autowired
-    private StockRepository stockRepository;
-    @Autowired
-    private ApprovalCodeRepository approvalCodeRepository;
-    @Autowired
-    private EmployeeRepository employeeRepository;
-    @Autowired
-    private ProductRepository productRepository;
 
-    @Autowired
-    private ClientRepository clientRepository;
-
-    public void approveVoucher(Long voucId, VoucherApprovalDTO request) {
+   /* public void approveVoucher(Long voucId, VoucherApprovalDTO request) {
         VoucherPK voucherPK = new VoucherPK();
         voucherPK.setVoucId(voucId);
         voucherPK.setProduct(request.getProCode());
@@ -144,59 +121,58 @@ public class VoucherService {
         } else {
             throw new RuntimeException("Stock not found");
         }
-    }
+    }*/
 
-    private void updateStock(Stock stock, int amountChange) {
-        int updatedAmount = stock.getStoAmo() + amountChange;
-        if (updatedAmount < 0) {
-            throw new RuntimeException("Insufficient stock");
-        }
-        stock.setStoAmo(updatedAmount);
-        stockRepository.save(stock);
-    }
-
-    public void approveVoucherDetails(Long voucId) {
-        List<Voucher> vouchers = voucherRepository.findByVoucId(voucId);
-        for (Voucher voucher : vouchers) {
-            voucher.setApprovalCode(approvalCodeRepository.findById("A01").orElseThrow(() -> new RuntimeException("Approval code not found")));
-
-            // Update other fields as needed
-            voucherRepository.save(voucher);
-        }
-    }
-
-
-    public void rejectVoucherDetails(Long voucId) {
-        List<Voucher> vouchers = voucherRepository.findByVoucId(voucId);
-        for (Voucher voucher : vouchers) {
-            voucher.setApprovalCode(approvalCodeRepository.findById("A02").orElseThrow(() -> new RuntimeException("Approval code not found")));
-
-            // Update other fields as needed
-            voucherRepository.save(voucher);
+        private void updateStock (Stock stock,int amountChange){
+            int updatedAmount = stock.getStoAmo() + amountChange;
+            if (updatedAmount < 0) {
+                throw new RuntimeException("Insufficient stock");
+            }
+            stock.setStoAmo(updatedAmount);
+            stockRepository.save(stock);
         }
 
-    @Transactional //전표 생성
-    public void createVoucher(VoucherDto voucherDto){
-        Voucher voucher = new Voucher();
-        voucher.setVoucId(voucherDto.getVoucId());
-        Product product = productRepository.findById(voucherDto.getProCode()).orElseThrow();
-        voucher.setProduct(product);
-        voucher.setVoucDate(voucherDto.getVoucDate());
-        voucher.setVoucSale(voucherDto.getVoucSale());
-        voucher.setVoucAmount(voucherDto.getVoucAmount());
-        voucher.setVoucSales(voucherDto.getVoucSales());
+        public void approveVoucherDetails (Long voucId){
+            List<Voucher> vouchers = voucherRepository.findByVoucId(voucId);
+            for (Voucher voucher : vouchers) {
+                voucher.setApprovalCode(approvalCodeRepository.findById("A01").orElseThrow(() -> new RuntimeException("Approval code not found")));
+
+                // Update other fields as needed
+                voucherRepository.save(voucher);
+            }
+        }
+
+
+        public void rejectVoucherDetails (Long voucId){
+            List<Voucher> vouchers = voucherRepository.findByVoucId(voucId);
+            for (Voucher voucher : vouchers) {
+                voucher.setApprovalCode(approvalCodeRepository.findById("A02").orElseThrow(() -> new RuntimeException("Approval code not found")));
+
+                // Update other fields as needed
+                voucherRepository.save(voucher);
+            }
+        }
+        @Transactional//전표 생성
+        public void createVoucher (VoucherDto voucherDto){
+            Voucher voucher = new Voucher();
+            voucher.setVoucId(voucherDto.getVoucId());
+            Product product = productRepository.findById(voucherDto.getProCode()).orElseThrow();
+            voucher.setProduct(product);
+            voucher.setVoucDate(voucherDto.getVoucDate());
+            voucher.setVoucSale(voucherDto.getVoucSale());
+            voucher.setVoucAmount(voucherDto.getVoucAmount());
+            voucher.setVoucSales(voucherDto.getVoucSales());
 //        voucher.setVoucApproval(voucherDto.getVoucApproval());
-        Client client = clientRepository.findById(voucherDto.getClientCode()).orElseThrow();
-        voucher.setClient(client);
-        ApprovalCode approvalCode = approvalCodeRepository.findById(voucherDto.getApprovalCode()).orElseThrow();
-        voucher.setApprovalCode(approvalCode);
-        Employee employee = employeeRepository.findById(voucherDto.getEmpCode()).orElseThrow();
-        voucher.setEmployee(employee);
-        Employee signer = employeeRepository.findById(voucherDto.getSignerCode()).orElseThrow();
-        voucher.setEmployeeSign(signer);
+            Client client = clientRepository.findById(voucherDto.getClientCode()).orElseThrow();
+            voucher.setClient(client);
+            ApprovalCode approvalCode = approvalCodeRepository.findById(voucherDto.getApprovalCode()).orElseThrow();
+            voucher.setApprovalCode(approvalCode);
+            Employee employee = employeeRepository.findById(voucherDto.getEmpCode()).orElseThrow();
+            voucher.setEmployee(employee);
+            Employee signer = employeeRepository.findById(voucherDto.getSignerCode()).orElseThrow();
+            voucher.setEmployeeSign(signer);
 //        voucher.setVoucNote(voucherDto.getVoucNote());
-        voucherRepository.save(voucher);
-    }
+            voucherRepository.save(voucher);
+        }
 
-}
-}
+    }

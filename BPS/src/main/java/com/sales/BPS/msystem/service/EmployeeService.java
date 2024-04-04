@@ -47,7 +47,7 @@ public class EmployeeService {
     }
 
     public Employee findByDeptCodeAndPositionCode(String deptCode){
-        Employee manager = employeeRepository.findByDeptCodeAndPositionCode(deptCode, "P02");
+        Employee manager = employeeRepository.findByDeptCodeAndPositionCode2(deptCode, "P02");
         return manager;
     }
 }

@@ -1,11 +1,11 @@
 ## BPS_Backend Sever
 
-#### 환경 설정
+### 환경 설정
 ```
 $ java -version
 openjdk version "17.0.10" 2024-01-16
 ```
-
+___
 ### 폴더 구조
 . </br>
 ├── BPS -> 스프링부트 프로젝트 폴더 </br>

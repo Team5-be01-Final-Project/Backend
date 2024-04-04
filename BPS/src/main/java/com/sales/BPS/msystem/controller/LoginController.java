@@ -51,10 +51,9 @@ public class LoginController {
             empNameCookie.setMaxAge(12 * 60 * 60);
             empNameCookie.setPath("/");
             response.addCookie(empNameCookie);
-//            empNameCookie.setSecure(true);
+            empNameCookie.setSecure(true);
             // SameSite 설정을 위해 별도의 헤더를 추가합니다.
-//            String cookieValue1 = "Path=/; HttpOnly; Secure; SameSite=None";
-            String cookieValue1 = "Path=/;";
+            String cookieValue1 = "Path=/; HttpOnly; Secure; SameSite=None";
             response.addHeader("Set-Cookie", cookieValue1);
             response.addCookie(empNameCookie);
 
@@ -65,10 +64,9 @@ public class LoginController {
             empImgCookie.setMaxAge(12 * 60 * 60);
             empImgCookie.setPath("/");
             response.addCookie(empImgCookie);
-//            empImgCookie.setSecure(true);
+            empImgCookie.setSecure(true);
             // SameSite 설정을 위해 별도의 헤더를 추가합니다.
-//            String cookieValue2 = "Path=/; HttpOnly; Secure; SameSite=None";
-            String cookieValue2 = "Path=/;";
+            String cookieValue2 = "Path=/; HttpOnly; Secure; SameSite=None";
             response.addHeader("Set-Cookie", cookieValue2);
             response.addCookie(empImgCookie);
 
@@ -79,10 +77,9 @@ public class LoginController {
             empaAuthCodeCookie.setMaxAge(12 * 60 * 60);
             empaAuthCodeCookie.setPath("/");
             response.addCookie(empaAuthCodeCookie);
-//            empaAuthCodeCookie.setSecure(true);
+            empaAuthCodeCookie.setSecure(true);
             // SameSite 설정을 위해 별도의 헤더를 추가합니다.
-//            String cookieValue3 = "Path=/; HttpOnly; Secure; SameSite=None";
-            String cookieValue3 = "Path=/;";
+            String cookieValue3 = "Path=/; HttpOnly; Secure; SameSite=None";
             response.addHeader("Set-Cookie", cookieValue3);
             response.addCookie(empaAuthCodeCookie);
 

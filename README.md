@@ -1,5 +1,10 @@
 ## BPS_Backend Sever
 
+#### 환경 설정
+```
+$ java -version
+openjdk version "17.0.10" 2024-01-16
+```
 
 ### 폴더 구조
 . </br>
@@ -26,4 +31,13 @@ CODE_DEPLOY_DEPLOYMENT_GROUP_NAME
 AWS_REGION
 ```
 ___
+### CI/CD
+#### EC2 환경설정
+```
+# JDK 17 설치
+# Docker 설치
+```
+
+#### Github Action Deploy to EC2 with docker container
+![image](https://github.com/Team5-be01-Final-Project/Backend/assets/150888333/5d092b4d-9ff5-40e0-a55a-133ef07085ca)
 

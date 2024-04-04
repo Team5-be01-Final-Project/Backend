@@ -154,15 +154,14 @@ public class VoucherService {
         }
         @Transactional//전표 생성
         public void createVoucher (VoucherDto voucherDto){
+            System.out.println(voucherDto);
             Voucher voucher = new Voucher();
             voucher.setVoucId(voucherDto.getVoucId());
-            Product product = productRepository.findById(voucherDto.getProCode()).orElseThrow();
-            voucher.setProduct(product);
+            voucher.setProCode(voucherDto.getProCode());
             voucher.setVoucDate(voucherDto.getVoucDate());
             voucher.setVoucSale(voucherDto.getVoucSale());
             voucher.setVoucAmount(voucherDto.getVoucAmount());
             voucher.setVoucSales(voucherDto.getVoucSales());
-//        voucher.setVoucApproval(voucherDto.getVoucApproval());
             Client client = clientRepository.findById(voucherDto.getClientCode()).orElseThrow();
             voucher.setClient(client);
             ApprovalCode approvalCode = approvalCodeRepository.findById(voucherDto.getApprovalCode()).orElseThrow();
@@ -171,8 +170,6 @@ public class VoucherService {
             voucher.setEmployee(employee);
             Employee signer = employeeRepository.findById(voucherDto.getSignerCode()).orElseThrow();
             voucher.setEmployeeSign(signer);
-//        voucher.setVoucNote(voucherDto.getVoucNote());
             voucherRepository.save(voucher);
         }
-
     }

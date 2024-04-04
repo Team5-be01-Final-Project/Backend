@@ -2,16 +2,20 @@ package com.sales.BPS.mproduct.service;
 
 import com.sales.BPS.mproduct.dto.VoucherApprovalDTO;
 import com.sales.BPS.mproduct.dto.VoucherDTO;
-import com.sales.BPS.mproduct.entity.Stock;
-import com.sales.BPS.mproduct.entity.Voucher;
-import com.sales.BPS.mproduct.entity.VoucherPK;
+import com.sales.BPS.mproduct.dto.VoucherDto;
+import com.sales.BPS.mproduct.entity.*;
 import com.sales.BPS.mproduct.repository.ApprovalCodeRepository;
+import com.sales.BPS.mproduct.repository.ProductRepository;
 import com.sales.BPS.mproduct.repository.StockRepository;
 import com.sales.BPS.mproduct.repository.VoucherRepository;
+import com.sales.BPS.msales.entity.Client;
+import com.sales.BPS.msales.repository.ClientRepository;
+import com.sales.BPS.msystem.entity.Employee;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.sales.BPS.msystem.repository.EmployeeRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -102,6 +106,11 @@ public class VoucherService {
     private ApprovalCodeRepository approvalCodeRepository;
     @Autowired
     private EmployeeRepository employeeRepository;
+    @Autowired
+    private ProductRepository productRepository;
+
+    @Autowired
+    private ClientRepository clientRepository;
 
     public void approveVoucher(Long voucId, VoucherApprovalDTO request) {
         VoucherPK voucherPK = new VoucherPK();
@@ -151,7 +160,26 @@ public class VoucherService {
         voucher.setVoucApproval(LocalDate.now());
         voucherRepository.save(voucher);
     }
-
-
-
+    @Transactional //전표 생성
+    public void createVoucher(VoucherDto voucherDto){
+        Voucher voucher = new Voucher();
+        voucher.setVoucId(voucherDto.getVoucId());
+        Product product = productRepository.findById(voucherDto.getProCode()).orElseThrow();
+        voucher.setProduct(product);
+        voucher.setVoucDate(voucherDto.getVoucDate());
+        voucher.setVoucSale(voucherDto.getVoucSale());
+        voucher.setVoucAmount(voucherDto.getVoucAmount());
+        voucher.setVoucSales(voucherDto.getVoucSales());
+//        voucher.setVoucApproval(voucherDto.getVoucApproval());
+        Client client = clientRepository.findById(voucherDto.getClientCode()).orElseThrow();
+        voucher.setClient(client);
+        ApprovalCode approvalCode = approvalCodeRepository.findById(voucherDto.getApprovalCode()).orElseThrow();
+        voucher.setApprovalCode(approvalCode);
+        Employee employee = employeeRepository.findById(voucherDto.getEmpCode()).orElseThrow();
+        voucher.setEmployee(employee);
+        Employee signer = employeeRepository.findById(voucherDto.getSignerCode()).orElseThrow();
+        voucher.setEmployeeSign(signer);
+//        voucher.setVoucNote(voucherDto.getVoucNote());
+        voucherRepository.save(voucher);
+    }
 }

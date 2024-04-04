@@ -2,15 +2,19 @@ package com.sales.BPS.mproduct.controller;
 
 import com.sales.BPS.mproduct.dto.VoucherApprovalDTO;
 import com.sales.BPS.mproduct.dto.VoucherDTO;
-import com.sales.BPS.mproduct.entity.Voucher;
+import com.sales.BPS.mproduct.dto.VoucherDto;
+import com.sales.BPS.mproduct.service.SequenceService;
 import com.sales.BPS.mproduct.service.VoucherService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/vouchers")
@@ -18,10 +22,12 @@ import java.util.List;
 public class VoucherController {
 
     private final VoucherService voucherService;
+    private final SequenceService sequenceService;
 
     @Autowired
-    public VoucherController(VoucherService voucherService) {
+    public VoucherController(VoucherService voucherService, SequenceService sequenceService) {
         this.voucherService = voucherService;
+        this.sequenceService = sequenceService;
     }
 
     @GetMapping
@@ -56,4 +62,31 @@ public class VoucherController {
         return ResponseEntity.ok().build();
     }
 
+    @PostMapping("/save") //전표 저장 1개씩
+    public ResponseEntity<?> createVoucher(@RequestBody VoucherDto voucherDto) {
+        try {
+            voucherService.createVoucher(voucherDto);
+            return new ResponseEntity<>("Voucher created successfully.", HttpStatus.CREATED);
+        } catch (Exception e) {
+            // 예외 처리 로직 (예외에 따라 적절한 HTTP 상태 코드와 메시지 반환)
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/voucId") //전표 번호 생성
+    public ResponseEntity<?> generateVoucherId() {
+        Map<String, Long> voucId = new HashMap<>();
+        voucId.put("voucId", sequenceService.generateVoucherId());
+        return ResponseEntity.ok(voucId);
+    }
+
+//    @PostMapping("/saveAll") // 여러 전표 저장
+//    public ResponseEntity<?> createVouchers(@RequestBody List<VoucherDto> voucherDtos) {
+//        try {
+//            voucherService.createVouchers(voucherDtos);
+//            return new ResponseEntity<>("Vouchers created successfully.", HttpStatus.CREATED);
+//        } catch (Exception e) {
+//            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+//        }
+//    }
 }

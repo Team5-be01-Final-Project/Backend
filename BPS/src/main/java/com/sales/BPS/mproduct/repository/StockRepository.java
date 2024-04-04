@@ -33,4 +33,7 @@ public interface StockRepository extends JpaRepository<Stock, Integer> {
     @Query("SELECT p FROM Product p WHERE p.proCode = :proCode")
     Optional<Product> findProductByProCode(@Param("proCode") Integer proCode);
 
+
+    // 상품 코드로 재고 조회
+    Stock findByProCode(Integer proCode);
 }

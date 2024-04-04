@@ -9,6 +9,7 @@ public class IncentiveDTO {
     private long voucMonthSales; // 월 매출액 합계
     private Integer salesRank; // 판매 순위
     private Integer incentive; // 인센티브
+    private String empImg;
 
     public IncentiveDTO(String empName, String deptName, long voucMonthSales, Integer salesRank, Integer incentive) {
         this.empName = empName;

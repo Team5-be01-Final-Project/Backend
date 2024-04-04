@@ -18,7 +18,7 @@ DB_PASSWORD
 ```
 GMAIL_PASSWORD
 ```
-#### 배포 관련
+#### CI/CD 배포 관련
 ```
 S3_BUCKET_NAME
 CODE_DEPLOY_APP_NAME

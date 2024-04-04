@@ -7,6 +7,7 @@ import java.time.LocalDate;
 @Data
 public class VoucherDTO {
     private Long voucId; // 전표번호
+    private Integer proCode;
     private String proName; // 제품명
     private LocalDate voucDate; // 등록일
     private Integer voucSale; // 판매가
@@ -17,6 +18,7 @@ public class VoucherDTO {
     private String empName; // 담당자(emp_code) 이름
     private String signerName; // 결재자(emp_code_sign) 이름
     private String voucNote; // 비고
+    private String appCode;
     private String approvalStatus; // 승인상태(코드이름)
     private String storageCar; // 담당자의 차량 번호 추가
     private boolean showApproveButton;

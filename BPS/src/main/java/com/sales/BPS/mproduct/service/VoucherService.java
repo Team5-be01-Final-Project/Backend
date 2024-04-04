@@ -2,6 +2,10 @@ package com.sales.BPS.mproduct.service;
 
 import com.sales.BPS.mproduct.dto.VoucherApprovalDTO;
 import com.sales.BPS.mproduct.dto.VoucherDTO;
+import com.sales.BPS.mproduct.entity.ApprovalCode;
+import com.sales.BPS.mproduct.entity.Stock;
+import com.sales.BPS.mproduct.entity.Voucher;
+import com.sales.BPS.mproduct.entity.VoucherPK;
 import com.sales.BPS.mproduct.dto.VoucherDto;
 import com.sales.BPS.mproduct.entity.*;
 import com.sales.BPS.mproduct.repository.ApprovalCodeRepository;
@@ -13,7 +17,6 @@ import com.sales.BPS.msales.repository.ClientRepository;
 import com.sales.BPS.msystem.entity.Employee;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.sales.BPS.msystem.repository.EmployeeRepository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,79 +29,86 @@ import java.util.stream.Collectors;
 public class VoucherService {
 
     private final VoucherRepository voucherRepository;
+    private final StockRepository stockRepository;
+    private final ApprovalCodeRepository approvalCodeRepository;
+    private final EmployeeRepository employeeRepository;
 
     @Autowired
-    public VoucherService(VoucherRepository voucherRepository) {
+    public VoucherService(VoucherRepository voucherRepository, StockRepository stockRepository,
+                          ApprovalCodeRepository approvalCodeRepository, EmployeeRepository employeeRepository) {
         this.voucherRepository = voucherRepository;
+        this.stockRepository = stockRepository;
+        this.approvalCodeRepository = approvalCodeRepository;
+        this.employeeRepository = employeeRepository;
     }
 
     public List<VoucherDTO> getAllVouchers() {
-        List<Voucher> vouchers = voucherRepository.findAll();
-        return vouchers.stream().map(this::mapToDTO).collect(Collectors.toList());
+        return voucherRepository.findAll().stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
     }
 
-    public VoucherDTO mapToDTO(Voucher voucher) {
-        VoucherDTO dto = new VoucherDTO();
-
-        if (voucher != null) {
-            dto.setVoucId(voucher.getVoucId());
-            dto.setProName(voucher.getProduct() != null ? voucher.getProduct().getProName() : null); // 제품 엔티티에서 제품명 추출, 널 체크 추가
-            dto.setVoucDate(voucher.getVoucDate());
-            dto.setVoucSale(Math.toIntExact(voucher.getVoucSale()));
-            dto.setVoucAmount(voucher.getVoucAmount());
-            dto.setVoucSales(Long.valueOf(voucher.getVoucSales()));
-            dto.setVoucApproval(voucher.getVoucApproval());
-            dto.setClientName(voucher.getClient() != null ? voucher.getClient().getClientName() : null); // 클라이언트 엔티티에서 거래처명 추출, 널 체크 추가
-            dto.setEmpName(voucher.getEmployee() != null ? voucher.getEmployee().getEmpName() : null); // 담당자 엔티티에서 이름 추출, 널 체크 추가
-            dto.setSignerName(voucher.getEmployeeSign() != null ? voucher.getEmployeeSign().getEmpName() : null); // 결재자 엔티티에서 이름 추출, 널 체크 추가
-            dto.setVoucNote(voucher.getVoucNote());
-            dto.setApprovalStatus(voucher.getApprovalCode() != null ? voucher.getApprovalCode().getAppName() : null); // 승인 코드 엔티티에서 승인 상태 이름 추출, 널 체크 추가
-            // 버튼 표시 여부 설정
-            dto.setShowApproveButton(voucher.getApprovalCode() != null && voucher.getApprovalCode().getAppCode().equals("A00"));
-            dto.setShowRejectButton(voucher.getApprovalCode() != null && voucher.getApprovalCode().getAppCode().equals("A00"));
-        }
-
-        return dto;
+    // 특정 voucId에 해당하는 Voucher 엔티티들을 조회하고, 그 결과를 VoucherDTO로 변환하여 반환
+    public List<VoucherDTO> findVouchersByVoucIdAsDto(Long voucId) {
+        List<Voucher> vouchers = voucherRepository.findByVoucId(voucId);
+        return vouchers.stream().map(this::convertToDto).collect(Collectors.toList());
     }
 
     private VoucherDTO convertToDto(Voucher voucher) {
         VoucherDTO dto = new VoucherDTO();
         dto.setVoucId(voucher.getVoucId());
-        dto.setEmpName(voucher.getEmployee() != null ? voucher.getEmployee().getEmpName() : null);
-        dto.setClientName(voucher.getClient() != null ? voucher.getClient().getClientName() : null);
-        dto.setProName(voucher.getProduct() != null ? voucher.getProduct().getProName() : null);
-        dto.setVoucDate(voucher.getVoucDate() != null ? LocalDate.parse(voucher.getVoucDate().toString()) : null); // LocalDate를 String으로 변환
-        dto.setVoucSale(Math.toIntExact(voucher.getVoucSale()));
+        dto.setProCode(voucher.getProduct().getProCode());
+        dto.setProName(voucher.getProduct().getProName());
+        dto.setVoucDate(voucher.getVoucDate());
+        dto.setVoucSale(voucher.getVoucSale());
         dto.setVoucAmount(voucher.getVoucAmount());
-        dto.setVoucSales(Long.valueOf(voucher.getVoucSales()));
-        dto.setVoucApproval(voucher.getVoucApproval() != null ? LocalDate.parse(voucher.getVoucApproval().toString()) : null); // LocalDate를 String으로 변환
-        dto.setSignerName(voucher.getEmployeeSign() != null ? voucher.getEmployeeSign().getEmpName() : null);
+        dto.setVoucSales(voucher.getVoucSales());
+        dto.setVoucApproval(voucher.getVoucApproval());
+        dto.setClientName(voucher.getClient().getClientName());
+        dto.setEmpName(voucher.getEmployee().getEmpName());
+        dto.setSignerName(voucher.getEmployeeSign().getEmpName());
         dto.setVoucNote(voucher.getVoucNote());
-        dto.setApprovalStatus(voucher.getApprovalCode() != null ? voucher.getApprovalCode().getAppName() : null);
 
-        dto.setShowApproveButton(voucher.getApprovalCode() != null && voucher.getApprovalCode().getAppCode().equals("A00"));
-        dto.setShowRejectButton(voucher.getApprovalCode() != null && voucher.getApprovalCode().getAppCode().equals("A00"));
+        // 수정 시작
+        String appCode = voucher.getApprovalCode().getAppCode();
+        dto.setAppCode(appCode != null ? appCode : "A00");
+        dto.setApprovalStatus(appCode != null ? voucher.getApprovalCode().getAppName() : "대기중");
+        dto.setShowApproveButton("A00".equals(appCode));
+        dto.setShowRejectButton("A00".equals(appCode));
+        // 수정 끝
 
-        if (voucher.getEmployee() != null && voucher.getEmployee().getStorage() != null) {
-            dto.setStorageCar(voucher.getEmployee().getStorage().getStorageCar());
-        }
         return dto;
     }
 
 
-    public List<VoucherDTO> findVouchersByVoucIdAsDto(Long voucId) {
-        List<Voucher> vouchers = voucherRepository.findByVoucId(voucId);
-        return vouchers.stream().map(this::convertToDto).collect(Collectors.toList());
-
+/*    public void approveVoucher(Long voucId, VoucherApprovalDTO request) {
+        Voucher voucher = findVoucherById(voucId, request.getProCode());
+        Stock stock = findStockById(request.getProCode());
+        updateStock(stock, -voucher.getVoucAmount());
+        updateVoucherApproval(voucher, "A01", request.getEmpCode());
     }
 
-    // 매출액 계산 로직
-    private void calculateVoucSales(Voucher voucher) {
-        if (voucher.getVoucSale() != null && voucher.getVoucAmount() != null) {
-            Long sales = (long) (voucher.getVoucSale() * voucher.getVoucAmount());
-            voucher.setVoucSales(sales);
+    // VoucherService.java
+    public void rejectVoucher(Long voucId, VoucherApprovalDTO request) {
+        Voucher voucher = findVoucherById(voucId, request.getProCode());
+        updateVoucherApproval(voucher, "A02", request.getEmpCode());
+    }*/
+
+
+    private Voucher findVoucherById(Long voucId, Integer proCode) {
+        Optional<Voucher> voucher = voucherRepository.findById(new VoucherPK(voucId, proCode));
+        if (voucher.isPresent()) {
+            return voucher.get();
+        } else {
+            throw new RuntimeException("Voucher not found");
         }
     }
+
+
+    private Stock findStockById(Integer proCode) {
+        Optional<Stock> stock = stockRepository.findById(proCode);
+        if (stock.isPresent()) {
+            return stock.get();
 
     @Autowired
     private StockRepository stockRepository;
@@ -130,36 +140,41 @@ public class VoucherService {
             }
             stock.setStoAmo(remainingStock);
             stockRepository.save(stock);
+
         } else {
             throw new RuntimeException("Stock not found");
         }
-
-        // PPC 테이블에 판매 정보 저장 로직 추가
-        // ...
-
-        voucher.setApprovalCode(approvalCodeRepository.findById("A01").orElse(null));
-        voucher.setEmployeeSign(employeeRepository.findById(request.getEmpCode()).orElse(null));
-        voucher.setVoucApproval(LocalDate.now());
-        voucherRepository.save(voucher);
     }
 
-    public void rejectVoucher(Long voucId, VoucherApprovalDTO request) {
-        VoucherPK voucherPK = new VoucherPK();
-        voucherPK.setVoucId(voucId);
-        voucherPK.setProduct(request.getProCode());
+    private void updateStock(Stock stock, int amountChange) {
+        int updatedAmount = stock.getStoAmo() + amountChange;
+        if (updatedAmount < 0) {
+            throw new RuntimeException("Insufficient stock");
+        }
+        stock.setStoAmo(updatedAmount);
+        stockRepository.save(stock);
+    }
 
-        Voucher voucher = voucherRepository.findById(voucherPK)
-                .orElseThrow(() -> new RuntimeException("Voucher not found"));
+    public void approveVoucherDetails(Long voucId) {
+        List<Voucher> vouchers = voucherRepository.findByVoucId(voucId);
+        for (Voucher voucher : vouchers) {
+            voucher.setApprovalCode(approvalCodeRepository.findById("A01").orElseThrow(() -> new RuntimeException("Approval code not found")));
 
-        if (!voucher.getProduct().getProCode().equals(request.getProCode())) {
-            throw new RuntimeException("Invalid product code");
+            // Update other fields as needed
+            voucherRepository.save(voucher);
+        }
+    }
+
+
+    public void rejectVoucherDetails(Long voucId) {
+        List<Voucher> vouchers = voucherRepository.findByVoucId(voucId);
+        for (Voucher voucher : vouchers) {
+            voucher.setApprovalCode(approvalCodeRepository.findById("A02").orElseThrow(() -> new RuntimeException("Approval code not found")));
+
+            // Update other fields as needed
+            voucherRepository.save(voucher);
         }
 
-        voucher.setApprovalCode(approvalCodeRepository.findById("A02").orElse(null));
-        voucher.setEmployeeSign(employeeRepository.findById(request.getEmpCode()).orElse(null));
-        voucher.setVoucApproval(LocalDate.now());
-        voucherRepository.save(voucher);
-    }
     @Transactional //전표 생성
     public void createVoucher(VoucherDto voucherDto){
         Voucher voucher = new Voucher();
@@ -182,4 +197,6 @@ public class VoucherService {
 //        voucher.setVoucNote(voucherDto.getVoucNote());
         voucherRepository.save(voucher);
     }
+
+}
 }

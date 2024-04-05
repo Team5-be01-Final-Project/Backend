@@ -2,6 +2,7 @@ package com.sales.BPS.msystem.controller;
 
 import com.sales.BPS.msales.entity.Client;
 import com.sales.BPS.msystem.dto.EmployeeInfoDTO;
+import com.sales.BPS.msystem.dto.EmployeesSpecDTO;
 import com.sales.BPS.msystem.entity.Employee;
 import com.sales.BPS.msystem.service.EmployeeService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -53,5 +54,12 @@ public class EmployeeController {
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    // 모든 직원의 사양을 조회하는 GET 요청 핸들러
+    @GetMapping("/specs")
+    public ResponseEntity<List<EmployeesSpecDTO>> getAllEmployeeSpecs() {
+        List<EmployeesSpecDTO> employeesSpecs = employeeService.getAllEmployeesSpec();
+        return ResponseEntity.ok(employeesSpecs); // HTTP 200 OK 상태 코드와 함께 결과 반환
     }
 }

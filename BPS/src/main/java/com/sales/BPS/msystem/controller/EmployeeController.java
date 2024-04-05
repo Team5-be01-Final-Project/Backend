@@ -25,11 +25,6 @@ public class EmployeeController {
         this.employeeService = employeeService;
     }
 
-//    @GetMapping("/list")
-//    public List<EmployeeInfoDTO> getAllEmployees(){
-//        return employeeService.findAllEmployees();
-//    }
-
     @GetMapping("/list")
     @Tag(name = "System API")
     @Operation(summary = "사원정보 조회",description = "사원정보(부서이름,이름, 전화번호 조회")

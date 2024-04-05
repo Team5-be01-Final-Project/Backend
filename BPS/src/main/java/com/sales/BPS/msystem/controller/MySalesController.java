@@ -2,6 +2,7 @@ package com.sales.BPS.msystem.controller;
 
 import com.sales.BPS.msales.entity.Client;
 import com.sales.BPS.msales.service.ClientService;
+import com.sales.BPS.msystem.dto.EmployeesSpecDTO;
 import com.sales.BPS.msystem.entity.Employee;
 import com.sales.BPS.msystem.service.EmployeeService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -35,11 +36,11 @@ public class MySalesController {
     @Tag(name = "MySales API")
     @Operation(summary = "My 영업 정보 조회", description = "로그인한 사원의 정보와 담당 거래처 목록을 조회합니다.")
     public ResponseEntity<Map<String, Object>> getMySalesInfo(@PathVariable Integer empCode) {
-        Employee employee = employeeService.findByEmpCode(empCode);
+        EmployeesSpecDTO employeeSpec = employeeService.findByEmpCodeWithSpec(empCode);
         List<Client> clients = clientService.findByEmployeeEmpCode(empCode);
 
         Map<String, Object> response = new HashMap<>();
-        response.put("employee", employee);
+        response.put("employee", employeeSpec);
         response.put("clients", clients);
 
         return ResponseEntity.ok(response);

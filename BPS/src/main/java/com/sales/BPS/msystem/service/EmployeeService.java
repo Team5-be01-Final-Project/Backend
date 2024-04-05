@@ -71,4 +71,9 @@ public class EmployeeService {
         )).collect(Collectors.toList());
     }
 
+    public EmployeesSpecDTO findByEmpCodeWithSpec(Integer empCode) {
+        return employeeRepository.findByEmpCodeWithSpec(empCode)
+                .orElseThrow(() -> new NoSuchElementException("해당하는 직원을 찾을 수 없습니다. EmpCode: " + empCode));
+    }
+
 }

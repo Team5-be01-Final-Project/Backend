@@ -34,5 +34,11 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
     @Query("SELECT e FROM Employee e JOIN e.department d JOIN e.positions p WHERE d.deptCode = :deptCode AND p.posCode = :posCode")
     Employee findByDeptCodeAndPositionCode2(@Param("deptCode") String deptCode, @Param("posCode") String posCode);
 
+    @Query("SELECT new com.sales.BPS.msystem.dto.EmployeesSpecDTO(e.empImg, e.empCode, e.empName, p.posName, d.deptName, e.empTel, e.empEmail, e.empStartDate, e.empEndDate) " +
+            "FROM Employee e " +
+            "JOIN e.positions p " +
+            "JOIN e.department d " +
+            "WHERE e.empCode = :empCode")
+    Optional<EmployeesSpecDTO> findByEmpCodeWithSpec(@Param("empCode") Integer empCode);
 
 }

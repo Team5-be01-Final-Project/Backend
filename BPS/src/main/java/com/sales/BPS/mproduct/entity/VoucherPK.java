@@ -18,7 +18,4 @@ public class VoucherPK implements Serializable {
         this.proCode = proCode;
     }
 
-    // Getters and setters
-
-
 }

@@ -37,8 +37,6 @@ public class SalesService {
             List<Voucher> vouchers = voucherRepository.findByClientClientCodeAndYearAndMonth(client.getClientCode(), year, month);
 
 
-
-
             for (Voucher voucher : vouchers) {
                 ClientSalesDTO dto = new ClientSalesDTO();
                 dto.setClientName(client.getClientName());

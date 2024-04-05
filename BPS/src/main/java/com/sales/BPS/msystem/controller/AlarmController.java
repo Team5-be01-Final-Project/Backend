@@ -25,13 +25,6 @@ public class AlarmController {
         this.alarmService = alarmService;
     }
 
-//    @PostMapping("/update")
-//    public ResponseEntity<Void> updateAlarmSetting(@RequestParam Integer empCode,
-//                                                   @RequestParam String alarmCode,
-//                                                   @RequestParam boolean alarmSetting) {
-//        alarmService.updateAlarmSetting(empCode, alarmCode, alarmSetting);
-//        return ResponseEntity.ok().build();
-//    }
 
     @PostMapping("/update")
     @Tag(name = "System API")

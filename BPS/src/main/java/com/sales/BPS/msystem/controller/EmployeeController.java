@@ -30,8 +30,8 @@ public class EmployeeController {
     @Operation(summary = "사원정보 조회",description = "사원정보(부서이름,이름, 전화번호 조회")
     public List<EmployeeInfoDTO> searchEmployees(@RequestParam(required = false) String deptName,
                                                  @RequestParam(required = false) String empName,
-                                                 @RequestParam(required = false) String empTel) {
-        return employeeService.findByCriteria(deptName, empName, empTel);
+                                                 @RequestParam(required = false) String empEmail) {
+        return employeeService.findByCriteria(deptName, empName, empEmail);
     }
 
     @GetMapping("/{empCode}/clients") //담당자의 담당 거래처 찾기

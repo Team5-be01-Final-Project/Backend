@@ -32,8 +32,8 @@ public class EmployeeService {
         }
     }
     // 기준에 따른 직원 검색
-    public List<EmployeeInfoDTO> findByCriteria(String deptName, String empName, String empTel) {
-        return employeeRepository.findByCriteria(deptName, empName, empTel);
+    public List<EmployeeInfoDTO> findByCriteria(String deptName, String empName, String empEmail) {
+        return employeeRepository.findByCriteria(deptName, empName, empEmail);
     }
 
     // 모든 직원 목록을 반환하는 메서드

@@ -41,13 +41,16 @@ public class EmployeeController {
         Employee employee = employeeService.findByEmpCode(empCode);
         if (employee != null) {
             return ResponseEntity.ok(employee);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 
     @GetMapping("/{empCode}/clients") //담당자의 담당 거래처 찾기
     public ResponseEntity<List<Client>> getClientsByEmployee(@PathVariable Integer empCode) {
         Employee employee = employeeService.findByEmpCode(empCode);
         return ResponseEntity.ok(employee.getClients());
     }
-
 
     @GetMapping("/{empCode}/approver") //담당자의 담당 거래처 찾기
     public ResponseEntity<?> getByDeptCodeAndPositionCode(@PathVariable Integer empCode) {

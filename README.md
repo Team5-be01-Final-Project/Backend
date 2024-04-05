@@ -1,9 +1,9 @@
 ## BPS_Backend Sever
 
-### 환경 설정
+### 개발 환경
 ```
-$ java -version
-openjdk version "17.0.10" 2024-01-16
+JDK 17
+SpringBoot 3.2.3
 ```
 ___
 ### 폴더 구조
@@ -40,4 +40,11 @@ ___
 
 #### Github Action Deploy to EC2 with docker container
 ![image](https://github.com/Team5-be01-Final-Project/Backend/assets/150888333/5d092b4d-9ff5-40e0-a55a-133ef07085ca)
+
+___
+Release History
+- 2.0.0
+  - https://github.com/Team5-be01-Final-Project/Backend/releases/tag/v2.0.0
+- 1.0.0
+  - https://github.com/Team5-be01-Final-Project/Backend/releases/tag/v1.0.0
 

@@ -61,7 +61,7 @@ public class Employee {
 
     @OneToMany(mappedBy = "employee")
     @JsonBackReference // 무한 재귀 문제(StackOverflowError) 해결하기 위한 어노테이션
-    @JsonIgnore // 양방향 관계가 있어서 순환 참조 해결을 위한 한 쪽 방향의 관계를 JSON 직렬화에서 제외
+    @JsonIgnore // Infinite recursion (StackOverflowError)" 예외가 발생 해결
     private List<Client> clients = new ArrayList<>();
 
     @OneToMany(mappedBy = "employee")

@@ -15,34 +15,38 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/stocks")
-@Tag(name = "Stock API", description = "재고관리 API입니다.")
+@Tag(name = "Stock API", description = "재고 관리 API입니다.")
 public class StockController {
 
     private final StockService stockService;
 
+    // StockService 의존성 주입을 위한 생성자
     @Autowired
     public StockController(StockService stockService) {
         this.stockService = stockService;
     }
 
+    // 모든 재고 목록 조회
     @GetMapping("/all")
     @Tag(name = "Stock API")
-    @Operation(summary = "재고조회",description = "재고를 조회합니다.")
+    @Operation(summary = "재고 조회", description = "모든 재고를 조회합니다.")
     public List<StockListDTO> findAllStockList() {
         return stockService.findAllStockList();
     }
 
+    // 조건에 따른 재고 목록 조회
     @GetMapping("/search")
     @Tag(name = "Stock API")
-    @Operation(summary = "상품조회",description = "상품 리스트를 조회합니다.")
+    @Operation(summary = "상품 검색", description = "조건에 따라 상품을 검색합니다.")
     public List<StockListDTO> findStockListByCondition(@RequestParam(required = false) Integer proCode,
                                                        @RequestParam(required = false) String proName) {
         return stockService.findStockListByCondition(proCode, proName);
     }
 
+    // 재고 등록
     @PostMapping("/register")
     @Tag(name = "Stock API")
-    @Operation(summary = "재고등록",description = "재고를 등록 합니다.")
+    @Operation(summary = "재고 등록", description = "새로운 재고를 등록합니다.")
     public ResponseEntity<String> registerStock(@RequestBody StockRegisterDTO stockRegisterDTO) {
         try {
             stockService.registerStock(stockRegisterDTO);
@@ -54,9 +58,10 @@ public class StockController {
         }
     }
 
+    // 상품 코드로 상품 정보 조회
     @GetMapping("/product/{proCode}")
     @Tag(name = "Stock API")
-    @Operation(summary = "재고조회",description = "품목기준코드로 제품을 조회합니다.")
+    @Operation(summary = "상품 조회", description = "상품 코드로 상품 정보를 조회합니다.")
     public ResponseEntity<StockProductDTO> getProductByCode(@PathVariable Integer proCode) {
         StockProductDTO product = stockService.getProductByCode(proCode);
         if (product != null) {

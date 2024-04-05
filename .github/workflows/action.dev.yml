@@ -1,15 +1,14 @@
-name: BPSdeployBE
+name: Deployaws
 
 on:
   push:
     branches:
-      - release/2.0.0
+      - release/3.0.0
   pull_request:
     types:
       - closed
 
 jobs:
-
   deploy:
 #    if: github.event.pull_request.merged == true
     environment: release

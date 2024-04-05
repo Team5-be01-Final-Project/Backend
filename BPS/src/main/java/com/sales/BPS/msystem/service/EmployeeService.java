@@ -41,8 +41,13 @@ public class EmployeeService {
         return employeeRepository.findAll();
     }
 
-    public Employee  findByEmpCode(Integer empCode){
+    public Employee findByEmpCode(Integer empCode){
         return employeeRepository.findById(empCode)
                 .orElseThrow(() -> new NoSuchElementException("해당하는 직원을 찾을 수 없습니다. EmpCode: " + empCode));
+    }
+
+    public Employee findByDeptCodeAndPositionCode(String deptCode){
+        Employee manager = employeeRepository.findByDeptCodeAndPositionCode2(deptCode, "P02");
+        return manager;
     }
 }

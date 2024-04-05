@@ -32,7 +32,7 @@ public class ProductServiceTest {
         // 테스트에 사용할 가짜 Product 데이터 생성
         productList = new ArrayList<>();
 
-        Product product1 = new Product(dto.getProCode());
+        Product product1 = new Product();
         product1.setProCode(1);
         product1.setProName("Product1");
         product1.setProSeg("Segment1");
@@ -42,7 +42,7 @@ public class ProductServiceTest {
         product1.setProUnit(1);
         productList.add(product1);
 
-        Product product2 = new Product(dto.getProCode());
+        Product product2 = new Product();
         product2.setProCode(2);
         product2.setProName("Product2");
         product2.setProSeg("Segment2");

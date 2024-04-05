@@ -42,7 +42,7 @@ ___
 ![image](https://github.com/Team5-be01-Final-Project/Backend/assets/150888333/5d092b4d-9ff5-40e0-a55a-133ef07085ca)
 
 ___
-Release History
+### Release History
 - [v2.0.0](https://github.com/Team5-be01-Final-Project/Backend/releases/tag/v2.0.0)
 - [v1.0.0](https://github.com/Team5-be01-Final-Project/Backend/releases/tag/v1.0.0)
 

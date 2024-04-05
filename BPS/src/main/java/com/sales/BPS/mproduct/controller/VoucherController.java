@@ -2,15 +2,19 @@ package com.sales.BPS.mproduct.controller;
 
 import com.sales.BPS.mproduct.dto.VoucherApprovalDTO;
 import com.sales.BPS.mproduct.dto.VoucherDTO;
-import com.sales.BPS.mproduct.entity.Voucher;
+import com.sales.BPS.mproduct.dto.VoucherDto;
+import com.sales.BPS.mproduct.service.SequenceService;
 import com.sales.BPS.mproduct.service.VoucherService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/vouchers")
@@ -18,10 +22,12 @@ import java.util.List;
 public class VoucherController {
 
     private final VoucherService voucherService;
+    private final SequenceService sequenceService;
 
     @Autowired
-    public VoucherController(VoucherService voucherService) {
+    public VoucherController(VoucherService voucherService, SequenceService sequenceService) {
         this.voucherService = voucherService;
+        this.sequenceService = sequenceService;
     }
 
     @GetMapping
@@ -33,27 +39,51 @@ public class VoucherController {
     }
 
     // 특정 voucId에 대한 출고전표 목록을 조회하는 엔드포인트
+    // 특정 출고전표의 세부 정보 조회
     @GetMapping("/{voucId}/details")
-    @Tag(name = "Voucher API")
-    @Operation(summary = "출고전표조회",description = "특정 voucID에 대한 출고 전표를 조회합니다.")
     public ResponseEntity<List<VoucherDTO>> getVoucherDetailsByVoucId(@PathVariable Long voucId) {
         List<VoucherDTO> dtoList = voucherService.findVouchersByVoucIdAsDto(voucId);
-        if (dtoList.isEmpty()) {
-            return ResponseEntity.notFound().build();
+        return dtoList.isEmpty() ? ResponseEntity.notFound().build() : ResponseEntity.ok(dtoList);
+    }
+    
+
+    @PutMapping("/{voucId}/reject/details")
+    public ResponseEntity<Void> rejectVoucherDetails(@PathVariable Long voucId) {
+        voucherService.rejectVoucherDetails(voucId);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/{voucId}/approve/details")
+    public ResponseEntity<Void> approveVoucherDetails(@PathVariable Long voucId) {
+        voucherService.approveVoucherDetails(voucId);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/save") //전표 저장 1개씩
+    public ResponseEntity<?> createVoucher(@RequestBody VoucherDto voucherDto) {
+        try {
+            voucherService.createVoucher(voucherDto);
+            return new ResponseEntity<>("Voucher created successfully.", HttpStatus.CREATED);
+        } catch (Exception e) {
+            // 예외 처리 로직 (예외에 따라 적절한 HTTP 상태 코드와 메시지 반환)
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-        return ResponseEntity.ok(dtoList);
     }
 
-    @PutMapping("/{voucId}/approve")
-    public ResponseEntity<Void> approveVoucher(@PathVariable Long voucId, @RequestBody VoucherApprovalDTO request) {
-        voucherService.approveVoucher(voucId, request);
-        return ResponseEntity.ok().build();
+    @GetMapping("/voucId") //전표 번호 생성
+    public ResponseEntity<?> generateVoucherId() {
+        Map<String, Long> voucId = new HashMap<>();
+        voucId.put("voucId", sequenceService.generateVoucherId());
+        return ResponseEntity.ok(voucId);
     }
 
-    @PutMapping("/{voucId}/reject")
-    public ResponseEntity<Void> rejectVoucher(@PathVariable Long voucId, @RequestBody VoucherApprovalDTO request) {
-        voucherService.rejectVoucher(voucId, request);
-        return ResponseEntity.ok().build();
-    }
-
+//    @PostMapping("/saveAll") // 여러 전표 저장
+//    public ResponseEntity<?> createVouchers(@RequestBody List<VoucherDto> voucherDtos) {
+//        try {
+//            voucherService.createVouchers(voucherDtos);
+//            return new ResponseEntity<>("Vouchers created successfully.", HttpStatus.CREATED);
+//        } catch (Exception e) {
+//            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+//        }
+//    }
 }

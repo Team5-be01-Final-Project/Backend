@@ -8,6 +8,14 @@ import java.io.Serializable;
 public class VoucherPK implements Serializable {
 
     private Long voucId;
-    private Integer product;
+    private Integer proCode;
+    public VoucherPK() {
+        // Default constructor
+    }
+
+    public VoucherPK(Long voucId, Integer proCode) {
+        this.voucId = voucId;
+        this.proCode = proCode;
+    }
 
 }

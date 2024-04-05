@@ -1,5 +1,6 @@
 package com.sales.BPS.msystem.controller;
 
+import com.sales.BPS.msales.entity.Client;
 import com.sales.BPS.msystem.dto.EmployeeInfoDTO;
 import com.sales.BPS.msystem.entity.Employee;
 import com.sales.BPS.msystem.service.EmployeeService;
@@ -8,7 +9,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import java.util.HashMap;
+import java.util.Map;
 import java.util.List;
 
 
@@ -22,11 +24,6 @@ public class EmployeeController {
     public EmployeeController(EmployeeService employeeService) {
         this.employeeService = employeeService;
     }
-
-//    @GetMapping("/list")
-//    public List<EmployeeInfoDTO> getAllEmployees(){
-//        return employeeService.findAllEmployees();
-//    }
 
     @GetMapping("/list")
     @Tag(name = "System API")
@@ -44,9 +41,25 @@ public class EmployeeController {
         Employee employee = employeeService.findByEmpCode(empCode);
         if (employee != null) {
             return ResponseEntity.ok(employee);
+
+    @GetMapping("/{empCode}/clients") //담당자의 담당 거래처 찾기
+    public ResponseEntity<List<Client>> getClientsByEmployee(@PathVariable Integer empCode) {
+        Employee employee = employeeService.findByEmpCode(empCode);
+        return ResponseEntity.ok(employee.getClients());
+    }
+
+
+    @GetMapping("/{empCode}/approver") //담당자의 담당 거래처 찾기
+    public ResponseEntity<?> getByDeptCodeAndPositionCode(@PathVariable Integer empCode) {
+        String deptCode = employeeService.findByEmpCode(empCode).getDepartment().getDeptCode();
+        Employee employee = employeeService.findByDeptCodeAndPositionCode(deptCode);
+        if (employee != null) {
+            Map<String, Object> approverInfo = new HashMap<>();
+            approverInfo.put("signerName", employee.getEmpName());
+            approverInfo.put("signerCode", employee.getEmpCode());
+            return ResponseEntity.ok(approverInfo);
         } else {
             return ResponseEntity.notFound().build();
         }
     }
-
 }

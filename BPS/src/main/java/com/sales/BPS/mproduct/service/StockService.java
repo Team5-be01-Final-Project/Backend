@@ -8,6 +8,7 @@ import com.sales.BPS.mproduct.entity.Stock;
 import com.sales.BPS.mproduct.repository.StockRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -31,6 +32,17 @@ public class StockService {
     // 조건에 따라 재고 목록 조회
     public List<StockListDTO> findStockListByCondition(Integer proCode, String proName) {
         return stockRepository.findStockList(proCode, proName);
+    }
+
+    @Transactional(readOnly = true)
+    public Integer getStockAmountByProductCode(Integer proCode) {
+        Stock stock = stockRepository.findByProCode(proCode);
+        if (stock != null) {
+            return stock.getStoAmo();
+        } else {
+            // 재고가 없는 경우 0을 반환하도록 설정
+            return 0;
+        }
     }
 
     // 재고 등록

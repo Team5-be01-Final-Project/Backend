@@ -42,7 +42,7 @@ public class ColdchainService {
         this.emailService = emailService;
     }
 
-    @Scheduled(fixedRate = 5000) // 5초마다 실행
+    @Scheduled(fixedRate = 500000) // 5초마다 실행
     public void checkAndLogTemperature() {
         List<Storage> storages = storageRepository.findAll();
         Random random = new Random();
@@ -102,31 +102,6 @@ public class ColdchainService {
             }
         });
     }
-
-    /* // 모든 온도 로그를 조회하는 메소드
-     public List<TempLogDTO> getAllTempLogsForFrontend() {
-         List<TempLog> allLogs = tempLogRepository.findAll();
-
-         return allLogs.stream()
-                 .map(this::convertToDTO)
-                 .collect(Collectors.toList());
-     }
-
-     private TempLogDTO convertToDTO(TempLog log) {
-         TempLogDTO dto = new TempLogDTO();
-         // TempLog 엔티티에서 필요한 정보를 추출하여 DTO에 설정
-         dto.setStorageCode(log.getStorageCode()); // storageCode 설정 추가
-         dto.setTempTemp(log.getTempTemp());
-         dto.setTempDate(log.getTempDate().toLocalDate());
-         if (log.getStorage() != null) {
-             dto.setStorageSeg(log.getStorage().getStorageSeg());
-             dto.setStorageCar(log.getStorage().getStorageCar());
-             if (log.getStorage().getEmployee() != null) {
-                 dto.setEmpName(log.getStorage().getEmployee().getEmpName());
-             }
-         }
-         return dto;
-     }*/
     public Map<String, Integer> getLatestTemperatures() {
         return new ConcurrentHashMap<>(latestTemperatures);
     }

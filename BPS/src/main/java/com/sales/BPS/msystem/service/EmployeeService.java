@@ -41,6 +41,7 @@ public class EmployeeService {
         return employeeRepository.findAll();
     }
 
+    // 사원 정보 조회 메서드
     public Employee findByEmpCode(Integer empCode){
         return employeeRepository.findById(empCode)
                 .orElseThrow(() -> new NoSuchElementException("해당하는 직원을 찾을 수 없습니다. EmpCode: " + empCode));

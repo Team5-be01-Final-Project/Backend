@@ -34,6 +34,14 @@ public class EmployeeController {
         return employeeService.findByCriteria(deptName, empName, empTel);
     }
 
+    @GetMapping("/{empCode}")
+    @Tag(name = "System API")
+    @Operation(summary = "사원 정보 조회", description = "로그인한 사원의 정보를 조회합니다.")
+    public ResponseEntity<Employee> getEmployeeByCode(@PathVariable Integer empCode) {
+        Employee employee = employeeService.findByEmpCode(empCode);
+        if (employee != null) {
+            return ResponseEntity.ok(employee);
+
     @GetMapping("/{empCode}/clients") //담당자의 담당 거래처 찾기
     public ResponseEntity<List<Client>> getClientsByEmployee(@PathVariable Integer empCode) {
         Employee employee = employeeService.findByEmpCode(empCode);

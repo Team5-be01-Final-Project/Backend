@@ -28,7 +28,8 @@ public interface ClientRepository extends JpaRepository<Client,String> {
     //중복확인
     boolean existsByClientCode(String clientCode);
 
-    
+    // 로그인한 사원의 담당 거래처 목록 조회 메서드
+    List<Client> findByEmployeeEmpCode(Integer empCode);
 
 
 }

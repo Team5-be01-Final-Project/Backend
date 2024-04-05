@@ -1,6 +1,7 @@
 package com.sales.BPS.msystem.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sales.BPS.mproduct.entity.Voucher;
 import com.sales.BPS.msales.entity.Client;
 import jakarta.persistence.*;
@@ -60,6 +61,7 @@ public class Employee {
 
     @OneToMany(mappedBy = "employee")
     @JsonBackReference // 무한 재귀 문제(StackOverflowError) 해결하기 위한 어노테이션
+    @JsonIgnore // Infinite recursion (StackOverflowError)" 예외가 발생 해결
     private List<Client> clients = new ArrayList<>();
 
     @OneToMany(mappedBy = "employee")

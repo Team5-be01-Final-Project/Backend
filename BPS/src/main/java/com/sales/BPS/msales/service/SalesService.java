@@ -139,4 +139,32 @@ public class SalesService {
 
         return monthlySalesList;
     }
+
+    // My Sales 내 매출 보기 기능을 위한 메서드
+    public List<ClientSalesDTO> getEmployeeSalesData(Integer empCode, int year, int month) {
+        List<ClientSalesDTO> employeeSalesData = new ArrayList<>();
+        List<Client> clients = clientRepository.findByEmployeeEmpCode(empCode);
+
+        for (Client client : clients) {
+            List<Voucher> vouchers = voucherRepository.findByClientClientCodeAndYearAndMonth(client.getClientCode(), year, month);
+
+            for (Voucher voucher : vouchers) {
+                ClientSalesDTO dto = new ClientSalesDTO();
+                dto.setClientName(client.getClientName());
+                dto.setProName(voucher.getProduct().getProName());
+                dto.setProUnit(voucher.getProduct().getProUnit());
+                dto.setVoucSale(voucher.getVoucSale());
+                dto.setVoucApproval(voucher.getVoucApproval());
+                dto.setVoucAmount(voucher.getVoucAmount());
+                dto.setCostOfSales(voucher.getProduct().getProUnit() * voucher.getVoucAmount());
+                dto.setVoucSales((long) voucher.getVoucSale() * voucher.getVoucAmount());
+                dto.setGrossProfit(dto.getVoucSales() - dto.getCostOfSales());
+                dto.setProfitMargin((dto.getGrossProfit() * 100.0) / dto.getVoucSales());
+
+                employeeSalesData.add(dto);
+            }
+        }
+        return employeeSalesData;
+    }
+
 }

@@ -48,4 +48,14 @@ public class SalesController {
         List<MonthlySalesDTO> monthlySales = salesService.getMonthlySales(year);
         return ResponseEntity.ok(monthlySales);
     }
+
+    // My Sales 내 매출 보기 기능을 위한 메서드
+    @GetMapping("/employeeSales")
+    @Tag(name = "Sales API")
+    @Operation(summary = "내 매출 보기", description = "로그인한 사원의 담당 거래처 매출, 이익 등을 조회합니다.")
+    public ResponseEntity<List<ClientSalesDTO>> getEmployeeSales(@RequestParam Integer empCode, @RequestParam int year, @RequestParam int month) {
+        List<ClientSalesDTO> employeeSalesData = salesService.getEmployeeSalesData(empCode, year, month);
+        return ResponseEntity.ok(employeeSalesData);
+    }
+
 }

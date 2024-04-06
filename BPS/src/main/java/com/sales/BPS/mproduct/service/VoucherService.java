@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -80,23 +81,23 @@ public class VoucherService {
     }
 
 
-    private Voucher findVoucherById(Long voucId, Integer proCode) {
+/*    private Voucher findVoucherById(Long voucId, Integer proCode) {
         Optional<Voucher> voucher = voucherRepository.findById(new VoucherPK(voucId, proCode));
         if (voucher.isPresent()) {
             return voucher.get();
         } else {
             throw new RuntimeException("Voucher not found");
         }
-    }
+    }*/
 
-
+/*
     private Stock findStockById(Integer proCode) {
         Optional<Stock> stock = stockRepository.findById(proCode);
         if (stock.isPresent()) {
             return stock.get();
         }
         return stock.get();///////////////////////////////////////////////////////////////////////////!!!!!!!!!!!
-    }
+    }*/
 
 
    /* public void approveVoucher(Long voucId, VoucherApprovalDTO request) {
@@ -136,7 +137,7 @@ public class VoucherService {
             List<Voucher> vouchers = voucherRepository.findByVoucId(voucId);
             for (Voucher voucher : vouchers) {
                 voucher.setApprovalCode(approvalCodeRepository.findById("A01").orElseThrow(() -> new RuntimeException("Approval code not found")));
-
+                voucher.setVoucApproval(LocalDate.now()); // 현재 날짜 설정
                 // Update other fields as needed
                 voucherRepository.save(voucher);
             }
@@ -147,7 +148,7 @@ public class VoucherService {
             List<Voucher> vouchers = voucherRepository.findByVoucId(voucId);
             for (Voucher voucher : vouchers) {
                 voucher.setApprovalCode(approvalCodeRepository.findById("A02").orElseThrow(() -> new RuntimeException("Approval code not found")));
-
+                voucher.setVoucApproval(LocalDate.now()); // 현재 날짜 설정
                 // Update other fields as needed
                 voucherRepository.save(voucher);
             }

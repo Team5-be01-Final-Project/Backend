@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/incentive")
+@RequestMapping("/api/incentive")
 @Tag(name = "Incentive API" , description = "인센티브 API입니다.")
 public class IncentiveController {
 

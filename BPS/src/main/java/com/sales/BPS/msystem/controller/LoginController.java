@@ -33,26 +33,57 @@ public class LoginController {
             Integer empCode = loginRequest.getEmpCode();
 
             Cookie empCodeCookie = new Cookie("empCode", empCode.toString());
+            empCodeCookie.setDomain(null);
+            //empCodeCookie.setHttpOnly(true);
+            empCodeCookie.setHttpOnly(false);
             empCodeCookie.setMaxAge(12 * 60 * 60); // 쿠키의 유효 기간을 12시간으로 설정
             empCodeCookie.setPath("/"); // 쿠키의 경로 설정(모든 경로에서 쿠키 사용 가능)
+            empCodeCookie.setSecure(true);
+            // SameSite 설정을 위해 별도의 헤더를 추가합니다.
+            String cookieValue = "Path=/; HttpOnly; Secure; SameSite=None";
+            response.addHeader("Set-Cookie", cookieValue);
             response.addCookie(empCodeCookie);
 
 
             Cookie empNameCookie = new Cookie("empName", employeeService.findByEmpCode(empCode).getEmpName());
+            empNameCookie.setDomain(null);
+            //empNameCookie.setHttpOnly(true);
+            empNameCookie.setHttpOnly(false);
             empNameCookie.setMaxAge(12 * 60 * 60);
             empNameCookie.setPath("/");
+            response.addCookie(empNameCookie);
+            empNameCookie.setSecure(true);
+            // SameSite 설정을 위해 별도의 헤더를 추가합니다.
+            String cookieValue1 = "Path=/; HttpOnly; Secure; SameSite=None";
+            response.addHeader("Set-Cookie", cookieValue1);
             response.addCookie(empNameCookie);
 
 
             Cookie empImgCookie = new Cookie("empImg", employeeService.findByEmpCode(empCode).getEmpImg());
+            empImgCookie.setDomain(null);
+            //empImgCookie.setHttpOnly(true);
+            empImgCookie.setHttpOnly(false); //JS 쿠키 허용
             empImgCookie.setMaxAge(12 * 60 * 60);
             empImgCookie.setPath("/");
+            response.addCookie(empImgCookie);
+            empImgCookie.setSecure(true);
+            // SameSite 설정을 위해 별도의 헤더를 추가합니다.
+            String cookieValue2 = "Path=/; HttpOnly; Secure; SameSite=None";
+            response.addHeader("Set-Cookie", cookieValue2);
             response.addCookie(empImgCookie);
 
 
             Cookie empaAuthCodeCookie = new Cookie("empAuthCode",employeeService.findByEmpCode(empCode).getAuthority().getAuthCode());
+            empaAuthCodeCookie.setDomain(null);
+            //empaAuthCodeCookie.setHttpOnly(true);
+            empaAuthCodeCookie.setHttpOnly(false);
             empaAuthCodeCookie.setMaxAge(12 * 60 * 60);
             empaAuthCodeCookie.setPath("/");
+            response.addCookie(empaAuthCodeCookie);
+            empaAuthCodeCookie.setSecure(true);
+            // SameSite 설정을 위해 별도의 헤더를 추가합니다.
+            String cookieValue3 = "Path=/; HttpOnly; Secure; SameSite=None";
+            response.addHeader("Set-Cookie", cookieValue3);
             response.addCookie(empaAuthCodeCookie);
 
             return ResponseEntity.ok("Login successful");

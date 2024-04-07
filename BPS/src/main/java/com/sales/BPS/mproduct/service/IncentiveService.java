@@ -109,4 +109,29 @@ public class IncentiveService {
         }
         return incentiveList;
     }
+
+    // 추가: 로그인한 사원의 인센티브 계산
+    public IncentiveDTO calculateMyIncentive(int year, int month, int empCode) {
+        // 로그인한 사원의 매출 데이터 조회
+        Object[] salesData = voucherRepository.findSalesByEmployeeCodeAndYearAndMonth(empCode, year, month);
+
+        if (salesData != null && employeeRepository.findById(empCode).isPresent()) {
+            String empName = employeeRepository.findById(empCode).get().getEmpName();
+            String deptName = employeeRepository.findById(empCode).get().getDepartment().getDeptName();
+            String empImg = employeeRepository.findById(empCode).get().getEmpImg();
+
+            long voucMonthSales = ((Number) salesData[1]).longValue(); // 월 매출액
+            int salesRank = 0; // 개인 인센티브에서는 순위 계산 제외
+
+            int incentive = (int) Math.round(voucMonthSales * 0.01);
+
+            IncentiveDTO incentiveDTO = new IncentiveDTO(empName, deptName, voucMonthSales, salesRank, incentive);
+            incentiveDTO.setEmpImg(empImg);
+
+            return incentiveDTO;
+        }
+
+        return null; // 데이터가 없는 경우 null 반환
+    }
+
 }

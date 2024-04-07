@@ -35,4 +35,11 @@ public interface VoucherRepository extends JpaRepository<Voucher, VoucherPK> {
 
     @Query("SELECT v FROM Voucher v WHERE YEAR(v.voucApproval) = :year")
     List<Voucher> findAllByYear(@Param("year") int year);
+
+    // 추가: 특정 사원의 매출 데이터 조회
+    @Query("SELECT v.employee.empCode, SUM(v.voucSales) " +
+            "FROM Voucher v " +
+            "WHERE v.employee.empCode = :empCode AND YEAR(v.voucApproval) = :year AND MONTH(v.voucApproval) = :month " +
+            "GROUP BY v.employee.empCode")
+    Object[] findSalesByEmployeeCodeAndYearAndMonth(@Param("empCode") int empCode, @Param("year") int year, @Param("month") int month);
 }

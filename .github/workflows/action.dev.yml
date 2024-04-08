@@ -3,7 +3,7 @@ name: BPSdeployBE
 on:
   push:
     branches:
-      - release/2.0.0
+      - meme
   pull_request:
     types:
       - closed

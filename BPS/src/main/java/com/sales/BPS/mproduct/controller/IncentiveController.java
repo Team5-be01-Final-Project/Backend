@@ -27,4 +27,21 @@ public class IncentiveController {
     public List<IncentiveDTO> getSalesPerformance(@RequestParam int year, @RequestParam int month) {
         return incentiveService.calculateIncentive(year, month);
     }
+
+    // 로그인한 사원의 인센티브 조회
+    @GetMapping("/myIncentive")
+    @Tag(name = "Incentive API")
+    @Operation(summary = "내 인센티브 조회" ,description = "로그인한 사원의 인센티브를 조회합니다.")
+    public IncentiveDTO getMyIncentive(@RequestParam int year, @RequestParam int month, @RequestParam int empCode) {
+        return incentiveService.calculateMyIncentive(year, month, empCode);
+    }
+
+    // 인센티브 시뮬레이션
+    @GetMapping("/simulation")
+    @Tag(name = "Incentive API")
+    @Operation(summary = "인센티브 시뮬레이션" ,description = "현재 매출액과 추가 매출액을 기반으로 인센티브를 시뮬레이션합니다.")
+    public IncentiveDTO getIncentiveSimulation(@RequestParam int empCode, @RequestParam long currentSales, @RequestParam long additionalSales) {
+        return incentiveService.calculateIncentiveSimulation(empCode, currentSales, additionalSales);
+    }
+
 }

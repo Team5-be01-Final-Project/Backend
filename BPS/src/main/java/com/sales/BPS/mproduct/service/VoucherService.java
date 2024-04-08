@@ -1,7 +1,7 @@
 package com.sales.BPS.mproduct.service;
 
 import com.sales.BPS.mproduct.dto.VoucherDTO;
-import com.sales.BPS.mproduct.dto.VoucherDto;
+import com.sales.BPS.mproduct.dto.VoucherSaveDTO;
 import com.sales.BPS.mproduct.entity.*;
 import com.sales.BPS.mproduct.repository.ApprovalCodeRepository;
 import com.sales.BPS.mproduct.repository.ProductRepository;
@@ -19,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -31,19 +30,26 @@ public class VoucherService {
     private final EmployeeRepository employeeRepository;
     private final ProductRepository productRepository;
     private final ClientRepository clientRepository;
+    private final StockService stockService;
 
     private final DepartmentRepository departmentRepository;
 
 
     @Autowired
-    public VoucherService(VoucherRepository voucherRepository, StockRepository stockRepository, ApprovalCodeRepository approvalCodeRepository, EmployeeRepository employeeRepository, ProductRepository productRepository, ClientRepository clientRepository, DepartmentRepository departmentRepository) {
+
+    public VoucherService(VoucherRepository voucherRepository, StockRepository stockRepository, ApprovalCodeRepository approvalCodeRepository, EmployeeRepository employeeRepository, ProductRepository productRepository, ClientRepository clientRepository,DepartmentRepository departmentRepository, StockService stockService) {
+
         this.voucherRepository = voucherRepository;
         this.stockRepository = stockRepository;
         this.approvalCodeRepository = approvalCodeRepository;
         this.employeeRepository = employeeRepository;
         this.productRepository = productRepository;
         this.clientRepository = clientRepository;
+
         this.departmentRepository = departmentRepository;
+
+        this.stockService = stockService;
+
     }
 
 
@@ -173,25 +179,34 @@ public class VoucherService {
                 throw new RuntimeException("Stock not found");
             }
         }
-    }
-        @Transactional//전표 생성
-        public void createVoucher (VoucherDto voucherDto){
-            System.out.println(voucherDto);
-            Voucher voucher = new Voucher();
-            voucher.setVoucId(voucherDto.getVoucId());
-            voucher.setProCode(voucherDto.getProCode());
-            voucher.setVoucDate(voucherDto.getVoucDate());
-            voucher.setVoucSale(voucherDto.getVoucSale());
-            voucher.setVoucAmount(voucherDto.getVoucAmount());
-            voucher.setVoucSales(voucherDto.getVoucSales());
-            Client client = clientRepository.findById(voucherDto.getClientCode()).orElseThrow();
-            voucher.setClient(client);
-            ApprovalCode approvalCode = approvalCodeRepository.findById(voucherDto.getApprovalCode()).orElseThrow();
-            voucher.setApprovalCode(approvalCode);
-            Employee employee = employeeRepository.findById(voucherDto.getEmpCode()).orElseThrow();
-            voucher.setEmployee(employee);
-            Employee signer = employeeRepository.findById(voucherDto.getSignerCode()).orElseThrow();
-            voucher.setEmployeeSign(signer);
-            voucherRepository.save(voucher);
+
+
+        @Transactional
+        public void createVouchers(VoucherSaveDTO voucherSaveDTO) {
+            Long voucId = voucherSaveDTO.getVoucId();
+            LocalDate voucDate = voucherSaveDTO.getVoucDate();
+            Employee employee = employeeRepository.findById(voucherSaveDTO.getEmpCode()).orElseThrow();
+            Employee signer = employeeRepository.findById(voucherSaveDTO.getSignerCode()).orElseThrow();
+            Client client = clientRepository.findById(voucherSaveDTO.getClientCode()).orElseThrow();
+            ApprovalCode approvalCode = approvalCodeRepository.findById(voucherSaveDTO.getApprovalCode()).orElseThrow();
+
+            for (VoucherSaveDTO.VoucherItem item : voucherSaveDTO.getItems()) {
+                Voucher voucher = new Voucher();
+                voucher.setVoucId(voucId);
+                voucher.setVoucDate(voucDate);
+                voucher.setEmployee(employee);
+                voucher.setEmployeeSign(signer);
+                voucher.setClient(client);
+                voucher.setApprovalCode(approvalCode);
+
+                voucher.setProCode(item.getProCode());
+                voucher.setVoucSale(item.getVoucSale());
+                voucher.setVoucAmount(item.getVoucAmount());
+                voucher.setVoucSales(item.getVoucSales());
+
+                stockService.decreaseStock(item.getProCode(), item.getVoucAmount());
+                voucherRepository.save(voucher);
+            }
+
         }
     }

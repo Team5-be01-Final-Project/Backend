@@ -26,5 +26,4 @@ public class CookieUtil {
         createCookie(response, name, null, 0, false, false, "Lax");
     }
 
-
 }

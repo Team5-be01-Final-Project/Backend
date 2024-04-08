@@ -37,7 +37,9 @@ public class LoginController {
             CookieUtil.createCookie(response, "empName", employeeService.findByEmpCode(empCode).getEmpName(), 60 * 60, false, true, "None");
             CookieUtil.createCookie(response, "empImg", employeeService.findByEmpCode(empCode).getEmpImg(),  60 * 60, false, true, "None");
             CookieUtil.createCookie(response, "empAuthCode", employeeService.findByEmpCode(empCode).getAuthority().getAuthCode(),  60 * 60, false, true, "None");
+
             CookieUtil.createCookie(response, "deptCode", employeeService.findByEmpCode(empCode).getDepartment().getDeptCode(),  60 * 60, false, true, "None");
+
             return ResponseEntity.ok("Login successful");
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
@@ -59,6 +61,7 @@ public class LoginController {
         CookieUtil.invalidateCookie(response, "empImg");
         CookieUtil.invalidateCookie(response, "empAuthCode");
         CookieUtil.invalidateCookie(response, "deptCode");
+
         return ResponseEntity.ok("Logout successful");
     }
 

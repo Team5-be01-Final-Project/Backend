@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/mysales")
+@RequestMapping("/api/mysales")
 @Tag(name = "MySales API", description = "My 영업 API입니다.")
 public class MySalesController {
 

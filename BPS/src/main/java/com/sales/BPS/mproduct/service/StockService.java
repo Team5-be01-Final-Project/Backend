@@ -85,4 +85,17 @@ public class StockService {
         }
     }
 
+    @Transactional //재고 차감 로직
+    public boolean decreaseStock(Integer proCode, Integer stoAmo) {
+        Stock stock = stockRepository.findById(proCode)
+                .orElseThrow(() -> new RuntimeException("Product not found"));
+
+        if (stock.getStoAmo() >= stoAmo) {
+            stock.setStoAmo(stock.getStoAmo() - stoAmo);
+            stockRepository.save(stock);
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

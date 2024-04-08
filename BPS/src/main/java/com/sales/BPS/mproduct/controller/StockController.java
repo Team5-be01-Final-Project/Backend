@@ -71,4 +71,13 @@ public class StockController {
         }
     }
 
+    @PostMapping("/decrease") //재고 차감 로직
+    public ResponseEntity<?> decreaseStock(@RequestBody StockRegisterDTO request) {
+        boolean success = stockService.decreaseStock(request.getProCode(), request.getStoAmo());
+        if (success) {
+            return ResponseEntity.ok().body("재고 차감이 완료되었습니다.");
+        } else {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Insufficient stock");
+        }
+    }
 }

@@ -37,7 +37,7 @@ public class VoucherService {
 
     @Autowired
 
-    public VoucherService(VoucherRepository voucherRepository, StockRepository stockRepository, ApprovalCodeRepository approvalCodeRepository, EmployeeRepository employeeRepository, ProductRepository productRepository, ClientRepository clientRepository,DepartmentRepository departmentRepository, StockService stockService) {
+    public VoucherService(VoucherRepository voucherRepository, StockRepository stockRepository, ApprovalCodeRepository approvalCodeRepository, EmployeeRepository employeeRepository, ProductRepository productRepository, ClientRepository clientRepository, DepartmentRepository departmentRepository, StockService stockService) {
 
         this.voucherRepository = voucherRepository;
         this.stockRepository = stockRepository;
@@ -136,24 +136,24 @@ public class VoucherService {
         }
     }*/
 
-        private void updateStock (Stock stock,int amountChange){
-            int updatedAmount = stock.getStoAmo() + amountChange;
-            if (updatedAmount < 0) {
-                throw new RuntimeException("Insufficient stock");
-            }
-            stock.setStoAmo(updatedAmount);
-            stockRepository.save(stock);
+    private void updateStock(Stock stock, int amountChange) {
+        int updatedAmount = stock.getStoAmo() + amountChange;
+        if (updatedAmount < 0) {
+            throw new RuntimeException("Insufficient stock");
         }
+        stock.setStoAmo(updatedAmount);
+        stockRepository.save(stock);
+    }
 
-        public void approveVoucherDetails (Long voucId){
-            List<Voucher> vouchers = voucherRepository.findByVoucId(voucId);
-            for (Voucher voucher : vouchers) {
-                voucher.setApprovalCode(approvalCodeRepository.findById("A01").orElseThrow(() -> new RuntimeException("Approval code not found")));
-                voucher.setVoucApproval(LocalDate.now()); // 현재 날짜 설정
-                // Update other fields as needed
-                voucherRepository.save(voucher);
-            }
+    public void approveVoucherDetails(Long voucId) {
+        List<Voucher> vouchers = voucherRepository.findByVoucId(voucId);
+        for (Voucher voucher : vouchers) {
+            voucher.setApprovalCode(approvalCodeRepository.findById("A01").orElseThrow(() -> new RuntimeException("Approval code not found")));
+            voucher.setVoucApproval(LocalDate.now()); // 현재 날짜 설정
+            // Update other fields as needed
+            voucherRepository.save(voucher);
         }
+    }
 
 
     @Transactional
@@ -179,10 +179,11 @@ public class VoucherService {
                 throw new RuntimeException("Stock not found");
             }
         }
+    }
 
 
         @Transactional
-        public void createVouchers(VoucherSaveDTO voucherSaveDTO) {
+        public void createVouchers(VoucherSaveDTO voucherSaveDTO){
             Long voucId = voucherSaveDTO.getVoucId();
             LocalDate voucDate = voucherSaveDTO.getVoucDate();
             Employee employee = employeeRepository.findById(voucherSaveDTO.getEmpCode()).orElseThrow();

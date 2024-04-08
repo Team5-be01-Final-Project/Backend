@@ -92,16 +92,21 @@ public class ClientController {
 
     @GetMapping("/{clientCode}")
     @Tag(name = "Client API")
-    @Operation(summary = "수정 전 조회",description = "거래처 수정 전 거래처를 조회합니다.")
+    @Operation(summary = "수정 전 조회", description = "거래처 수정 전 거래처를 조회합니다.")
     public ResponseEntity<ClientDTO> getClientByCode(@PathVariable String clientCode) {
         try {
+            // clientService의 findByClientCode 메서드를 호출하여 clientCode에 해당하는 ClientDTO를 가져옵니다.
             ClientDTO clientDTO = clientService.findByClientCode(clientCode);
+
             if (clientDTO != null) {
+                // clientDTO가 null이 아니면 ResponseEntity의 ok 메서드를 사용하여 200 OK 상태코드와 함께 clientDTO를 반환합니다.
                 return ResponseEntity.ok(clientDTO);
             } else {
+                // clientDTO가 null이면 ResponseEntity의 notFound 메서드를 사용하여 404 Not Found 상태코드를 반환합니다.
                 return ResponseEntity.notFound().build();
             }
         } catch (Exception e) {
+            // 예외가 발생한 경우 ResponseEntity의 status 메서드를 사용하여 500 Internal Server Error 상태코드와 함께 null을 반환합니다.
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }

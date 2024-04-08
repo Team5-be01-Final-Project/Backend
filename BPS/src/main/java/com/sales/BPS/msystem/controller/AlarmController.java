@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
-@RequestMapping("/alarms")
+@RequestMapping("/api/alarms")
 @Tag(name = "System API", description = "시스템관리 API입니다.")
 public class AlarmController {
     private final AlarmService alarmService;

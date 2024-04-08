@@ -135,4 +135,4 @@
 
 2024-04-08
 - [Fix] 8/3.1.0/WY Controller 경로 수정
-- [Feat] 4.1.1./3.1.1/WY CookieConfig 파일 추가
+- [Feat] 4.1.1./3.1.1/WY CookieUtil 파일 추가

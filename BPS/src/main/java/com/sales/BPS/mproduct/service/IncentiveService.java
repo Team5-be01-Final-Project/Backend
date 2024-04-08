@@ -109,4 +109,61 @@ public class IncentiveService {
         }
         return incentiveList;
     }
+
+    // 로그인한 사원의 인센티브 계산 로직
+    public IncentiveDTO calculateMyIncentive(int year, int month, int empCode) {
+        // 로그인한 사원의 해당 년도와 월의 매출 데이터 조회
+        Object[] salesData = voucherRepository.findSalesByEmployeeCodeAndYearAndMonth(empCode, year, month);
+
+        // 매출 데이터가 존재하고, 해당 사원이 있는 경우
+        if (salesData != null && employeeRepository.findById(empCode).isPresent()) {
+            // 사원 정보 조회
+            String empName = employeeRepository.findById(empCode).get().getEmpName();
+            String deptName = employeeRepository.findById(empCode).get().getDepartment().getDeptName();
+            String empImg = employeeRepository.findById(empCode).get().getEmpImg();
+
+            // 월 매출액 계산
+            long voucMonthSales = ((Number) salesData[1]).longValue();
+            // 개인 인센티브 순위는 여기서 계산하지 않음
+            int salesRank = 0;
+
+            // 인센티브 계산 (월 매출액의 1%)
+            int incentive = (int) Math.round(voucMonthSales * 0.01);
+
+            // 인센티브 정보를 DTO에 저장
+            IncentiveDTO incentiveDTO = new IncentiveDTO(empName, deptName, voucMonthSales, salesRank, incentive);
+            incentiveDTO.setEmpImg(empImg);
+
+            // 계산된 인센티브 정보 반환
+            return incentiveDTO;
+        }
+
+        // 매출 데이터가 없는 경우 null 반환
+        return null;
+    }
+
+    // 인센티브 시뮬레이션 로직
+    public IncentiveDTO calculateIncentiveSimulation(int empCode, long currentSales, long additionalSales) {
+        // 해당 사원 조회 (없으면 예외 발생)
+        Employee employee = employeeRepository.findById(empCode)
+                .orElseThrow(() -> new RuntimeException("해당 직원을 찾을 수 없습니다. EmpCode: " + empCode));
+
+        // 사원 정보 조회
+        String empName = employee.getEmpName();
+        String deptName = employee.getDepartment().getDeptName();
+        String empImg = employee.getEmpImg();
+
+        // 총 매출액 계산 (현재 매출 + 추가 매출)
+        long totalSales = currentSales + additionalSales;
+        // 인센티브 계산 (총 매출액의 1%)
+        int incentive = (int) Math.round(totalSales * 0.01);
+
+        // 인센티브 정보를 DTO에 저장
+        IncentiveDTO incentiveDTO = new IncentiveDTO(empName, deptName, totalSales, 0, incentive);
+        incentiveDTO.setEmpImg(empImg);
+
+        // 계산된 인센티브 정보 반환
+        return incentiveDTO;
+    }
+
 }

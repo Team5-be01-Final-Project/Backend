@@ -1,5 +1,6 @@
 package com.sales.BPS.mproduct.service;
 
+import com.sales.BPS.mexception.InsufficientStockException;
 import com.sales.BPS.mproduct.dto.StockListDTO;
 import com.sales.BPS.mproduct.dto.StockProductDTO;
 import com.sales.BPS.mproduct.dto.StockRegisterDTO;
@@ -85,4 +86,16 @@ public class StockService {
         }
     }
 
+    @Transactional //재고 차감 로직
+    public boolean decreaseStock(Integer proCode, Integer stoAmo) {
+        Stock stock = stockRepository.findById(proCode)
+                .orElseThrow(() -> new RuntimeException("Product not found"));
+        if (stock.getStoAmo() >= stoAmo) {
+            stock.setStoAmo(stock.getStoAmo() - stoAmo);
+            stockRepository.save(stock);
+            return true;
+        } else {
+            throw new InsufficientStockException(proCode + " 의 재고가 부족합니다. 다시 확인해주세요.");
+        }
+    }
 }

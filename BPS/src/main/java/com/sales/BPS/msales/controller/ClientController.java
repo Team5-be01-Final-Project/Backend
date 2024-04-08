@@ -2,6 +2,7 @@ package com.sales.BPS.msales.controller;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sales.BPS.config.CookieUtil;
 import com.sales.BPS.msales.dto.ClientDTO;
 import com.sales.BPS.msales.entity.Client;
 import com.sales.BPS.msales.repository.ClientRepository;
@@ -10,6 +11,7 @@ import com.sales.BPS.msystem.entity.Employee;
 import com.sales.BPS.msystem.service.EmployeeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -70,9 +72,17 @@ public class ClientController {
 
     @DeleteMapping("/{clientCode}")
     @Tag(name = "Client API")
-    @Operation(summary = "거래처 삭제",description = "거래처를 삭제합니다.")
-    public ResponseEntity<?> deleteClient(@PathVariable String clientCode) {
+    @Operation(summary = "거래처 삭제", description = "거래처를 삭제합니다.")
+    public ResponseEntity<?> deleteClient(@PathVariable String clientCode, HttpServletRequest request) {
         try {
+            // 쿠키에서 권한 코드 가져오기
+            String authCode = CookieUtil.getCookieValue(request, "empAuthCode");
+
+            // 권한 검사
+            if (!"AUTH003".equals(authCode)) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("삭제 권한이 없습니다.");
+            }
+
             clientService.deleteClientByClientCode(clientCode);
             return ResponseEntity.ok().body("Client with code " + clientCode + " has been deleted successfully.");
         } catch (Exception e) {

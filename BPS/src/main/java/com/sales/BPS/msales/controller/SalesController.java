@@ -49,7 +49,7 @@ public class SalesController {
         return ResponseEntity.ok(monthlySales);
     }
 
-    // 내 매출 현황 기능을 위한 메서드
+    // My Sales 내 매출 보기 기능을 위한 메서드
     @GetMapping("/employeeSales")
     @Tag(name = "Sales API")
     @Operation(summary = "내 매출 보기", description = "로그인한 사원의 담당 거래처 매출, 이익 등을 조회합니다.")

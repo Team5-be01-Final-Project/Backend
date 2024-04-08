@@ -140,43 +140,30 @@ public class SalesService {
         return monthlySalesList;
     }
 
-    // 내 매출 현황 기능을 위한 메서드
+    // My Sales 내 매출 보기 기능을 위한 메서드
     public List<ClientSalesDTO> getEmployeeSalesData(Integer empCode, int year, int month) {
         List<ClientSalesDTO> employeeSalesData = new ArrayList<>();
         List<Client> clients = clientRepository.findByEmployeeEmpCode(empCode);
 
-        // 최근 3개월 계산
-        LocalDate currentDate = LocalDate.of(year, month, 1);
-        LocalDate[] recentMonths = new LocalDate[3];
-        for (int i = 0; i < 3; i++) {
-            recentMonths[i] = currentDate.minusMonths(i);
-        }
-
         for (Client client : clients) {
-            ClientSalesDTO dto = new ClientSalesDTO();
-            dto.setClientName(client.getClientName());
+            List<Voucher> vouchers = voucherRepository.findByClientClientCodeAndYearAndMonth(client.getClientCode(), year, month);
 
-            // 최근 3개월의 매출액 계산
-            Long[] monthlySales = new Long[3];
-            for (int i = 0; i < 3; i++) {
-                LocalDate targetMonth = recentMonths[i];
-                List<Voucher> vouchers = voucherRepository.findByClientClientCodeAndYearAndMonth(
-                        client.getClientCode(),
-                        targetMonth.getYear(),
-                        targetMonth.getMonthValue()
-                );
+            for (Voucher voucher : vouchers) {
+                ClientSalesDTO dto = new ClientSalesDTO();
+                dto.setClientName(client.getClientName());
+                dto.setProName(voucher.getProduct().getProName());
+                dto.setProUnit(voucher.getProduct().getProUnit());
+                dto.setVoucSale(voucher.getVoucSale());
+                dto.setVoucApproval(voucher.getVoucApproval());
+                dto.setVoucAmount(voucher.getVoucAmount());
+                dto.setCostOfSales(voucher.getProduct().getProUnit() * voucher.getVoucAmount());
+                dto.setVoucSales((long) voucher.getVoucSale() * voucher.getVoucAmount());
+                dto.setGrossProfit(dto.getVoucSales() - dto.getCostOfSales());
+                dto.setProfitMargin((dto.getGrossProfit() * 100.0) / dto.getVoucSales());
 
-                long totalSales = vouchers.stream()
-                        .mapToLong(voucher -> (long) voucher.getVoucSale() * voucher.getVoucAmount())
-                        .sum();
-
-                monthlySales[i] = totalSales;
+                employeeSalesData.add(dto);
             }
-
-            dto.setMonthlySales(monthlySales);
-            employeeSalesData.add(dto);
         }
-
         return employeeSalesData;
     }
 

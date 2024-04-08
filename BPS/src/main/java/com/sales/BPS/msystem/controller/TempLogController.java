@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/temp-logs")
+@RequestMapping("/api/temp-logs")
 public class TempLogController {
 
     @Autowired

@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/authorities")
+@RequestMapping("/api/authorities")
 @Tag(name = "System API", description = "시스템관리 API입니다.")
 public class AuthorityController {
     private final AuthorityCodeService authorityCodeService;

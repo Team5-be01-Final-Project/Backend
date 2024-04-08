@@ -134,6 +134,8 @@
 - [Fix] 4.1.1/3.1.0/WY LoginController 수정
 
 2024-04-08
+
+- [Feat] 4.7.2/3.2.0/MS 출고 전표 결재 재고 
 - [Fix] 8/3.1.0/WY Controller 경로 수정
 - [Feat] 4.1.1./3.1.1/WY CookieUtil 파일 추가
 - [Feat] 4.12.3./3.1.0/SH 인센티브 시뮬레이션 기능 구현

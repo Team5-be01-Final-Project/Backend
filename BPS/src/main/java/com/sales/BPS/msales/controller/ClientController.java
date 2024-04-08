@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/clients")
+@RequestMapping("/api/clients")
 @Tag(name = "Client API", description = "거래처관리 API입니다.")
 public class ClientController {
 

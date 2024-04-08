@@ -132,3 +132,6 @@
 
 2024-04-07
 - [Fix] 4.1.1/3.1.0/WY LoginController 수정
+
+2024-04-08
+- [Fix] 8/3.1.0/WY Controller 경로 수정

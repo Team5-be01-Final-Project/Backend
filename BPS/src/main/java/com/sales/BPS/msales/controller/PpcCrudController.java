@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/ppc")
+@RequestMapping("/api/ppc")
 public class PpcCrudController {
 
     private final PpcService ppcService;

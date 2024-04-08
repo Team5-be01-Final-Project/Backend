@@ -16,7 +16,7 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping("/employees")
+@RequestMapping("/api/employees")
 @Tag(name = "System API", description = "시스템관리 API입니다.")
 public class EmployeeController {
     private final EmployeeService employeeService;

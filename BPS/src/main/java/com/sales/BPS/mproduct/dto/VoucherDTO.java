@@ -20,9 +20,8 @@ public class VoucherDTO {
     private String voucNote; // 비고
     private String appCode;
     private String approvalStatus; // 승인상태(코드이름)
-    private String storageCar; // 담당자의 차량 번호 추가
     private boolean showApproveButton;
     private boolean showRejectButton;
-
+    private String deptCode;
 
 }

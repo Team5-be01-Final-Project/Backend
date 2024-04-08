@@ -10,6 +10,7 @@ import com.sales.BPS.mproduct.repository.VoucherRepository;
 import com.sales.BPS.msales.entity.Client;
 import com.sales.BPS.msales.repository.ClientRepository;
 import com.sales.BPS.msystem.entity.Employee;
+import com.sales.BPS.msystem.repository.DepartmentRepository;
 import com.sales.BPS.msystem.repository.EmployeeRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,14 +32,18 @@ public class VoucherService {
     private final ProductRepository productRepository;
     private final ClientRepository clientRepository;
 
+    private final DepartmentRepository departmentRepository;
+
+
     @Autowired
-    public VoucherService(VoucherRepository voucherRepository, StockRepository stockRepository, ApprovalCodeRepository approvalCodeRepository, EmployeeRepository employeeRepository, ProductRepository productRepository, ClientRepository clientRepository) {
+    public VoucherService(VoucherRepository voucherRepository, StockRepository stockRepository, ApprovalCodeRepository approvalCodeRepository, EmployeeRepository employeeRepository, ProductRepository productRepository, ClientRepository clientRepository, DepartmentRepository departmentRepository) {
         this.voucherRepository = voucherRepository;
         this.stockRepository = stockRepository;
         this.approvalCodeRepository = approvalCodeRepository;
         this.employeeRepository = employeeRepository;
         this.productRepository = productRepository;
         this.clientRepository = clientRepository;
+        this.departmentRepository = departmentRepository;
     }
 
 
@@ -76,6 +81,7 @@ public class VoucherService {
         dto.setShowApproveButton("A00".equals(appCode));
         dto.setShowRejectButton("A00".equals(appCode));
         // 수정 끝
+        dto.setDeptCode(voucher.getEmployee().getDepartment().getDeptCode()); // 부서 코드 설정
 
         return dto;
     }
@@ -144,15 +150,30 @@ public class VoucherService {
         }
 
 
-        public void rejectVoucherDetails (Long voucId){
-            List<Voucher> vouchers = voucherRepository.findByVoucId(voucId);
-            for (Voucher voucher : vouchers) {
-                voucher.setApprovalCode(approvalCodeRepository.findById("A02").orElseThrow(() -> new RuntimeException("Approval code not found")));
-                voucher.setVoucApproval(LocalDate.now()); // 현재 날짜 설정
-                // Update other fields as needed
-                voucherRepository.save(voucher);
+    @Transactional
+    public void rejectVoucherDetails(Long voucId) {
+        List<Voucher> vouchers = voucherRepository.findByVoucId(voucId);
+        for (Voucher voucher : vouchers) {
+            // 출고전표 반려 처리
+            voucher.setApprovalCode(approvalCodeRepository.findById("A02").orElseThrow(() -> new RuntimeException("Approval code not found")));
+            voucher.setVoucApproval(LocalDate.now()); // 현재 날짜 설정
+            // Update other fields as needed
+            voucherRepository.save(voucher);
+
+            // 상품의 재고량을 출고전표의 수량만큼 증가시킴
+            Product product = productRepository.findById(voucher.getProCode()).orElseThrow(() -> new RuntimeException("Product not found"));
+            // 상품의 재고량을 출고전표의 수량만큼 증가시킴
+            Stock stock = stockRepository.findById(product.getProCode()).orElseThrow(() -> new RuntimeException("Stock not found"));
+
+
+            if (stock != null) {
+                int amountChange = voucher.getVoucAmount(); // 출고전표의 수량만큼 변경
+                updateStock(stock, amountChange);
+            } else {
+                throw new RuntimeException("Stock not found");
             }
         }
+    }
         @Transactional//전표 생성
         public void createVoucher (VoucherDto voucherDto){
             System.out.println(voucherDto);

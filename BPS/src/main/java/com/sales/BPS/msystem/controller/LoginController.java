@@ -1,5 +1,6 @@
 package com.sales.BPS.msystem.controller;
 
+import com.sales.BPS.config.CookieUtil;
 import com.sales.BPS.msystem.dto.LoginRequestDTO;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -31,61 +32,12 @@ public class LoginController {
         boolean isValidUser = employeeService.loginEmployee(loginRequest.getEmpCode(), loginRequest.getEmpPw());
         if (isValidUser) {
             Integer empCode = loginRequest.getEmpCode();
-
-            Cookie empCodeCookie = new Cookie("empCode", empCode.toString());
-            empCodeCookie.setDomain(null);
-            //empCodeCookie.setHttpOnly(true);
-            empCodeCookie.setHttpOnly(false);
-            empCodeCookie.setMaxAge(12 * 60 * 60); // 쿠키의 유효 기간을 12시간으로 설정
-            empCodeCookie.setPath("/"); // 쿠키의 경로 설정(모든 경로에서 쿠키 사용 가능)
-            empCodeCookie.setSecure(true);
-            // SameSite 설정을 위해 별도의 헤더를 추가합니다.
-            String cookieValue = "Path=/; HttpOnly; Secure; SameSite=None";
-            response.addHeader("Set-Cookie", cookieValue);
-            response.addCookie(empCodeCookie);
-
-
-            Cookie empNameCookie = new Cookie("empName", employeeService.findByEmpCode(empCode).getEmpName());
-            empNameCookie.setDomain(null);
-            //empNameCookie.setHttpOnly(true);
-            empNameCookie.setHttpOnly(false);
-            empNameCookie.setMaxAge(12 * 60 * 60);
-            empNameCookie.setPath("/");
-            response.addCookie(empNameCookie);
-            empNameCookie.setSecure(true);
-            // SameSite 설정을 위해 별도의 헤더를 추가합니다.
-            String cookieValue1 = "Path=/; HttpOnly; Secure; SameSite=None";
-            response.addHeader("Set-Cookie", cookieValue1);
-            response.addCookie(empNameCookie);
-
-
-            Cookie empImgCookie = new Cookie("empImg", employeeService.findByEmpCode(empCode).getEmpImg());
-            empImgCookie.setDomain(null);
-            //empImgCookie.setHttpOnly(true);
-            empImgCookie.setHttpOnly(false); //JS 쿠키 허용
-            empImgCookie.setMaxAge(12 * 60 * 60);
-            empImgCookie.setPath("/");
-            response.addCookie(empImgCookie);
-            empImgCookie.setSecure(true);
-            // SameSite 설정을 위해 별도의 헤더를 추가합니다.
-            String cookieValue2 = "Path=/; HttpOnly; Secure; SameSite=None";
-            response.addHeader("Set-Cookie", cookieValue2);
-            response.addCookie(empImgCookie);
-
-
-            Cookie empaAuthCodeCookie = new Cookie("empAuthCode",employeeService.findByEmpCode(empCode).getAuthority().getAuthCode());
-            empaAuthCodeCookie.setDomain(null);
-            //empaAuthCodeCookie.setHttpOnly(true);
-            empaAuthCodeCookie.setHttpOnly(false);
-            empaAuthCodeCookie.setMaxAge(12 * 60 * 60);
-            empaAuthCodeCookie.setPath("/");
-            response.addCookie(empaAuthCodeCookie);
-            empaAuthCodeCookie.setSecure(true);
-            // SameSite 설정을 위해 별도의 헤더를 추가합니다.
-            String cookieValue3 = "Path=/; HttpOnly; Secure; SameSite=None";
-            response.addHeader("Set-Cookie", cookieValue3);
-            response.addCookie(empaAuthCodeCookie);
-
+            // 쿠키 추가
+            CookieUtil.createCookie(response, "empCode", empCode.toString(), 60 * 60, false, true, "None");
+            CookieUtil.createCookie(response, "empName", employeeService.findByEmpCode(empCode).getEmpName(), 60 * 60, false, true, "None");
+            CookieUtil.createCookie(response, "empImg", employeeService.findByEmpCode(empCode).getEmpImg(),  60 * 60, false, true, "None");
+            CookieUtil.createCookie(response, "empAuthCode", employeeService.findByEmpCode(empCode).getAuthority().getAuthCode(),  60 * 60, false, true, "None");
+            CookieUtil.createCookie(response, "deptCode", employeeService.findByEmpCode(empCode).getDepartment().getDeptCode(),  60 * 60, false, true, "None");
             return ResponseEntity.ok("Login successful");
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
@@ -102,29 +54,11 @@ public class LoginController {
     public ResponseEntity<?> logout(HttpServletResponse response) {
 
         // 쿠키 무효화
-        Cookie empCodeCookie = new Cookie("empCode", null); //empCode 쿠키 만료
-        empCodeCookie.setPath("/");
-        empCodeCookie.setMaxAge(0); // 쿠키의 만료 시간을 0으로 설정하여 즉시 만료
-        response.addCookie(empCodeCookie);
-
-        Cookie empNameCookie = new Cookie("empName", null); //empCode 쿠키 만료
-        empNameCookie.setPath("/");
-        empNameCookie.setMaxAge(0); // 쿠키의 만료 시간을 0으로 설정하여 즉시 만료
-        response.addCookie(empNameCookie);
-
-        Cookie empImgCookie = new Cookie("empImg", null); //empCode 쿠키 만료
-        empImgCookie.setPath("/");
-        empImgCookie.setMaxAge(0); // 쿠키의 만료 시간을 0으로 설정하여 즉시 만료
-        response.addCookie(empImgCookie);
-
-        Cookie empaAuthCodeCookie = new Cookie("empAuthCode", null); //empCode 쿠키 만료
-        empaAuthCodeCookie.setPath("/");
-        empaAuthCodeCookie.setMaxAge(0); // 쿠키의 만료 시간을 0으로 설정하여 즉시 만료
-        response.addCookie(empaAuthCodeCookie);
-
-        // 쿠키 무효화 2
-//        invalidateCookies(response);
-
+        CookieUtil.invalidateCookie(response, "empCode");
+        CookieUtil.invalidateCookie(response, "empName");
+        CookieUtil.invalidateCookie(response, "empImg");
+        CookieUtil.invalidateCookie(response, "empAuthCode");
+        CookieUtil.invalidateCookie(response, "deptCode");
         return ResponseEntity.ok("Logout successful");
     }
 

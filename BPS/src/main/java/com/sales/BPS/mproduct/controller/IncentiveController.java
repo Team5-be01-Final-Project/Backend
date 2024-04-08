@@ -36,4 +36,12 @@ public class IncentiveController {
         return incentiveService.calculateMyIncentive(year, month, empCode);
     }
 
+    // 추가: 인센티브 시뮬레이션
+    @GetMapping("/simulation")
+    @Tag(name = "Incentive API")
+    @Operation(summary = "인센티브 시뮬레이션" ,description = "현재 매출액과 추가 매출액을 기반으로 인센티브를 시뮬레이션합니다.")
+    public IncentiveDTO getIncentiveSimulation(@RequestParam int empCode, @RequestParam long currentSales, @RequestParam long additionalSales) {
+        return incentiveService.calculateIncentiveSimulation(empCode, currentSales, additionalSales);
+    }
+
 }

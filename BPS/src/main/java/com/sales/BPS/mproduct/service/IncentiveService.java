@@ -134,4 +134,22 @@ public class IncentiveService {
         return null; // 데이터가 없는 경우 null 반환
     }
 
+    // 추가: 현재 매출액과 추가 매출액을 기반으로 인센티브 시뮬레이션
+    public IncentiveDTO calculateIncentiveSimulation(int empCode, long currentSales, long additionalSales) {
+        Employee employee = employeeRepository.findById(empCode)
+                .orElseThrow(() -> new RuntimeException("해당 직원을 찾을 수 없습니다. EmpCode: " + empCode));
+
+        String empName = employee.getEmpName();
+        String deptName = employee.getDepartment().getDeptName();
+        String empImg = employee.getEmpImg();
+
+        long totalSales = currentSales + additionalSales;
+        int incentive = (int) Math.round(totalSales * 0.01);
+
+        IncentiveDTO incentiveDTO = new IncentiveDTO(empName, deptName, totalSales, 0, incentive);
+        incentiveDTO.setEmpImg(empImg);
+
+        return incentiveDTO;
+    }
+
 }

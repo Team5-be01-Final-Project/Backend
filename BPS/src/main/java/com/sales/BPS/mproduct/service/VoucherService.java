@@ -29,15 +29,17 @@ public class VoucherService {
     private final EmployeeRepository employeeRepository;
     private final ProductRepository productRepository;
     private final ClientRepository clientRepository;
+    private final StockService stockService;
 
     @Autowired
-    public VoucherService(VoucherRepository voucherRepository, StockRepository stockRepository, ApprovalCodeRepository approvalCodeRepository, EmployeeRepository employeeRepository, ProductRepository productRepository, ClientRepository clientRepository) {
+    public VoucherService(VoucherRepository voucherRepository, StockRepository stockRepository, ApprovalCodeRepository approvalCodeRepository, EmployeeRepository employeeRepository, ProductRepository productRepository, ClientRepository clientRepository, StockService stockService) {
         this.voucherRepository = voucherRepository;
         this.stockRepository = stockRepository;
         this.approvalCodeRepository = approvalCodeRepository;
         this.employeeRepository = employeeRepository;
         this.productRepository = productRepository;
         this.clientRepository = clientRepository;
+        this.stockService = stockService;
     }
 
 
@@ -152,7 +154,7 @@ public class VoucherService {
                 voucherRepository.save(voucher);
             }
         }
-        
+
         @Transactional
         public void createVouchers(VoucherSaveDTO voucherSaveDTO) {
             Long voucId = voucherSaveDTO.getVoucId();
@@ -176,6 +178,7 @@ public class VoucherService {
                 voucher.setVoucAmount(item.getVoucAmount());
                 voucher.setVoucSales(item.getVoucSales());
 
+                stockService.decreaseStock(item.getProCode(), item.getVoucAmount());
                 voucherRepository.save(voucher);
             }
         }

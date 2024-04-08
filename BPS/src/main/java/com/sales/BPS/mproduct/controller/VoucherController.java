@@ -1,5 +1,6 @@
 package com.sales.BPS.mproduct.controller;
 
+import com.sales.BPS.mexception.InsufficientStockException;
 import com.sales.BPS.mproduct.dto.VoucherDTO;
 import com.sales.BPS.mproduct.dto.VoucherSaveDTO;
 import com.sales.BPS.mproduct.service.SequenceService;
@@ -72,6 +73,8 @@ public class VoucherController {
         try {
             voucherService.createVouchers(VoucherSaveDTO);
             return new ResponseEntity<>("Vouchers created successfully.", HttpStatus.CREATED);
+        } catch (InsufficientStockException e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }

@@ -1,6 +1,7 @@
 package com.sales.BPS.msystem.service;
 
 import com.sales.BPS.msystem.dto.EmployeeInfoDTO;
+import com.sales.BPS.msystem.dto.EmployeesSpecDTO;
 import com.sales.BPS.msystem.entity.Employee;
 import com.sales.BPS.msystem.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class EmployeeService {
@@ -25,6 +27,9 @@ public class EmployeeService {
         Optional<Employee> employeeOptional = employeeRepository.findById(empCode);
         if (employeeOptional.isPresent()) {
             Employee employee = employeeOptional.get();
+            if(employee.getAuthority().getAuthCode().equals("AUTH000")){
+                return false;
+            }
             String storedEmpPw = employee.getEmpPw();
             return empPw.equals(storedEmpPw); // 비밀번호 일치 여부 반환
         } else {
@@ -32,8 +37,8 @@ public class EmployeeService {
         }
     }
     // 기준에 따른 직원 검색
-    public List<EmployeeInfoDTO> findByCriteria(String deptName, String empName, String empTel) {
-        return employeeRepository.findByCriteria(deptName, empName, empTel);
+    public List<EmployeeInfoDTO> findByCriteria(String deptName, String empName, String empEmail) {
+        return employeeRepository.findByCriteria(deptName, empName, empEmail);
     }
 
     // 모든 직원 목록을 반환하는 메서드
@@ -41,6 +46,7 @@ public class EmployeeService {
         return employeeRepository.findAll();
     }
 
+    // 사원 정보 조회 메서드
     public Employee findByEmpCode(Integer empCode){
         return employeeRepository.findById(empCode)
                 .orElseThrow(() -> new NoSuchElementException("해당하는 직원을 찾을 수 없습니다. EmpCode: " + empCode));
@@ -50,4 +56,28 @@ public class EmployeeService {
         Employee manager = employeeRepository.findByDeptCodeAndPositionCode2(deptCode, "P02");
         return manager;
     }
+
+
+    public List<EmployeesSpecDTO> getAllEmployeesSpec() {
+        List<Employee> employees = employeeRepository.findAll();
+        // Employee 엔터티 리스트를 EmployeesSpecDTO 리스트로 변환
+        return employees.stream().map(employee -> new EmployeesSpecDTO(
+                employee.getEmpImg(),
+                employee.getEmpCode(),
+                employee.getEmpName(),
+                employee.getPositions().getPosName(),
+                employee.getDepartment().getDeptName(),
+                employee.getEmpTel(),
+                employee.getEmpEmail(),
+                employee.getEmpStartDate(),
+                employee.getEmpEndDate()
+        )).collect(Collectors.toList());
+    }
+
+    // 로그인한 사원의 정보를 specDTO에서 조회
+    public EmployeesSpecDTO findByEmpCodeWithSpec(Integer empCode) {
+        return employeeRepository.findByEmpCodeWithSpec(empCode)
+                .orElseThrow(() -> new NoSuchElementException("해당하는 직원을 찾을 수 없습니다. EmpCode: " + empCode));
+    }
+
 }

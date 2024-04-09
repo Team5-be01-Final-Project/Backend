@@ -17,4 +17,6 @@ public class ClientSalesDTO {
     private Double profitMargin; // 이익률 (매출이익 / 매출액 * 100)
     private LocalDate voucApproval;
 
+    private Long[] monthlySales; // 최근 3개월의 매출액
+
 }

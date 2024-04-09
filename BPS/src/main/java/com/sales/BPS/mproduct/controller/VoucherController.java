@@ -1,17 +1,19 @@
 package com.sales.BPS.mproduct.controller;
 
-import com.sales.BPS.mproduct.dto.VoucherApprovalDTO;
+import com.sales.BPS.mexception.InsufficientStockException;
 import com.sales.BPS.mproduct.dto.VoucherDTO;
-import com.sales.BPS.mproduct.dto.VoucherDto;
+import com.sales.BPS.mproduct.dto.VoucherSaveDTO;
 import com.sales.BPS.mproduct.service.SequenceService;
 import com.sales.BPS.mproduct.service.VoucherService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,7 +34,7 @@ public class VoucherController {
 
     @GetMapping
     @Tag(name = "Voucher API")
-    @Operation(summary = "출고전표조회",description = "출고 전표를 조회합니다.")
+    @Operation(summary = "출고전표조회", description = "출고 전표를 조회합니다.")
     public ResponseEntity<List<VoucherDTO>> getAllVouchers() {
         List<VoucherDTO> vouchers = voucherService.getAllVouchers();
         return ResponseEntity.ok(vouchers);
@@ -45,7 +47,7 @@ public class VoucherController {
         List<VoucherDTO> dtoList = voucherService.findVouchersByVoucIdAsDto(voucId);
         return dtoList.isEmpty() ? ResponseEntity.notFound().build() : ResponseEntity.ok(dtoList);
     }
-    
+
 
     @PutMapping("/{voucId}/reject/details")
     public ResponseEntity<Void> rejectVoucherDetails(@PathVariable Long voucId) {
@@ -59,16 +61,6 @@ public class VoucherController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/save") //전표 저장 1개씩
-    public ResponseEntity<?> createVoucher(@RequestBody VoucherDto voucherDto) {
-        try {
-            voucherService.createVoucher(voucherDto);
-            return new ResponseEntity<>("Voucher created successfully.", HttpStatus.CREATED);
-        } catch (Exception e) {
-            // 예외 처리 로직 (예외에 따라 적절한 HTTP 상태 코드와 메시지 반환)
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
-    }
 
     @GetMapping("/voucId") //전표 번호 생성
     public ResponseEntity<?> generateVoucherId() {
@@ -77,13 +69,36 @@ public class VoucherController {
         return ResponseEntity.ok(voucId);
     }
 
-//    @PostMapping("/saveAll") // 여러 전표 저장
-//    public ResponseEntity<?> createVouchers(@RequestBody List<VoucherDto> voucherDtos) {
-//        try {
-//            voucherService.createVouchers(voucherDtos);
-//            return new ResponseEntity<>("Vouchers created successfully.", HttpStatus.CREATED);
-//        } catch (Exception e) {
-//            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-//        }
-//    }
+    @PostMapping("/saveall") // 여러 전표 저장
+    public ResponseEntity<?> createVouchers(@RequestBody VoucherSaveDTO VoucherSaveDTO) {
+        System.out.println("VoucherSaveDTO: " + VoucherSaveDTO);
+        try {
+            voucherService.createVouchers(VoucherSaveDTO);
+            return new ResponseEntity<>("Vouchers created successfully.", HttpStatus.CREATED);
+        } catch (InsufficientStockException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    // 검색 조건에 맞는 출고전표를 조회
+    @GetMapping("/search")
+    @Tag(name = "Voucher API")
+    @Operation(summary = "출고전표 검색", description = "조건에 따라 출고전표를 검색합니다.")
+    public ResponseEntity<List<VoucherDTO>> searchVouchers(
+            @RequestParam(required = false) String voucId, // 전표번호로 검색 (선택)
+            @RequestParam(required = false) String empName, // 담당자 이름으로 검색 (선택)
+            @RequestParam(required = false) String clientName, // 거래처명으로 검색 (선택)
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate, // 등록일 시작일로 검색 (선택)
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate, // 등록일 종료일로 검색 (선택)
+            @RequestParam(required = false) String signerName, // 결재자 이름으로 검색 (선택)
+            @RequestParam(required = false) String approvalStatus, // 결재상태로 검색 (선택)
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate approvalStartDate, // 결재일 시작일로 검색 (선택)
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate approvalEndDate) { // 결재일 종료일로 검색 (선택)
+        // VoucherService의 searchVouchers 메서드 호출하여 검색 조건에 맞는 출고전표 목록 조회
+        List<VoucherDTO> vouchers = voucherService.searchVouchers(voucId, empName, clientName, startDate, endDate, signerName, approvalStatus, approvalStartDate, approvalEndDate);
+        // 조회된 출고전표 목록을 응답으로 반환
+        return ResponseEntity.ok(vouchers);
+    }
 }

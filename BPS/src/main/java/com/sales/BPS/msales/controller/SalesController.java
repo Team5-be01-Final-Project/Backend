@@ -13,10 +13,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
-@RequestMapping("/sales")
+@RequestMapping("/api/sales")
 @Tag(name = "Sales API", description = "매출조회 API입니다.")
 public class SalesController {
 
@@ -47,5 +48,23 @@ public class SalesController {
     public ResponseEntity<List<MonthlySalesDTO>> getMonthlySales(@RequestParam int year) {
         List<MonthlySalesDTO> monthlySales = salesService.getMonthlySales(year);
         return ResponseEntity.ok(monthlySales);
+    }
+
+    // My Sales 내 매출 보기 기능을 위한 메서드
+    @GetMapping("/employeeSales")
+    @Tag(name = "Sales API")
+    @Operation(summary = "내 매출 현황", description = "로그인한 사원의 담당 거래처 최근 3개월 매출을 조회합니다.")
+    public ResponseEntity<List<ClientSalesDTO>> getEmployeeSales(
+            @RequestParam Integer empCode,
+            @RequestParam(required = false) Integer year,
+            @RequestParam(required = false) Integer month
+    ) {
+        if (year == null || month == null) {
+            LocalDate currentDate = LocalDate.now();
+            year = currentDate.getYear();
+            month = currentDate.getMonthValue();
+        }
+        List<ClientSalesDTO> employeeSalesData = salesService.getEmployeeSalesData(empCode, year, month);
+        return ResponseEntity.ok(employeeSalesData);
     }
 }

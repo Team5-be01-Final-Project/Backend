@@ -1,5 +1,6 @@
 package com.sales.BPS.mproduct.service;
 
+import com.sales.BPS.mexception.InsufficientStockException;
 import com.sales.BPS.mproduct.dto.StockListDTO;
 import com.sales.BPS.mproduct.dto.StockProductDTO;
 import com.sales.BPS.mproduct.dto.StockRegisterDTO;
@@ -47,13 +48,12 @@ public class StockService {
 
     // 재고 등록
     public void registerStock(StockRegisterDTO stockRegisterDTO) {
-        // 상품 정보 확인
-        Optional<Product> product = stockRepository.findProductByProCode(stockRegisterDTO.getProCode());
-
+        // 상품명으로 상품 정보 확인
+        Optional<Product> product = stockRepository.findProductByProName(stockRegisterDTO.getProName());
         if (product.isPresent()) {
+            Integer proCode = product.get().getProCode();
             // 기존 재고가 있는지 확인
-            Optional<Stock> existingStock = stockRepository.findById(stockRegisterDTO.getProCode());
-
+            Optional<Stock> existingStock = stockRepository.findById(proCode);
             if (existingStock.isPresent()) {
                 // 기존 재고가 있으면 재고 수량 업데이트
                 Stock stock = existingStock.get();
@@ -62,7 +62,7 @@ public class StockService {
             } else {
                 // 기존 재고가 없으면 새로 등록
                 Stock stock = new Stock();
-                stock.setProCode(stockRegisterDTO.getProCode());
+                stock.setProCode(proCode);
                 stock.setStoAmo(stockRegisterDTO.getStoAmo());
                 stock.setProduct(product.get());
                 stockRepository.save(stock);
@@ -72,9 +72,9 @@ public class StockService {
         }
     }
 
-    // 상품 코드로 상품 정보 조회
-    public StockProductDTO getProductByCode(Integer proCode) {
-        Optional<Product> product = stockRepository.findProductByProCode(proCode);
+    // 상품명으로 상품 정보 조회
+    public StockProductDTO getProductByName(String proName) {
+        Optional<Product> product = stockRepository.findProductByProName(proName);
         if (product.isPresent()) {
             StockProductDTO stockProductDTO = new StockProductDTO();
             stockProductDTO.setProCode(product.get().getProCode());
@@ -85,4 +85,16 @@ public class StockService {
         }
     }
 
+    @Transactional //재고 차감 로직
+    public boolean decreaseStock(Integer proCode, Integer stoAmo) {
+        Stock stock = stockRepository.findById(proCode)
+                .orElseThrow(() -> new RuntimeException("Product not found"));
+        if (stock.getStoAmo() >= stoAmo) {
+            stock.setStoAmo(stock.getStoAmo() - stoAmo);
+            stockRepository.save(stock);
+            return true;
+        } else {
+            throw new InsufficientStockException(proCode + " 의 재고가 부족합니다. 다시 확인해주세요.");
+        }
+    }
 }

@@ -14,9 +14,6 @@ public interface ClientRepository extends JpaRepository<Client,String> {
     @Query("SELECT c.clientCode AS clientCode, c.clientName AS clientName, c.clientClass AS clientClass, c.clientBoss AS clientBoss, c.clientWhere AS clientWhere, c.clientPost AS clientPost, c.clientEmp AS clientEmp, c.clientEmpTel AS clientEmpTel FROM Client c")
     List<ClientProjection> findClientsWithSpecificFields();
 
-    Client findByClientCode(String clientCode);
-
-
     interface ClientProjection {
         String getClientCode();
         String getClientName();
@@ -31,5 +28,7 @@ public interface ClientRepository extends JpaRepository<Client,String> {
     //중복확인
     boolean existsByClientCode(String clientCode);
 
+    // 로그인한 사원의 담당 거래처 목록 조회 메서드
+    List<Client> findByEmployeeEmpCode(Integer empCode);
 
 }

@@ -139,4 +139,44 @@ public class SalesService {
 
         return monthlySalesList;
     }
+
+    // My Sales 내 매출 보기 기능을 위한 메서드
+    public List<ClientSalesDTO> getEmployeeSalesData(Integer empCode, int year, int month) {
+        List<ClientSalesDTO> employeeSalesData = new ArrayList<>();
+        List<Client> clients = clientRepository.findByEmployeeEmpCode(empCode);
+
+        // 최근 3개월 계산
+        LocalDate currentDate = LocalDate.of(year, month, 1);
+        LocalDate[] recentMonths = new LocalDate[3];
+        for (int i = 0; i < 3; i++) {
+            recentMonths[i] = currentDate.minusMonths(2 - i);
+        }
+
+        for (Client client : clients) {
+            ClientSalesDTO dto = new ClientSalesDTO();
+            dto.setClientName(client.getClientName());
+
+            // 최근 3개월의 매출액 계산
+            Long[] monthlySales = new Long[3];
+            for (int i = 0; i < 3; i++) {
+                LocalDate targetMonth = recentMonths[i];
+                List<Voucher> vouchers = voucherRepository.findByClientClientCodeAndYearAndMonth(
+                        client.getClientCode(),
+                        targetMonth.getYear(),
+                        targetMonth.getMonthValue()
+                );
+
+                long totalSales = vouchers.stream()
+                        .mapToLong(voucher -> (long) voucher.getVoucSale() * voucher.getVoucAmount())
+                        .sum();
+
+                monthlySales[i] = totalSales;
+            }
+
+            dto.setMonthlySales(monthlySales);
+            employeeSalesData.add(dto);
+        }
+
+        return employeeSalesData;
+    }
 }

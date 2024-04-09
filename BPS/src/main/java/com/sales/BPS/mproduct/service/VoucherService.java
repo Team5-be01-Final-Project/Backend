@@ -208,6 +208,14 @@ public class VoucherService {
                 stockService.decreaseStock(item.getProCode(), item.getVoucAmount());
                 voucherRepository.save(voucher);
             }
-
         }
+
+    // 검색 조건에 맞는 출고전표를 조회
+    public List<VoucherDTO> searchVouchers(String voucId, String empName, String clientName, LocalDate startDate, LocalDate endDate, String signerName, String approvalStatus, LocalDate approvalStartDate, LocalDate approvalEndDate) {
+        // VoucherRepository의 searchVouchers 메서드 호출하여 검색 조건에 맞는 출고전표 엔티티 목록 조회
+        List<Voucher> vouchers = voucherRepository.searchVouchers(voucId, empName, clientName, startDate, endDate, signerName, approvalStatus, approvalStartDate, approvalEndDate);
+        // 조회된 출고전표 엔티티 목록을 VoucherDTO 목록으로 변환하여 반환
+        return vouchers.stream().map(this::convertToDto).collect(Collectors.toList());
     }
+
+}

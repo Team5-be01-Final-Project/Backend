@@ -29,9 +29,9 @@ public interface StockRepository extends JpaRepository<Stock, Integer> {
     List<StockListDTO> findStockList(@Param("proCode") Integer proCode,
                                      @Param("proName") String proName);
 
-    // proCode를 기준으로 Product를 조회하는 쿼리
-    @Query("SELECT p FROM Product p WHERE p.proCode = :proCode")
-    Optional<Product> findProductByProCode(@Param("proCode") Integer proCode);
+    // proName을 기준으로 Product를 조회하는 쿼리
+    @Query("SELECT p FROM Product p WHERE p.proName = :proName")
+    Optional<Product> findProductByProName(@Param("proName") String proName);
 
 
     // 상품 코드로 재고 조회

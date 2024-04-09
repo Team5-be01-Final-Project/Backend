@@ -17,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -78,8 +79,8 @@ public class ClientController {
             // 쿠키에서 권한 코드 가져오기
             String authCode = CookieUtil.getCookieValue(request, "empAuthCode");
 
-            // 권한 검사
-            if (!"AUTH003".equals(authCode)) {
+            // 여러 권한 확인
+            if (!Arrays.asList("AUTH001", "AUTH002", "AUTH003").contains(authCode)) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body("삭제 권한이 없습니다.");
             }
 

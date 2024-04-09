@@ -27,19 +27,20 @@ public class PpcCrudController {
     }
 
     // 거래처별 상품 가격 정보 추가 또는 업데이트
-    @PutMapping("/update/{proCode}")
-    public ResponseEntity<Void> updatePpc(@PathVariable Integer proCode, @RequestBody PpcDTO ppcDTO) {
-        ppcService.updatePpc(proCode, ppcDTO);
+    @PutMapping("/{clientCode}/{proCode}")
+    public ResponseEntity<Void> updatePpc(@PathVariable String clientCode, @PathVariable Integer proCode, @RequestBody PpcDTO ppcDTO) {
+        ppcService.updatePpc(clientCode, proCode, ppcDTO);
         return ResponseEntity.ok().build();
     }
 
+
     // 거래처별 상품 가격 정보 삭제
-    @DeleteMapping("/{proCode}")
-    public ResponseEntity<?> deletePpc(@PathVariable Integer proCode) {
-        if (proCode == null) {
+    @DeleteMapping("/{clientCode}/{proCode}")
+    public ResponseEntity<?> deletePpc(@PathVariable String clientCode, @PathVariable Integer proCode) {
+        if (clientCode == null || proCode == null) {
             return ResponseEntity.badRequest().build();
         }
-        ppcService.deletePpcByProCode(proCode);
+        ppcService.deletePpc(clientCode, proCode);
         return ResponseEntity.ok().build();
     }
 

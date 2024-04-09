@@ -86,6 +86,7 @@ public class PpcService {
         dto.setProSeg(ppc.getProduct().getProSeg());
         dto.setProCat(ppc.getProduct().getProCat());
         dto.setPpcSale(ppc.getPpcSale());
+        dto.setProUnit(ppc.getProduct().getProUnit()); // 상품의 단위 정보를 DTO에 추가
         return dto;
     }
 

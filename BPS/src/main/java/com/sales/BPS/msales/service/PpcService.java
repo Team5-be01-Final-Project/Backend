@@ -111,10 +111,14 @@ public class PpcService {
 
 
     @Transactional
-    public void deletePpcByProCode(Integer proCode) {
-        List<Ppc> ppcs = ppcRepository.findByProCode(proCode);
-        ppcs.forEach(ppcRepository::delete);
+    public void deletePpc(String clientCode, Integer proCode) {
+        // 거래처 코드와 상품 코드에 해당하는 Ppc 엔터티를 데이터베이스에서 조회
+        Optional<Ppc> ppc = ppcRepository.findByClientCodeAndProCode(clientCode, proCode);
+
+        // 해당하는 Ppc 엔터티가 존재하면 삭제
+        ppc.ifPresent(ppcRepository::delete);
     }
+
 
     public List<PpcDTO> getPpcs(String clientCode) {
         // 거래처 코드에 해당하는 모든 Ppc 엔터티를 데이터베이스에서 조회

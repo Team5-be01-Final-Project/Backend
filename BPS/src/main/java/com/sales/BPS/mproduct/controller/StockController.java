@@ -58,12 +58,12 @@ public class StockController {
         }
     }
 
-    // 상품 코드로 상품 정보 조회
-    @GetMapping("/product/{proCode}")
+    // 상품명으로 상품 정보 조회
+    @GetMapping("/product/{proName}")
     @Tag(name = "Stock API")
-    @Operation(summary = "상품 조회", description = "상품 코드로 상품 정보를 조회합니다.")
-    public ResponseEntity<StockProductDTO> getProductByCode(@PathVariable Integer proCode) {
-        StockProductDTO product = stockService.getProductByCode(proCode);
+    @Operation(summary = "상품 조회", description = "상품명으로 상품 정보를 조회합니다.")
+    public ResponseEntity<StockProductDTO> getProductByName(@PathVariable String proName) {
+        StockProductDTO product = stockService.getProductByName(proName);
         if (product != null) {
             return ResponseEntity.ok(product);
         } else {

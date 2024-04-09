@@ -27,6 +27,9 @@ public class EmployeeService {
         Optional<Employee> employeeOptional = employeeRepository.findById(empCode);
         if (employeeOptional.isPresent()) {
             Employee employee = employeeOptional.get();
+            if(employee.getAuthority().getAuthCode().equals("AUTH000")){
+                return false;
+            }
             String storedEmpPw = employee.getEmpPw();
             return empPw.equals(storedEmpPw); // 비밀번호 일치 여부 반환
         } else {

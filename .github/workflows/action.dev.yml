@@ -3,10 +3,9 @@ name: Deployaws
 on:
   push:
     branches:
-      - meme
+      - release/5.0.0
   pull_request:
     branches:
-      - meme
     types:
       - closed
 

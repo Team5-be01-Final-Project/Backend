@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.sales</groupId>
 	<artifactId>BPS</artifactId>
-	<version>0.0.11-SNAPSHOT</version>
+	<version>0.0.12-SNAPSHOT</version>
 	<name>BPS</name>
 	<description>[T5]Final Project</description>
 	<properties>
@@ -64,6 +64,12 @@
 			<version>3.2.0</version>
 		</dependency>
 
+		<dependency>
+			<groupId>com.github.spotbugs</groupId>
+			<artifactId>spotbugs-maven-plugin</artifactId>
+			<version>4.8.4.0</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>
@@ -78,6 +84,18 @@
 							<artifactId>lombok</artifactId>
 						</exclude>
 					</excludes>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>com.github.spotbugs</groupId>
+				<artifactId>spotbugs-maven-plugin</artifactId>
+				<version>4.8.4.0</version>
+				<configuration>
+					<xmlOutput>true</xmlOutput>
+					<effort>Max</effort>
+					<threshold>Low</threshold>
+					<spotbugsXmlOutputFilename>spotbugsReport.xml</spotbugsXmlOutputFilename>
 				</configuration>
 			</plugin>
 		</plugins>

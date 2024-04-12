@@ -15,7 +15,7 @@ public class PpcDTO {
         private String proSeg; // 상품 분류
         private String proCat;
         private Integer ppcSale;
-
+        private Integer proUnit;
 
 
 }

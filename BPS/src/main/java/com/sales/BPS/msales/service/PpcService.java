@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -43,16 +44,18 @@ public class PpcService {
 
 
     @Transactional
-    public void updatePpc(Integer proCode, PpcDTO ppcDTO) {
-        // 상품 코드로 Ppc 엔티티를 조회합니다.
-        List<Ppc> ppcs = ppcRepository.findByProCode(proCode);
-        for (Ppc existingPpc : ppcs) {
+    public void updatePpc(String clientCode, Integer proCode, PpcDTO ppcDTO) {
+        // 거래처 코드와 상품 코드로 Ppc 엔티티를 조회합니다.
+        Optional<Ppc> optionalPpc = ppcRepository.findByClientCodeAndProCode(clientCode, proCode);
+        if (optionalPpc.isPresent()) {
+            Ppc existingPpc = optionalPpc.get();
+
             // 클라이언트 정보 업데이트
-            Client client = clientService.findClientByClientCode(ppcDTO.getClientCode());
+            Client client = clientService.findClientByClientCode(clientCode);
             if (client == null) {
                 // 클라이언트가 존재하지 않으면 새로운 클라이언트를 생성합니다.
                 client = new Client();
-                client.setClientCode(ppcDTO.getClientCode());
+                client.setClientCode(clientCode);
                 // 필요에 따라 클라이언트의 다른 속성을 설정할 수 있습니다.
             }
             existingPpc.setClient(client);
@@ -69,8 +72,12 @@ public class PpcService {
 
             // 엔티티를 저장하여 업데이트를 완료합니다.
             ppcRepository.save(existingPpc);
+        } else {
+            // 해당 거래처와 상품에 대한 주문이 존재하지 않을 경우 예외 처리를 할 수 있습니다.
+            // 예를 들어, NotFoundException 등의 예외를 던질 수 있습니다.
         }
     }
+
 
     public boolean isExistingSale(String clientCode, Integer proCode) {
         return ppcRepository.existsByClientCodeAndProCode(clientCode, proCode);
@@ -86,6 +93,7 @@ public class PpcService {
         dto.setProSeg(ppc.getProduct().getProSeg());
         dto.setProCat(ppc.getProduct().getProCat());
         dto.setPpcSale(ppc.getPpcSale());
+        dto.setProUnit(ppc.getProduct().getProUnit()); // 상품의 단위 정보를 DTO에 추가
         return dto;
     }
 
@@ -103,10 +111,14 @@ public class PpcService {
 
 
     @Transactional
-    public void deletePpcByProCode(Integer proCode) {
-        List<Ppc> ppcs = ppcRepository.findByProCode(proCode);
-        ppcs.forEach(ppcRepository::delete);
+    public void deletePpc(String clientCode, Integer proCode) {
+        // 거래처 코드와 상품 코드에 해당하는 Ppc 엔터티를 데이터베이스에서 조회
+        Optional<Ppc> ppc = ppcRepository.findByClientCodeAndProCode(clientCode, proCode);
+
+        // 해당하는 Ppc 엔터티가 존재하면 삭제
+        ppc.ifPresent(ppcRepository::delete);
     }
+
 
     public List<PpcDTO> getPpcs(String clientCode) {
         // 거래처 코드에 해당하는 모든 Ppc 엔터티를 데이터베이스에서 조회

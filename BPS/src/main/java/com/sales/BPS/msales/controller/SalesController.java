@@ -66,7 +66,6 @@ public class SalesController {
         if (!Arrays.asList("AUTH001", "AUTH002", "AUTH003").contains(authCode)) {
             productSalesDTOS.forEach(productSalesDTO -> {
                 productSalesDTO.setProUnit(null);
-                productSalesDTO.setCostOfSales(null);
                 productSalesDTO.setGrossProfit(null);
                 productSalesDTO.setProfitMargin(null);
             });

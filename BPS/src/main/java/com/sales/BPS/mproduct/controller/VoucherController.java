@@ -49,15 +49,17 @@ public class VoucherController {
     }
 
 
-    @PutMapping("/{voucId}/reject/details")
-    public ResponseEntity<Void> rejectVoucherDetails(@PathVariable Long voucId) {
-        voucherService.rejectVoucherDetails(voucId);
+    @PutMapping("/{voucId}/approve/details")
+    public ResponseEntity<Void> approveVoucherDetails(@PathVariable Long voucId, @RequestBody Map<String, String> requestBody) {
+        String remarks = requestBody.get("remarks");
+        voucherService.approveVoucherDetails(voucId, remarks);
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping("/{voucId}/approve/details")
-    public ResponseEntity<Void> approveVoucherDetails(@PathVariable Long voucId) {
-        voucherService.approveVoucherDetails(voucId);
+    @PutMapping("/{voucId}/reject/details")
+    public ResponseEntity<Void> rejectVoucherDetails(@PathVariable Long voucId, @RequestBody Map<String, String> requestBody) {
+        String remarks = requestBody.get("remarks");
+        voucherService.rejectVoucherDetails(voucId, remarks);
         return ResponseEntity.ok().build();
     }
 

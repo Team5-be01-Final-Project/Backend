@@ -160,10 +160,11 @@ public class SalesService {
             Long[] monthlySales = new Long[3];
             for (int i = 0; i < 3; i++) {
                 LocalDate targetMonth = recentMonths[i];
-                List<Voucher> vouchers = voucherRepository.findByClientClientCodeAndYearAndMonth(
+                List<Voucher> vouchers = voucherRepository.findByClientClientCodeAndYearAndMonthAndApprovalCodeAppCode(
                         client.getClientCode(),
                         targetMonth.getYear(),
-                        targetMonth.getMonthValue()
+                        targetMonth.getMonthValue(),
+                        "A01"       // 승인 코드를 가진 전표만 매출로 집계
                 );
 
                 long totalSales = vouchers.stream()

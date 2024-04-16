@@ -52,6 +52,8 @@ public class ProductController {
 
 
     @GetMapping("/{clientCode}/ppcs")
+    @Tag(name = "Products API")
+    @Operation(summary = "상품조회", description = "특정 거래처의 상품 리스트를 조회합니다.")
     public ResponseEntity<List<PpcVoucherDTO>> getProductsByClient(@PathVariable String clientCode) {
         List<PpcVoucherDTO> ppcVoucherDTO = ppcService.findPpcByClient(clientCode);
         System.out.println(clientCode);

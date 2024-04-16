@@ -58,6 +58,10 @@ public class EmployeeService {
         Optional<Employee> employeeOptional = employeeRepository.findById(empCode);
         if (employeeOptional.isPresent()) {
             Employee employee = employeeOptional.get();
+            if(employee.getAuthority().getAuthCode().equals("AUTH000")){
+                logger.warn("A retired employee with empCode: {}", empCode);
+                return false;
+            }
             try {
                 String encryptedInputPw = EncryptionService.encryptWithNewKey(empPw, SECRET_KEY);
                 logger.debug("Encrypted input password: {}", encryptedInputPw); // 암호화된 입력 비밀번호 로깅
@@ -111,8 +115,8 @@ public class EmployeeService {
                 employee.getEmpName(),
                 employee.getPositions().getPosName(),
                 employee.getDepartment().getDeptName(),
-                employee.getEmpTel(),
                 employee.getEmpEmail(),
+                employee.getEmpTel(),
                 employee.getEmpStartDate(),
                 employee.getEmpEndDate()
         )).collect(Collectors.toList());

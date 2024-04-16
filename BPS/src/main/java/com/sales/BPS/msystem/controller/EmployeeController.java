@@ -28,7 +28,7 @@ public class EmployeeController {
 
     @GetMapping("/list")
     @Tag(name = "System API")
-    @Operation(summary = "사원정보 조회",description = "사원정보(부서이름,이름, 전화번호 조회")
+    @Operation(summary = "사원정보 조회",description = "사원정보(부서이름,이름, 전화번호 조회합니다.")
     public List<EmployeeInfoDTO> searchEmployees(@RequestParam(required = false) String deptName,
                                                  @RequestParam(required = false) String empName,
                                                  @RequestParam(required = false) String empEmail) {
@@ -48,12 +48,16 @@ public class EmployeeController {
     }
 
     @GetMapping("/{empCode}/clients") //담당자의 담당 거래처 찾기
+    @Tag(name = "System API")
+    @Operation(summary = "담당자 거래처 찾기",description = "담당자의 담당 거래처를 조회합니다.")
     public ResponseEntity<List<Client>> getClientsByEmployee(@PathVariable Integer empCode) {
         Employee employee = employeeService.findByEmpCode(empCode);
         return ResponseEntity.ok(employee.getClients());
     }
 
     @GetMapping("/{empCode}/approver") //담당자의 담당 거래처 찾기
+    @Tag(name = "System API")
+    @Operation(summary = "담당자 걸재자 찾기",description = "담당자의 결재자를 조회합니다.")
     public ResponseEntity<?> getByDeptCodeAndPositionCode(@PathVariable Integer empCode) {
         String deptCode = employeeService.findByEmpCode(empCode).getDepartment().getDeptCode();
         Employee employee = employeeService.findByDeptCodeAndPositionCode(deptCode);
@@ -69,6 +73,8 @@ public class EmployeeController {
 
     // 모든 직원의 사양을 조회하는 GET 요청 핸들러
     @GetMapping("/specs")
+    @Tag(name = "System API")
+    @Operation(summary = "전직원 정보 조회",description = "전 직원의 정보를 조회합니다.")
     public ResponseEntity<List<EmployeesSpecDTO>> getAllEmployeeSpecs() {
         List<EmployeesSpecDTO> employeesSpecs = employeeService.getAllEmployeesSpec();
         return ResponseEntity.ok(employeesSpecs); // HTTP 200 OK 상태 코드와 함께 결과 반환

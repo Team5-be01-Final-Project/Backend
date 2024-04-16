@@ -66,7 +66,6 @@ public class SalesController {
         if (!Arrays.asList("AUTH001", "AUTH002", "AUTH003").contains(authCode)) {
             productSalesDTOS.forEach(productSalesDTO -> {
                 productSalesDTO.setProUnit(null);
-                productSalesDTO.setCostOfSales(null);
                 productSalesDTO.setGrossProfit(null);
                 productSalesDTO.setProfitMargin(null);
             });
@@ -76,6 +75,8 @@ public class SalesController {
     }
 
     @GetMapping("/monthlySales")
+    @Tag(name = "Sales API")
+    @Operation(summary = "월별 매출조회", description = "월별  매출, 이익 등 조회합니다.")
     public ResponseEntity<List<MonthlySalesDTO>> getMonthlySales(@RequestParam int year) {
         List<MonthlySalesDTO> monthlySales = salesService.getMonthlySales(year);
         return ResponseEntity.ok(monthlySales);

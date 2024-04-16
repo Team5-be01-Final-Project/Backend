@@ -45,6 +45,14 @@ public interface VoucherRepository extends JpaRepository<Voucher, VoucherPK> {
             "GROUP BY v.employee.empCode")
     Object[] findSalesByEmployeeCodeAndYearAndMonth(@Param("empCode") int empCode, @Param("year") int year, @Param("month") int month);
 
+    // 승인된 매출만 집계하는 내 매출 현황 관련 메서드
+    @Query("SELECT v FROM Voucher v WHERE v.client.clientCode = :clientCode AND YEAR(v.voucDate) = :year AND MONTH(v.voucDate) = :month AND v.approvalCode.appCode = :approvalCode")
+    List<Voucher> findByClientClientCodeAndYearAndMonthAndApprovalCodeAppCode(
+            @Param("clientCode") String clientCode,
+            @Param("year") int year,
+            @Param("month") int month,
+            @Param("approvalCode") String approvalCode);
+
     // 검색 조건에 맞는 출고전표를 조회
     @Query("SELECT v FROM Voucher v WHERE (:voucId IS NULL OR CAST(v.voucId AS string) LIKE %:voucId%) " +
             "AND (:empName IS NULL OR v.employee.empName LIKE %:empName%) " +

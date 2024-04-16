@@ -43,26 +43,36 @@ public class VoucherController {
     // 특정 voucId에 대한 출고전표 목록을 조회하는 엔드포인트
     // 특정 출고전표의 세부 정보 조회
     @GetMapping("/{voucId}/details")
+    @Tag(name = "Voucher API")
+    @Operation(summary = "출고전표조회", description = "특정 voucId에 대한 출고 전표를 조회합니다.")
     public ResponseEntity<List<VoucherDTO>> getVoucherDetailsByVoucId(@PathVariable Long voucId) {
         List<VoucherDTO> dtoList = voucherService.findVouchersByVoucIdAsDto(voucId);
         return dtoList.isEmpty() ? ResponseEntity.notFound().build() : ResponseEntity.ok(dtoList);
     }
 
 
-    @PutMapping("/{voucId}/reject/details")
-    public ResponseEntity<Void> rejectVoucherDetails(@PathVariable Long voucId) {
-        voucherService.rejectVoucherDetails(voucId);
+    @PutMapping("/{voucId}/approve/details")
+    @Tag(name = "Voucher API")
+    @Operation(summary = "출고전표승인", description = "출고전표를 승인합니다.")
+    public ResponseEntity<Void> approveVoucherDetails(@PathVariable Long voucId, @RequestBody Map<String, String> requestBody) {
+        String remarks = requestBody.get("remarks");
+        voucherService.approveVoucherDetails(voucId, remarks);
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping("/{voucId}/approve/details")
-    public ResponseEntity<Void> approveVoucherDetails(@PathVariable Long voucId) {
-        voucherService.approveVoucherDetails(voucId);
+    @PutMapping("/{voucId}/reject/details")
+    @Tag(name = "Voucher API")
+    @Operation(summary = "출고전표반려", description = "출고전표를 반려합니다.")
+    public ResponseEntity<Void> rejectVoucherDetails(@PathVariable Long voucId, @RequestBody Map<String, String> requestBody) {
+        String remarks = requestBody.get("remarks");
+        voucherService.rejectVoucherDetails(voucId, remarks);
         return ResponseEntity.ok().build();
     }
 
 
     @GetMapping("/voucId") //전표 번호 생성
+    @Tag(name = "Voucher API")
+    @Operation(summary = "출고전표번호 생성", description = "전표번호를 생성합니다.")
     public ResponseEntity<?> generateVoucherId() {
         Map<String, Long> voucId = new HashMap<>();
         voucId.put("voucId", sequenceService.generateVoucherId());
@@ -70,6 +80,8 @@ public class VoucherController {
     }
 
     @PostMapping("/saveall") // 여러 전표 저장
+    @Tag(name = "Voucher API")
+    @Operation(summary = "출고전표저장", description = "여러 전표를 저장합니다.")
     public ResponseEntity<?> createVouchers(@RequestBody VoucherSaveDTO VoucherSaveDTO) {
         System.out.println("VoucherSaveDTO: " + VoucherSaveDTO);
         try {

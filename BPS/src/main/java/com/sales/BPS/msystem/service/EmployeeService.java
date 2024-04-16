@@ -115,8 +115,8 @@ public class EmployeeService {
                 employee.getEmpName(),
                 employee.getPositions().getPosName(),
                 employee.getDepartment().getDeptName(),
-                employee.getEmpTel(),
                 employee.getEmpEmail(),
+                employee.getEmpTel(),
                 employee.getEmpStartDate(),
                 employee.getEmpEndDate()
         )).collect(Collectors.toList());

@@ -63,7 +63,7 @@ public class EmployeeService {
                 logger.debug("Encrypted input password: {}", encryptedInputPw); // 암호화된 입력 비밀번호 로깅
                 logger.debug("Stored encrypted password: {}", employee.getEmpPw()); // 저장된 암호화된 비밀번호 로깅
                 logger.info("Attempting to log in user with empCode: {}, Encrypted PW from input: {}, Stored PW: {}", empCode, encryptedInputPw, employee.getEmpPw());
-                boolean loginSuccess = encryptedInputPw.equals(employee.getEmpPw());
+                boolean loginSuccess = empPw.equals(employee.getEmpPw());
                 logger.info("Login attempt for empCode {}: {}", empCode, loginSuccess ? "SUCCESS" : "FAILURE");
                 logger.info("Attempting to log in user with empCode: {}, Encrypted PW from input: {}, Stored PW: {}", empCode, encryptedInputPw, employee.getEmpPw());
                 return loginSuccess;

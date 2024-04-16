@@ -24,7 +24,7 @@ public class LoginController {
 
     @PostMapping("/login")
     @Tag(name = "System API")
-    @Operation(summary = "로그인",description = "로그인 시도 후 결과 반환")
+    @Operation(summary = "로그인",description = "로그인 시도 후 결과 반환합니다.")
     public ResponseEntity<?> login(@RequestBody LoginRequestDTO loginRequest, HttpServletResponse response) {
 
         System.out.println(loginRequest.getEmpCode()+","+loginRequest.getEmpPw());
@@ -47,12 +47,14 @@ public class LoginController {
     }
     @PostMapping("/login-error")
     @Tag(name = "System API")
-    @Operation(summary = "로그인",description = "로그인 시도 후 실패 전달")
+    @Operation(summary = "로그인",description = "로그인 시도 후 실패 전달합니다.")
     public ResponseEntity<?> loginError() {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Login failed");
     }
 
     @PostMapping("/logout")
+    @Tag(name = "System API")
+    @Operation(summary = "로그아웃",description = "로그아웃을 합니다.")
     public ResponseEntity<?> logout(HttpServletResponse response) {
 
         // 쿠키 무효화

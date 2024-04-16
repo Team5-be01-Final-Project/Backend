@@ -72,6 +72,8 @@ public class StockController {
     }
 
     @PostMapping("/decrease") //재고 차감 로직
+    @Tag(name = "Stock API")
+    @Operation(summary = "재고 차감", description = "전표가 결재되면 재고가 차감됩니다.")
     public ResponseEntity<?> decreaseStock(@RequestBody StockRegisterDTO request) {
         boolean success = stockService.decreaseStock(request.getProCode(), request.getStoAmo());
         if (success) {

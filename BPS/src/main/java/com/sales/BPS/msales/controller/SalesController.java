@@ -75,6 +75,8 @@ public class SalesController {
     }
 
     @GetMapping("/monthlySales")
+    @Tag(name = "Sales API")
+    @Operation(summary = "월별 매출조회", description = "월별  매출, 이익 등 조회합니다.")
     public ResponseEntity<List<MonthlySalesDTO>> getMonthlySales(@RequestParam int year) {
         List<MonthlySalesDTO> monthlySales = salesService.getMonthlySales(year);
         return ResponseEntity.ok(monthlySales);

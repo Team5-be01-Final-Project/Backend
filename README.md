@@ -113,7 +113,7 @@ ___
 ```
 
 ___
-###  Github Action Deploy to EC2 with docker container
+### 🚩 Github Action Deploy to EC2 with docker container
 ![image](https://github.com/Team5-be01-Final-Project/Backend/assets/150888333/5d092b4d-9ff5-40e0-a55a-133ef07085ca)
 
 ___
@@ -282,7 +282,7 @@ ___
 </details>
 
 ___
-### Release History
+### ⏳ Release History
 - [Release v6.0.0]
 - [Release v5.0.0](https://github.com/Team5-be01-Final-Project/Backend/releases/tag/v5.0.0)
 - [Release v4.0.0](https://github.com/Team5-be01-Final-Project/Backend/releases/tag/v4.0.0)

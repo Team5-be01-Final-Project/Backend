@@ -1,12 +1,12 @@
 # BPS_Backend Sever
 
-### 개발 환경
+### 🛠 개발 환경
 ```
 JDK 17
 SpringBoot 3.2.3
 ```
 ___
-### 폴더 구조
+### 🗂 폴더 구조
 
 <details>
 <summary>  tree  </summary>
@@ -76,9 +76,9 @@ ___
 </details>
 
 ___
-### 환경 변수
+### 📌 환경 변수
 
-#### DB 관련
+#### 💾 DB 관련
 
 ```
 DB_URL
@@ -86,13 +86,13 @@ DB_USERNAME
 DB_PASSWORD
 ```
 
-#### 이메일 관련
+#### 📬 이메일 관련
 
 ```
 GMAIL_PASSWORD
 ```
 
-#### CI/CD 배포 관련
+#### 💻 CI/CD 배포 관련
 
 ```
 S3_BUCKET_NAME
@@ -105,7 +105,7 @@ ___
 ### CI/CD
 
 ___
-### EC2 환경설정
+### ⚙ EC2 환경설정
 
 ```
 # JDK 17 설치
@@ -113,14 +113,14 @@ ___
 ```
 
 ___
-### Github Action Deploy to EC2 with docker container
+###  Github Action Deploy to EC2 with docker container
 ![image](https://github.com/Team5-be01-Final-Project/Backend/assets/150888333/5d092b4d-9ff5-40e0-a55a-133ef07085ca)
 
 ___
-### BackEnd API Test - Swagger
+### 📝 BackEnd API Test - Swagger
 
 <details>
-<summary>  로그인  </summary>
+<summary> ✅ 로그인  </summary>
 <div markdown="1">
 
 ### 로그인 / 로그아웃
@@ -135,7 +135,7 @@ ___
 </details>
 
 <details>
-<summary>  사원 관리  </summary>
+<summary> ✅ 사원 관리  </summary>
 <div markdown="1">
 
 ### 사원 조회
@@ -149,7 +149,7 @@ ___
 </details>
 
 <details>
-<summary>  이상 온도  </summary>
+<summary> ✅ 이상 온도  </summary>
 <div markdown="1">
 
 ### 이상 온도 알림
@@ -162,7 +162,7 @@ ___
 </details>
 
 <details>
-<summary>  제품 관리  </summary>
+<summary> ✅ 제품 관리  </summary>
 <div markdown="1">
 
 ### 제품 조회 및 권한 수정
@@ -181,7 +181,7 @@ ___
 </details>
 
 <details>
-<summary>  재고 관리  </summary>
+<summary> ✅ 재고 관리  </summary>
 <div markdown="1">
 
 ### 재고 조회 및 등록
@@ -195,7 +195,7 @@ ___
 </details>
 
 <details>
-<summary>  전표 관리  </summary>
+<summary> ✅ 전표 관리  </summary>
 <div markdown="1">
 
 ### 전표 조회
@@ -227,7 +227,7 @@ ___
 </details>
 
 <details>
-<summary>  판매 관리  </summary>
+<summary> ✅ 판매 관리  </summary>
 <div markdown="1">
 
 ### 매출 
@@ -241,7 +241,7 @@ ___
 </details>
 
 <details>
-<summary>  거래처 관리  </summary>
+<summary> ✅ 거래처 관리  </summary>
 <div markdown="1">
 
 ### 거래처 조회
@@ -261,7 +261,7 @@ ___
 </details>
 
 <details>
-<summary>  인센티브 관리  </summary>
+<summary> ✅ 인센티브 관리  </summary>
 <div markdown="1">
 
 ### 인센티브 현황

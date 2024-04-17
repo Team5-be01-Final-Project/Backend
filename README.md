@@ -76,7 +76,7 @@ ___
 </details>
 
 ___
-### 📌 환경 변수
+### 🔑 환경 변수
 
 #### 💾 DB 관련
 
@@ -282,11 +282,19 @@ ___
 </details>
 
 ___
-### ⏳ Release History
+### 📌 Release History
+
 - [Release v6.0.0]
+
+<details>
+<summary> ⏳ 릴리즈 과거 내역  </summary>
+<div markdown="1">
+  
 - [Release v5.0.0](https://github.com/Team5-be01-Final-Project/Backend/releases/tag/v5.0.0)
 - [Release v4.0.0](https://github.com/Team5-be01-Final-Project/Backend/releases/tag/v4.0.0)
 - [Release v3.0.0](https://github.com/Team5-be01-Final-Project/Backend/releases/tag/v3.0.0)
 - [Release v2.0.0](https://github.com/Team5-be01-Final-Project/Backend/releases/tag/v2.0.0)
 - [Release v1.0.0](https://github.com/Team5-be01-Final-Project/Backend/releases/tag/v1.0.0)
 
+</div>
+</details>

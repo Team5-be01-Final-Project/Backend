@@ -148,7 +148,7 @@ ___
 ### 사원 조회
 <br/>
 
-- 대표와 팀장은는 전직원 조회가 가능하지만 팀원은 조회할 수 없다.
+- 대표와 팀장은 전직원 조회가 가능하지만 팀원은 조회할 수 없다.
 ![image](https://github.com/Team5-be01-Final-Project/Backend/assets/149128094/48814216-ad9f-4e47-9384-5536f5e125db)
 <br/>
 
@@ -317,15 +317,41 @@ ___
 ### 인센티브 현황
 - 대표는 전 직원에 대한 인센티브 조회가 가능하다.
 - 팀장인 본인 팀원에 대한 인센티브 조회가 가능하다.
+- 사원은 이 메뉴를 이용할 수 없다.
 ![image](https://github.com/Team5-be01-Final-Project/Backend/assets/149128094/0bc1dcd8-459b-40ef-b2c3-73c704f61b55)
 <br/>
 
-### 내 인센티브
-- 사원은 로그인한 정보로 현재매출 대비 인센티브를 확인할 수 있다.
-- 추가 매출을 기입하여 인센티브를 확인할 수 있다.
-![image](https://github.com/Team5-be01-Final-Project/Backend/assets/149128094/2758101a-d4a0-4755-bf13-189c57667890)
-![image](https://github.com/Team5-be01-Final-Project/Backend/assets/149128094/71abc8c5-557b-40f7-b9df-02ea694a646b)
+</div>
+</details>
 <br/>
+
+<details>
+<summary> ⭐ <b>My 영업</b>  </summary>
+<div markdown="1">
+
+### 내 정보 조회
+- 사원은 자신의 정보를 조회할 수 있다.
+![image](https://github.com/Team5-be01-Final-Project/Backend/assets/149128094/4c7bac00-a6f2-4d5f-bdf9-aedfaecbf222)
+<br/>
+
+### 내 거래처 조회
+- 사원은 자신의 담당 병원에 대한 이름, 담당자, 담당자 전화번호를 조회할 수 있다.
+![image](https://github.com/Team5-be01-Final-Project/Backend/assets/149128094/a66733b1-b0d9-4353-8844-ee537b5bfd4f)
+<br/>
+
+### 내 매출 현황
+- 사원은 자신의 최근 3개월 거래처 당 매출현황을 볼 수 있다.
+![image](https://github.com/Team5-be01-Final-Project/Backend/assets/149128094/bf5b60b5-82d1-4e01-b8ad-a33d6791b674)
+<br/>
+
+### 내 인센티브
+- 사원은 자신의 현재매출 대비 인센티브를 확인할 수 있다.
+![image](https://github.com/Team5-be01-Final-Project/Backend/assets/149128094/2758101a-d4a0-4755-bf13-189c57667890)
+<br/>
+
+- 추가 매출을 기입하여 예상 인센티브를 확인할 수 있다.
+- 시뮬레이션 기능이기 때문에 데이터를 변환하지 않는다.
+![image](https://github.com/Team5-be01-Final-Project/Backend/assets/149128094/71abc8c5-557b-40f7-b9df-02ea694a646b)
 
 </div>
 </details>

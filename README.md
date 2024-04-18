@@ -93,8 +93,7 @@ ___
 ### 🚩 Github Action Deploy to EC2 with docker container
 <br/>
 
-![image](https://github.com/Team5-be01-Final-Project/Backend/assets/149128094/cfc699f5-5488-4690-9c1e-6bb5151f8313)
-
+![image](https://github.com/Team5-be01-Final-Project/Backend/assets/149128094/87449c61-ba35-4a9f-97c3-045037c73733)
 
 ___
 ### 📝 BackEnd API Test - Swagger

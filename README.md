@@ -1,75 +1,46 @@
 # 📠 BPS_Backend Sever
+<br/>
 
 ### 🛠 개발 환경
+
+<br/>
+
 ```
 JDK 17
 SpringBoot 3.2.3
 ```
 ___
-### 🗂 폴더 구조
+### 🗂 프로젝트 구조
+<br/>
 
 <details>
-<summary>  tree  </summary>
+<summary>  <b>🌳 Tree 🌳</b>  </summary>
 <div markdown="1">
 
 ```bash
-├── BPS
-│   ├── mvnw
-│   ├── mvnw.cmd
-│   ├── pom.xml
-│   ├── src
-│   │   ├── main
-│   │   │   ├── java
-│   │   │   │   └── com
-│   │   │   │       └── sales
-│   │   │   │           └── BPS
-│   │   │   │               ├── BpsApplication.java
-│   │   │   │               ├── config
-│   │   │   │               ├── mexception
-│   │   │   │               ├── mproduct
-│   │   │   │               │   ├── controller
-│   │   │   │               │   ├── dto
-│   │   │   │               │   ├── entity
-│   │   │   │               │   ├── repository
-│   │   │   │               │   └── service
-│   │   │   │               ├── msales
-│   │   │   │               │   ├── controller
-│   │   │   │               │   ├── dto
-│   │   │   │               │   ├── entity
-│   │   │   │               │   ├── repository
-│   │   │   │               │   └── service
-│   │   │   │               └── msystem
-│   │   │   │                   ├── controller
-│   │   │   │                   ├── dto
-│   │   │   │                   ├── entity
-│   │   │   │                   ├── repository
-│   │   │   │                   └── service
-│   │   │   └── resources
-│   │   │       ├── application.yml
-│   │   │       └── templates
-│   │   └── test
-│   │       └── java
-│   │           └── com
-│   │               └── sales
-│   │                   └── BPS
-│   │                       ├── BpsApplicationTests.java
-│   │                       └── service
-│   └── target
-│       ├── classes
-│       ├── generated-sources
-│       ├── generated-test-sources
-│       └── test-classes
-├── Dockerfile
-├── README.md
-├── appspec.yml
-├── changelog.md
-├── docker-compose.yml
-├── img
-├── nginx
-│   └── conf
-│       └── proxy.conf
-├── start.sh
-└── stop.sh
+📦 BPS
+├──🖱 BpsApplication.java
+├──📂 config                  # 쿠키, 스웨거, 웹 설정 파일
+├──📂 mexception              # 예외 처리 관련 클래스
+├──📂 mproduct                # 제품, 인센티브, 재고, 전표 디렉토리
+│   ├──📁 controller
+│   ├──📁 dto
+│   ├──📁 entity
+│   ├──📁 repository
+│   └──📁 service
+├──📂 msales                  # 거래처, 상품 판매 디렉토리
+│   ├──📁 controller
+│   ├──📁 dto
+│   ├──📁 entity
+│   ├──📁 repository
+│   └──📁 service
+└──📂 msystem                 # 로그인, 사원, 권한, 알림 디렉토리 
+    ├──📁 controller
+    ├──📁 dto
+    ├──📁 entity
+    ├──📁 repository
+    └──📁 service
+
 ```
 
 </div>
@@ -77,8 +48,10 @@ ___
 
 ___
 ### 🔑 환경 변수
+<br/>
 
 #### 💾 DB 관련
+<br/>
 
 ```
 DB_URL
@@ -87,12 +60,14 @@ DB_PASSWORD
 ```
 
 #### 📬 이메일 관련
+<br/>
 
 ```
 GMAIL_PASSWORD
 ```
 
 #### 💻 CI/CD 배포 관련
+<br/>
 
 ```
 S3_BUCKET_NAME
@@ -101,11 +76,11 @@ CODE_DEPLOY_DEPLOYMENT_GROUP_NAME
 AWS_REGION
 ```
 
-___
-### CI/CD
+
 
 ___
 ### ⚙ EC2 환경설정
+<br/>
 
 ```
 # JDK 17 설치
@@ -114,13 +89,16 @@ ___
 
 ___
 ### 🚩 Github Action Deploy to EC2 with docker container
+<br/>
+
 ![image](https://github.com/Team5-be01-Final-Project/Backend/assets/150888333/5d092b4d-9ff5-40e0-a55a-133ef07085ca)
 
 ___
 ### 📝 BackEnd API Test - Swagger
+<br/>
 
 <details>
-<summary> ✅ 로그인  </summary>
+<summary> ⭐ <b>로그인</b> </summary>
 <div markdown="1">
 
 ### 로그인 / 로그아웃
@@ -133,9 +111,10 @@ ___
 
 </div>
 </details>
+<br/>
 
 <details>
-<summary> ✅ 사원 관리  </summary>
+<summary> ⭐ <b>사원 관리</b>  </summary>
 <div markdown="1">
 
 ### 사원 조회
@@ -147,9 +126,10 @@ ___
 
 </div>
 </details>
+<br/>
 
 <details>
-<summary> ✅ 이상 온도  </summary>
+<summary> ⭐ <b>이상 온도</b>  </summary>
 <div markdown="1">
 
 ### 이상 온도 알림
@@ -160,9 +140,10 @@ ___
 
 </div>
 </details>
+<br/>
 
 <details>
-<summary> ✅ 제품 관리  </summary>
+<summary> ⭐ <b>제품 관리</b>  </summary>
 <div markdown="1">
 
 ### 제품 조회 및 권한 수정
@@ -179,9 +160,10 @@ ___
 
 </div>
 </details>
+<br/>
 
 <details>
-<summary> ✅ 재고 관리  </summary>
+<summary> ⭐ <b>재고 관리</b>  </summary>
 <div markdown="1">
 
 ### 재고 조회 및 등록
@@ -193,9 +175,10 @@ ___
 
 </div>
 </details>
+<br/>
 
 <details>
-<summary> ✅ 전표 관리  </summary>
+<summary> ⭐ <b>전표 관리</b>  </summary>
 <div markdown="1">
 
 ### 전표 조회
@@ -225,9 +208,10 @@ ___
 
 </div>
 </details>
+<br/>
 
 <details>
-<summary> ✅ 판매 관리  </summary>
+<summary> ⭐ <b>판매 관리</b>  </summary>
 <div markdown="1">
 
 ### 매출 
@@ -239,9 +223,10 @@ ___
 
 </div>
 </details>
+<br/>
 
 <details>
-<summary> ✅ 거래처 관리  </summary>
+<summary> ⭐ <b>거래처 관리</b>  </summary>
 <div markdown="1">
 
 ### 거래처 조회
@@ -259,9 +244,10 @@ ___
 
 </div>
 </details>
+<br/>
 
 <details>
-<summary> ✅ 인센티브 관리  </summary>
+<summary> ⭐ <b>인센티브 관리</b>  </summary>
 <div markdown="1">
 
 ### 인센티브 현황
@@ -280,14 +266,18 @@ ___
 
 </div>
 </details>
+<br/>
 
 ___
-### 📌 Release History
+### ⏳ Release History
+<br/>
 
 - [Release v6.0.0]
+<br/>
+<br/>
 
 <details>
-<summary> ⏳ 릴리즈 과거 내역  </summary>
+<summary>  릴리즈 모음  </summary>
 <div markdown="1">
   
 - [Release v5.0.0](https://github.com/Team5-be01-Final-Project/Backend/releases/tag/v5.0.0)

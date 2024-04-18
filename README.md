@@ -100,6 +100,10 @@ ___
 ### 📝 BackEnd API Test - Swagger
 <br/>
 
+### [API 명세서](https://github.com/Team5-be01-Final-Project/.github/blob/main/Datas/API%20%EB%AA%85%EC%84%B8%EC%84%9C.pdf)
+
+<br/>
+
 <details>
 <summary> ⭐ <b>로그인</b> </summary>
 <div markdown="1">

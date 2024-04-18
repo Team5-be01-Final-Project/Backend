@@ -58,6 +58,7 @@ DB_URL
 DB_USERNAME
 DB_PASSWORD
 ```
+<br/>
 
 #### 📬 이메일 관련
 <br/>
@@ -65,6 +66,7 @@ DB_PASSWORD
 ```
 GMAIL_PASSWORD
 ```
+<br/>
 
 #### 💻 CI/CD 배포 관련
 <br/>
@@ -269,10 +271,10 @@ ___
 <br/>
 
 ___
-### ⏳ Release History
+### 🧾 릴리즈 내역
 <br/>
 
-- [Release v6.0.0]
+- [Release v6.0.0](링크 추가 예정)
 <br/>
 <br/>
 

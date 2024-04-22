@@ -364,14 +364,15 @@ ___
 ### 🧾 릴리즈 내역
 <br/>
 
-- [Release v6.0.0](링크 추가 예정)
+- [Release v7.0.0](https://github.com/Team5-be01-Final-Project/Backend/releases/tag/v7.0.0)
 <br/>
 <br/>
 
 <details>
 <summary>  릴리즈 모음  </summary>
 <div markdown="1">
-  
+
+- [Release v6.0.0](https://github.com/Team5-be01-Final-Project/Backend/releases/tag/v6.0.0)  
 - [Release v5.0.0](https://github.com/Team5-be01-Final-Project/Backend/releases/tag/v5.0.0)
 - [Release v4.0.0](https://github.com/Team5-be01-Final-Project/Backend/releases/tag/v4.0.0)
 - [Release v3.0.0](https://github.com/Team5-be01-Final-Project/Backend/releases/tag/v3.0.0)

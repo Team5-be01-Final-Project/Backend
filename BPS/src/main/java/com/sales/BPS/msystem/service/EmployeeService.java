@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class EmployeeService {
-    @Autowired
+
     private final EmployeeRepository employeeRepository;
     private static final Logger logger = LoggerFactory.getLogger(EmployeeService.class);
     private static final String SECRET_KEY = "new_secret_key_here";  // 적절한 키 값을 설정하세요.
@@ -80,8 +80,6 @@ public class EmployeeService {
             return false;
         }
     }
-
-
 
 
     // 기준에 따른 직원 검색

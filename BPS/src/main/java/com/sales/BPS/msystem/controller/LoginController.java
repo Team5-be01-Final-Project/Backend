@@ -45,12 +45,12 @@ public class LoginController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
         }
     }
-    @PostMapping("/login-error")
-    @Tag(name = "System API")
-    @Operation(summary = "로그인",description = "로그인 시도 후 실패 전달합니다.")
-    public ResponseEntity<?> loginError() {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Login failed");
-    }
+//    @PostMapping("/login-error")
+//    @Tag(name = "System API")
+//    @Operation(summary = "로그인실패",description = "로그인 시도 후 실패 전달합니다.")
+//    public ResponseEntity<?> loginError() {
+//        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Login failed");
+//    }
 
     @PostMapping("/logout")
     @Tag(name = "System API")

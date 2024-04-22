@@ -360,12 +360,19 @@ ___
 </details>
 <br/>
 
+
+
+___
+### 📝 Changelog.md 
+<br/>
+
+[Changelog.md](https://github.com/Team5-be01-Final-Project/Backend/blob/dev/changelog.md)
+
 ___
 ### 🧾 릴리즈 내역
 <br/>
 
 - [Release v7.0.0](https://github.com/Team5-be01-Final-Project/Backend/releases/tag/v7.0.0)
-<br/>
 <br/>
 
 <details>

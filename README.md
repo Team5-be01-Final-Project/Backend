@@ -363,10 +363,10 @@ ___
 
 
 ___
-### 📝 Changelog.md 
+### 📝 Changelog 
 <br/>
 
-[Changelog.md](https://github.com/Team5-be01-Final-Project/Backend/blob/dev/changelog.md)
+[changelog.md](https://github.com/Team5-be01-Final-Project/Backend/blob/dev/changelog.md)
 
 ___
 ### 🧾 릴리즈 내역

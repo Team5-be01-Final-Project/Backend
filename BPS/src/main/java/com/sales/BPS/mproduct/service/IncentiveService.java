@@ -45,15 +45,15 @@ public class IncentiveService {
                 long voucMonthSales = ((Number) data[1]).longValue(); // 월 매출액
                 int salesRank = rank;
 
-                int incentive = (int) Math.round(voucMonthSales * 0.01);
+                int incentive = (int) Math.round(voucMonthSales * 0.1);
                 int addincentive = 0;
 
                 if (rank == 1) {
-                    addincentive = (int) (voucMonthSales * 0.005); // 1위
+                    addincentive = (int) (voucMonthSales * 0.05); // 1위
                 } else if (rank == 2) {
-                    addincentive = (int) (voucMonthSales * 0.003); // 2위
+                    addincentive = (int) (voucMonthSales * 0.03); // 2위
                 } else if (rank == 3) {
-                    addincentive = (int) (voucMonthSales * 0.001); // 3위
+                    addincentive = (int) (voucMonthSales * 0.01); // 3위
                 }
                 incentive += addincentive;
 
@@ -97,7 +97,7 @@ public class IncentiveService {
                 String deptName = manager.getDepartment().getDeptName();
                 long voucMonthSales = teamvoucMonthSales[i];
                 int salesRank = 0;
-                int incentive = (int) Math.round(voucMonthSales * 0.01);
+                int incentive = (int) Math.round(voucMonthSales * 0.1);
                 IncentiveDTO incentiveDTO = new IncentiveDTO(empName, deptName, voucMonthSales, salesRank, incentive);
 
                 System.out.println(incentiveDTO);
@@ -128,7 +128,7 @@ public class IncentiveService {
             int salesRank = 0;
 
             // 인센티브 계산 (월 매출액의 1%)
-            int incentive = (int) Math.round(voucMonthSales * 0.01);
+            int incentive = (int) Math.round(voucMonthSales * 0.1);
 
             // 인센티브 정보를 DTO에 저장
             IncentiveDTO incentiveDTO = new IncentiveDTO(empName, deptName, voucMonthSales, salesRank, incentive);
@@ -156,7 +156,7 @@ public class IncentiveService {
         // 총 매출액 계산 (현재 매출 + 추가 매출)
         long totalSales = currentSales + additionalSales;
         // 인센티브 계산 (총 매출액의 1%)
-        int incentive = (int) Math.round(totalSales * 0.01);
+        int incentive = (int) Math.round(totalSales * 0.1);
 
         // 인센티브 정보를 DTO에 저장
         IncentiveDTO incentiveDTO = new IncentiveDTO(empName, deptName, totalSales, 0, incentive);

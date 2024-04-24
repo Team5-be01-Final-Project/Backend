@@ -5,6 +5,21 @@ spring:
       encoding: UTF-8
       mode: always
 
+  # 메일 전송
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: luinadel33@gmail.com
+    password: ${GMAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+
+
   datasource:
     driverClassName: org.mariadb.jdbc.Driver
     url: ${DB_URL}
@@ -14,8 +29,16 @@ spring:
   #JPA
   jpa:
     hibernate:
-      ddl-auto: create
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl  # 테이블, 컬럼명 대, 소문자 구분
+      ddl-auto: update
     generate-ddl: false
     show-sql: true
 server:
   port: 8081
+
+  # 스케줄링 활성화
+  task:
+    scheduling:
+      pool:
+        size: 5
